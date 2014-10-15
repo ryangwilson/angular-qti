@@ -65,6 +65,10 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                 var cellSpacing = (table.getAttribute("cellspacing") || 0) + "px";
                 css(table, "border-spacing", cellSpacing);
             }
+            if (table.hasAttribute("bgcolor")) {
+                var bgColor = table.getAttribute("bgcolor");
+                css(table, "background-color", bgColor);
+            }
             colgroups = table.querySelectorAll("colgroup");
             th = table.querySelectorAll("th");
             td = table.querySelectorAll("td");
@@ -86,7 +90,7 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
             for (i = 0; i < th.length; i++) {
                 css(th[i], "padding", cellPadding);
                 th[i].setAttribute("ng-click", "changeSorting('col_" + i + ".value')");
-                th[i].insertAdjacentHTML("afterBegin", '<span style="float:right" ng-class="selectedCls(\'col_' + i + '.value\')" class=""></span>');
+                th[i].insertAdjacentHTML("afterBegin", '<span class="sort-indicator" ng-class="selectedCls(\'col_' + i + ".value')\"></span>");
             }
             tbody = table.querySelector("tbody");
             tr = table.querySelector("tbody tr");
