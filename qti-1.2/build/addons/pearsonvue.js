@@ -35,9 +35,9 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
             scope.selectedCls = function(column) {
                 if (column === scope.sort.column) {
                     if (scope.sort.reverse) {
-                        return "fa fa-camera-retro";
+                        return "fa fa-chevron-down";
                     } else {
-                        return "fa fa-camera-retro";
+                        return "fa fa-chevron-up";
                     }
                 }
             };
@@ -50,14 +50,13 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     sort.reverse = false;
                 }
             };
-            var str = el[0].innerHTML;
-            var xml = helpers.strToXML(str).firstChild;
-            var i;
-            var colgroups = xml.querySelectorAll("colgroup");
-            var th = xml.querySelectorAll("th");
-            var td = xml.querySelectorAll("td");
-            var tableCells = [];
-            var col, row, rule;
+            var str, xml, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
+            str = el[0].innerHTML;
+            xml = helpers.strToXML(str).firstChild;
+            colgroups = xml.querySelectorAll("colgroup");
+            th = xml.querySelectorAll("th");
+            td = xml.querySelectorAll("td");
+            tableCells = [];
             for (i = 0; i < td.length; i++) {
                 tableCells.push(td[i].textContent);
                 col = i % th.length;
@@ -72,24 +71,23 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                 };
             }
             for (i = 0; i < th.length; i++) {
-                th[i].setAttribute("ng-class", "selectedCls('col_" + i + ".value')");
                 th[i].setAttribute("ng-click", "changeSorting('col_" + i + ".value')");
+                th[i].insertAdjacentHTML("afterBegin", '<span style="float:right" ng-class="selectedCls(\'col_' + i + '.value\')" class=""></span>');
             }
-            var tbody = xml.querySelector("tbody");
-            var tr = xml.querySelector("tbody tr");
+            tbody = xml.querySelector("tbody");
+            tr = xml.querySelector("tbody tr");
             tr.setAttribute("ng-repeat", "row in body | orderBy:sort.column:sort.reverse");
-            var tds = xml.querySelectorAll("tbody > tr > td");
-            for (var i = 0; i < th.length; i += 1) {
-                var node = tds[i];
-                var node = tds[i];
+            tds = xml.querySelectorAll("tbody > tr > td");
+            for (i = 0; i < th.length; i += 1) {
+                node = tds[i];
                 while (node.firstChild) {
                     node = node.firstChild;
                 }
                 node.nodeValue = "{{row.col_" + i + ".label}}";
             }
             tbody.innerHTML = tr.outerHTML;
-            var linkFn = $compile(xml.outerHTML);
-            var content = linkFn(scope);
+            linkFn = $compile(xml.outerHTML);
+            content = linkFn(scope);
             el.empty();
             el.append(content);
         }

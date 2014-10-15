@@ -12,20 +12,21 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
         restrict: 'E',
         link: function (scope, el, attr) {
 
+            // :: internal model :: //
             scope.head = {};
             scope.body = [];
-
             scope.sort = {
                 column: 'col_0.value',
                 reverse: false
             };
 
+            // :: functions for handling sort :: //
             scope.selectedCls = function (column) {
-                if(column === scope.sort.column) {
-                    if(scope.sort.reverse) {
-                        return 'fa fa-camera-retro';
+                if (column === scope.sort.column) {
+                    if (scope.sort.reverse) {
+                        return 'fa fa-chevron-down';
                     } else {
-                        return 'fa fa-camera-retro';
+                        return 'fa fa-chevron-up';
                     }
                 }
             };
@@ -40,19 +41,19 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                 }
             };
 
-            var str = el[0].innerHTML;
+            var str, xml, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
 
-            var xml = helpers.strToXML(str).firstChild;
-            var i;
+            str = el[0].innerHTML;
 
-            var colgroups = xml.querySelectorAll('colgroup');
+            xml = helpers.strToXML(str).firstChild;
 
-            var th = xml.querySelectorAll('th');
+            colgroups = xml.querySelectorAll('colgroup');
+
+            th = xml.querySelectorAll('th');
 
             // setup data
-            var td = xml.querySelectorAll('td');
-            var tableCells = [];
-            var col, row, rule;
+            td = xml.querySelectorAll('td');
+            tableCells = [];
             for (i = 0; i < td.length; i++) {
                 tableCells.push(td[i].textContent);
                 col = i % th.length;
@@ -69,19 +70,18 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
 
             // setup template
             for (i = 0; i < th.length; i++) {
-                th[i].setAttribute('ng-class', 'selectedCls(\'col_' + i + '.value\')');
                 th[i].setAttribute('ng-click', 'changeSorting(\'col_' + i + '.value\')');
+                th[i].insertAdjacentHTML('afterBegin', '<span style="float:right" ng-class="selectedCls(\'col_' + i + '.value\')" class=""></span>');
             }
 
-            var tbody = xml.querySelector('tbody');
+            tbody = xml.querySelector('tbody');
 
-            var tr = xml.querySelector('tbody tr');
+            tr = xml.querySelector('tbody tr');
             tr.setAttribute('ng-repeat', 'row in body | orderBy:sort.column:sort.reverse');
 
-            var tds = xml.querySelectorAll('tbody > tr > td');
-            for (var i = 0; i < th.length; i += 1) {
-                var node = tds[i];
-                var node = tds[i];
+            tds = xml.querySelectorAll('tbody > tr > td');
+            for (i = 0; i < th.length; i += 1) {
+                node = tds[i];
                 while (node.firstChild) {
                     node = node.firstChild;
                 }
@@ -89,8 +89,8 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             }
             tbody.innerHTML = tr.outerHTML;
 
-            var linkFn = $compile(xml.outerHTML);
-            var content = linkFn(scope);
+            linkFn = $compile(xml.outerHTML);
+            content = linkFn(scope);
             el.empty();
             el.append(content);
 

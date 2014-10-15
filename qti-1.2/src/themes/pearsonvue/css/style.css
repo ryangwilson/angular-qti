@@ -103,7 +103,12 @@ thead {
     cursor: pointer;
 }
 
-thead tr {
+th, td {
     outline: 0;
+    padding: 4px !important;
+}
+
+thead .fa {
+    padding: 0 4px;
 }
 
