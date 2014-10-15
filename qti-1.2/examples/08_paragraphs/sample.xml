@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="Paragraphs Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <mattext>
+                                <p>This is the first paragraph...</p>
+                                <p></p>
+                                <p>This is the second paragraph...</p>
+                                <p></p>
+                                <p align="right">This is an example of a right aligned paragraph. This is an example of a right aligned paragraph. This is an example of a right aligned paragraph. This is an example of a right aligned paragraph.</p>
+                                <p></p>
+                                <p style="text-indent: 14.0pt;">Lauriger Horatius...</p>
+                                <p style="margin-left: 12.0pt;">Lauriger Horatius...</p>
+                                <p style="margin-right: 12.0pt;">Lauriger Horatius...</p>
+                                <p style="margin-top: 6.0pt;">Lauriger Horatius...</p>
+                                <p style="margin-bottom: 18.0pt;">Lauriger Horatius...</p>
+                                <p style="text-indent: 14.0pt; margin-left: 12.0pt; margin-right: 12.0pt; margin-top: 6.0pt; margin-bottom: 18.0pt;">Lauriger Horatius...</p>
+                                <p style="white-space: pre-wrap;">Lauriger Horatius, quam...</p>
+
+                                <p>This is an example of a normal left aligned paragraph. This is an example of a normal left aligned paragraph. This is an example of a normal left aligned paragraph. This is an example of a normal left aligned paragraph.</p>
+                                <p></p>
+                                <p align="right">This is an example of a right aligned paragraph. This is an example of a right aligned paragraph. This is an example of a right aligned paragraph. This is an example of a right aligned paragraph.</p>
+                                <p></p>
+                                <p style="text-indent: 40.0pt;">This is an example of a paragraph with the first line indented. This is an example of a paragraph with the first line indented. This is an example of a paragraph with the first line indented. This is an example of a paragraph with the first line indented.</p>
+                                <p></p>
+                                <p style="margin-left: 25.0pt;">This is a paragraph with the left margin indented. This is a paragraph with the left margin indented. This is a paragraph with the left margin indented. This is a paragraph with the left margin indented. This is a paragraph with the left margin indented.</p>
+                                <p></p>
+                                <p style="margin-right: 55.0pt;">This is an example of a paragraph with the right margin indented. This is an example of a paragraph with the right margin indented. This is an example of a paragraph with the right margin indented. This is an example of a paragraph with the right margin indented. This is an example of a paragraph with the right margin indented.</p>
+                                <p></p>
+                                <p style="text-indent: 35.0pt; margin-left: 25.0pt; margin-right: 45.0pt;">This is an example of a paragraph with the first line indented, the left margin indented, and the right margin indented. This is an example of a paragraph with the first line indented, the left margin indented, and the right margin indented. This is an example of a paragraph with the first line indented, the left margin indented, and the right margin indented.</p>
+                                <p></p>
+                                <p style="text-indent: -24.0pt; margin-left: 24.0pt;">This is an example of a paragraph with a hanging indent. This is an example of a paragraph with a hanging indent. This is an example of a paragraph with a hanging indent. This is an example of a paragraph with a hanging indent. This is an example of a paragraph with a hanging indent. This is an example of a paragraph with a hanging indent.</p>
+                                <p></p>
+                                <p>Text with no margin set.</p>
+                                <p style="margin-top: 50.0pt;margin-bottom: 50px;">This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt.</p>
+                                <p>Text with no margin set.</p>
+                            </mattext>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

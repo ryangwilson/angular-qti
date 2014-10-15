@@ -1,0 +1,114 @@
+<item ident="146464">
+    <pearsonvue:objectivesref linkrefid="1090578" />
+    <presentation fontface="Tahoma" fontsize="9" fontstyle="normal" background_color="#FFFFFF">
+        <flow>
+            <flow>
+                <flow>
+                    <material>
+                        <mattext><p>Which National Football League (NFL) team has won the most Superbowls?</p>
+                        </mattext>
+                    </material>
+                </flow>
+            </flow>
+            <flow>
+                <response_lid ident="146464_R" rcardinality="single">
+                    <render_choice>
+                        <flow_label>
+                            <response_label ident="A">
+                                <flow_mat orientation="horizontal">
+                                    <flow_mat width="60">
+                                        <material>
+                                            <mattext>A.</mattext>
+                                        </material>
+                                    </flow_mat>
+                                    <flow_mat>
+                                        <material>
+                                            <mattext><p>Detroit Lions</p>
+                                            </mattext>
+                                        </material>
+                                    </flow_mat>
+                                </flow_mat>
+                            </response_label>
+                        </flow_label>
+                        <flow_label>
+                            <response_label ident="B">
+                                <flow_mat orientation="horizontal">
+                                    <flow_mat width="60">
+                                        <material>
+                                            <mattext>B.</mattext>
+                                        </material>
+                                    </flow_mat>
+                                    <flow_mat>
+                                        <material>
+                                            <mattext><p>Denver Broncos</p>
+                                            </mattext>
+                                        </material>
+                                    </flow_mat>
+                                </flow_mat>
+                            </response_label>
+                        </flow_label>
+                        <flow_label>
+                            <response_label ident="C">
+                                <flow_mat orientation="horizontal">
+                                    <flow_mat width="60">
+                                        <material>
+                                            <mattext>C.</mattext>
+                                        </material>
+                                    </flow_mat>
+                                    <flow_mat>
+                                        <material>
+                                            <mattext><p>San Francisco 49ers</p>
+                                            </mattext>
+                                        </material>
+                                    </flow_mat>
+                                </flow_mat>
+                            </response_label>
+                        </flow_label>
+                        <flow_label>
+                            <response_label ident="D">
+                                <flow_mat orientation="horizontal">
+                                    <flow_mat width="60">
+                                        <material>
+                                            <mattext>D.</mattext>
+                                        </material>
+                                    </flow_mat>
+                                    <flow_mat>
+                                        <material>
+                                            <mattext><p>Pittsburgh Steelers</p>
+                                            </mattext>
+                                        </material>
+                                    </flow_mat>
+                                </flow_mat>
+                            </response_label>
+                        </flow_label>
+                    </render_choice>
+                </response_lid>
+            </flow>
+        </flow>
+    </presentation>
+    <resprocessing>
+        <outcomes>
+            <decvar varname="SCORE" vartype="Decimal" defaultval="0" minvalue="0" maxvalue="1" />
+        </outcomes>
+        <respcondition title="Correct">
+            <conditionvar>
+                <and>
+                    <not>
+                        <varequal respident="146464_R">A</varequal>
+                    </not>
+                    <not>
+                        <varequal respident="146464_R">B</varequal>
+                    </not>
+                    <not>
+                        <varequal respident="146464_R">C</varequal>
+                    </not>
+                    <varequal respident="146464_R">D</varequal>
+                </and>
+            </conditionvar>
+            <setvar varname="SCORE" action="Set">1</setvar>
+        </respcondition>
+    </resprocessing>
+    <itemproc_extension>
+        <pearsonvue:itemcontrol />
+    </itemproc_extension>
+</item>

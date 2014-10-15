@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="HTML Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <mattext><u>Hello</u> World&#174;</mattext>
+                            <matbreak></matbreak>
+                            <mattext>Normal <b>bold <em>em <s>s strike <u>underline</u> strike</s> em</em> bold</b> Normal</mattext>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

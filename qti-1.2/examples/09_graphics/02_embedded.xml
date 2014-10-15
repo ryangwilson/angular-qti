@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="Graphics :: Embedded Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <matimage embedded="Base64">
+                                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
+                            </matimage>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="Paragraphs :: Margins Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <mattext>
+                                <p>Text with no margin set.</p>
+                                <p style="margin-top: 50.0pt;margin-bottom: 50.0pt;">This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt. This is an example of a paragraph with the top and bottom margins set at 50.0 pt.</p>
+                                <p>Text with no margin set.</p>
+                            </mattext>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

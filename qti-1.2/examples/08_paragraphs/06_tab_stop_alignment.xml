@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="Paragraphs :: Tab Stops Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <mattext>
+                                <p><span style="padding-right: 0.5in"></span>Hello</p>
+                                <p style="tab-size: 40px;" tab_stops="interval: 0.5; alignment: left;">Lauriger	Horatius,&#09;quam dixisti verum Candidate Name: ${User.FullName}</p>
+                                <p tab_stops="tabset: 1.0, 1.5, 2.5; alignment: left, right, left;">Lauriger&#09;Horatius,&#09;quam&#09;dixisti&#09;verum</p>
+                            </mattext>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

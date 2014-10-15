@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="TableAssessment" title="Table :: Basic Example">
+        <section ident="TableSection">
+            <item ident="TableItem">
+                <presentation>
+                    <flow orientation="vertical">
+                        <flow>
+                            <material>
+                                <mattext>This table contains information on cities and their populations.</mattext>
+                            </material>
+                        </flow>
+                        <flow>
+                            <material>
+                                <pearsonvue:mat_extension name="table" organization="pearsonvue" version="1.0.0">
+<![CDATA[
+<table version="1.0" border="1" rules="all" cellpadding="10">
+    <colgroup sort_rule="dictionary" width="100"/>
+    <colgroup sort_rule="dictionary" width="75"/>
+    <colgroup sort_rule="numeric" width="125"/>
+    <thead>
+        <tr bgcolor="#C0C0C0">
+            <th><p><font size="14"><b>City</b></font></p></th>
+            <th><p><font size="14"><b>State</b></font></p></th>
+            <th><p><font size="14"><b>Population</b></font></p></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Minneapolis</td>
+            <td>MN</td>
+            <td><p align="right">390,504</p></td>
+        </tr>
+        <tr>
+            <td>San Francisco</td>
+            <td>CA</td>
+            <td><p align="right">810,575</p></td>
+        </tr>
+        <tr>
+            <td>Dallas</td>
+            <td>TX</td>
+            <td><p align="right">1,300,431</p></td>
+        </tr>
+    </tbody>
+</table>
+]]>
+                                </pearsonvue:mat_extension>
+                            </material>
+                        </flow>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="SampleAssessment" title="Paragraphs :: Whitespace Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <mattext>
+                                <p>Paragraph with a tab.</p>
+                                <p/>
+                                <p>Paragraph with multiple spaces.</p>
+                                <p>Paragraph with multiple extra
+
+linebreak</p>
+                                <p style="white-space: pre-wrap;">[1 2  3   4    ]
+[more text]</p>
+                                <p>[1 2  3   4    ]</p>
+                            </mattext>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

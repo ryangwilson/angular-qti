@@ -1,0 +1,83 @@
+[ng-cloak] {
+    display: none;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    padding: 10px;
+    margin: 0;
+    font-size: 13px;
+}
+
+em {
+    font-style: italic;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+/*item {*/
+    /*zoom: 140%;*/
+/*}*/
+
+.qti-assessment {
+    border: 1px solid #0062AA;
+}
+
+.qti-assessment > .qti-title {
+    background: #0062AA;
+    padding: 10px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.qti-content {
+    padding: 10px;
+}
+
+/* Add a non-breaking space if paragraph is empty */
+p:empty:after {
+    content: '\00a0';
+}
+
+/* Material text - p.3 White space created either by manual space characters or tab characters is preserved within a mattext element. */
+mattext, matimage {
+    /*white-space: pre-wrap;*/
+    display: inline-block;
+    /*unicode-bidi: embed;*/
+}
+
+/* Material break */
+matbreak {
+    display: block;
+}
+
+flow {
+    display: block;
+    padding-bottom: 15px;
+}
+
+flow:last-child {
+    padding: 0;
+}
+
+flow_mat {
+    display: block;
+    padding: 5px;
+}
+
+flow_mat[orientation=horizontal] > flow_mat {
+    display: inline-block;
+}
+
+/*render_choice flow_mat:first-child mattext:before {*/
+/*content:url(templates/radio.html)*/
+/*}*/
+
+resprocessing {
+    display: none;
+}
