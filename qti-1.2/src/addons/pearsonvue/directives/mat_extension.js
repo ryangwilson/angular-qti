@@ -21,7 +21,13 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             };
 
             scope.selectedCls = function (column) {
-                return column === scope.sort.column && 'sort-' + scope.sort.descending;
+                if(column === scope.sort.column) {
+                    if(scope.sort.reverse) {
+                        return 'fa fa-camera-retro';
+                    } else {
+                        return 'fa fa-camera-retro';
+                    }
+                }
             };
 
             scope.changeSorting = function (column) {
@@ -42,23 +48,14 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             var colgroups = xml.querySelectorAll('colgroup');
 
             var th = xml.querySelectorAll('th');
-            var tableHeaders = [];
-            for (i = 0; i < th.length; i++) {
-                tableHeaders.push({
-                    label: th[i].textContent,
-                    name: th[i].textContent.toLowerCase().replace(/(\s+|-+)/gim, '_')
-                });
-                scope.head['col_' + i + '.value'] = th[i].textContent.toLowerCase().replace(/(\s+|-+)/gim, '_');
-            }
-//            console.log('th', tableHeaders.length);
-//            console.log('head', scope.head);
 
+            // setup data
             var td = xml.querySelectorAll('td');
             var tableCells = [];
             var col, row, rule;
             for (i = 0; i < td.length; i++) {
                 tableCells.push(td[i].textContent);
-                col = i % tableHeaders.length;
+                col = i % th.length;
                 if (col === 0) {
                     row = {};
                     scope.body.push(row);
@@ -69,36 +66,30 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                     value: strToValue(colgroups[col].getAttribute('sort_rule'), td[i].textContent)
                 };
             }
-//            console.log('td', tableCells);
-//            console.log('body', scope.body);
-//            console.log('rows', row);
 
-            var colGroupStrings = '';
-            var tableCellsStrings = '';
-            for (i = 0; i < colgroups.length; i += 1) {
-                colGroupStrings += colgroups[i].outerHTML;
-                tableCellsStrings += '<td>{{row.col_' + i + '.label}}</td>';
+            // setup template
+            for (i = 0; i < th.length; i++) {
+                th[i].setAttribute('ng-class', 'selectedCls(\'col_' + i + '.value\')');
+                th[i].setAttribute('ng-click', 'changeSorting(\'col_' + i + '.value\')');
             }
 
-            var tpl = '' +
-                '<table>' +
-                '   ##colgroups##' +
-                '   <thead>' +
-                '       <tr>' +
-                '           <th ng-repeat="(i,th) in head" ng-class="selectedCls(i)" ng-click="changeSorting(i)">{{th}}</th>' +
-                '       </tr>' +
-                '   </thead>' +
-                '   <tbody>' +
-                '       <tr ng-repeat="row in body | orderBy:sort.column:sort.reverse">' +
-                '       ##td##' +
-                '       </tr>' +
-                '   </tbody>' +
-                '</table>';
+            var tbody = xml.querySelector('tbody');
 
-            tpl = tpl.split('##colgroups##').join(colGroupStrings);
-            tpl = tpl.split('##td##').join(tableCellsStrings);
+            var tr = xml.querySelector('tbody tr');
+            tr.setAttribute('ng-repeat', 'row in body | orderBy:sort.column:sort.reverse');
 
-            var linkFn = $compile(tpl);
+            var tds = xml.querySelectorAll('tbody > tr > td');
+            for (var i = 0; i < th.length; i += 1) {
+                var node = tds[i];
+                var node = tds[i];
+                while (node.firstChild) {
+                    node = node.firstChild;
+                }
+                node.nodeValue = '{{row.col_' + i + '.label}}';
+            }
+            tbody.innerHTML = tr.outerHTML;
+
+            var linkFn = $compile(xml.outerHTML);
             var content = linkFn(scope);
             el.empty();
             el.append(content);

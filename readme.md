@@ -2,6 +2,14 @@
 
 These are notes as I am developing QTI.
 
+#### Tables
+---
+
+[http://jsfiddle.net/vojtajina/js64b/14/](http://jsfiddle.net/vojtajina/js64b/14/)
+
+[http://mattiash.github.io/angular-tablesort/](http://mattiash.github.io/angular-tablesort/)
+
+
 #### Equations
 ---
 
@@ -18,4 +26,6 @@ This is a great editor to get ideas from. It is built in Flash ;(
 **Commercial Editor**
 
 [http://www.wiris.com/editor/demo/en/index](http://www.wiris.com/editor/demo/en/index)
+
+
 
