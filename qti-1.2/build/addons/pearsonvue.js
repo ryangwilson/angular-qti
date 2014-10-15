@@ -16,6 +16,11 @@ angular.module("qti").directive("font", function() {
 });
 
 angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
+    var css = function(el, prop, value) {
+        var styles = el.getAttribute("style") || "";
+        styles += ";" + prop + ":" + value;
+        el.setAttribute("style", styles);
+    };
     var strToValue = function(type, value) {
         switch (type) {
           case "numeric":
@@ -50,12 +55,19 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     sort.reverse = false;
                 }
             };
-            var str, xml, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
+            var str, table, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
             str = el[0].innerHTML;
-            xml = helpers.strToXML(str).firstChild;
-            colgroups = xml.querySelectorAll("colgroup");
-            th = xml.querySelectorAll("th");
-            td = xml.querySelectorAll("td");
+            table = helpers.strToXML(str).firstChild;
+            if (table.hasAttribute("border")) {
+                css(table, "border-width", table.getAttribute("border") + "px");
+            }
+            if (table.hasAttribute("cellspacing")) {
+                var cellSpacing = (table.getAttribute("cellspacing") || 0) + "px";
+                css(table, "border-spacing", cellSpacing);
+            }
+            colgroups = table.querySelectorAll("colgroup");
+            th = table.querySelectorAll("th");
+            td = table.querySelectorAll("td");
             tableCells = [];
             for (i = 0; i < td.length; i++) {
                 tableCells.push(td[i].textContent);
@@ -70,15 +82,18 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     value: strToValue(colgroups[col].getAttribute("sort_rule"), td[i].textContent)
                 };
             }
+            var cellPadding = (table.getAttribute("cellpadding") || 0) + "px";
             for (i = 0; i < th.length; i++) {
+                css(th[i], "padding", cellPadding);
                 th[i].setAttribute("ng-click", "changeSorting('col_" + i + ".value')");
                 th[i].insertAdjacentHTML("afterBegin", '<span style="float:right" ng-class="selectedCls(\'col_' + i + '.value\')" class=""></span>');
             }
-            tbody = xml.querySelector("tbody");
-            tr = xml.querySelector("tbody tr");
+            tbody = table.querySelector("tbody");
+            tr = table.querySelector("tbody tr");
             tr.setAttribute("ng-repeat", "row in body | orderBy:sort.column:sort.reverse");
-            tds = xml.querySelectorAll("tbody > tr > td");
+            tds = table.querySelectorAll("tbody > tr > td");
             for (i = 0; i < th.length; i += 1) {
+                css(tds[i], "padding", cellPadding);
                 node = tds[i];
                 while (node.firstChild) {
                     node = node.firstChild;
@@ -86,7 +101,7 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                 node.nodeValue = "{{row.col_" + i + ".label}}";
             }
             tbody.innerHTML = tr.outerHTML;
-            linkFn = $compile(xml.outerHTML);
+            linkFn = $compile(table.outerHTML);
             content = linkFn(scope);
             el.empty();
             el.append(content);

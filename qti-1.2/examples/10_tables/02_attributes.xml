@@ -16,7 +16,7 @@
                             <material>
                                 <pearsonvue:mat_extension name="table" organization="pearsonvue" version="1.0.0">
 <![CDATA[
-<table version="1.0" border="1" rules="all" cellpadding="10" >
+<table version="1.0" border="4" rules="none" cellpadding="10" cellspacing="10" frame="box">
     <colgroup sort_rule="dictionary" width="100"/>
     <colgroup sort_rule="dictionary" width="75"/>
     <colgroup sort_rule="numeric" width="125"/>

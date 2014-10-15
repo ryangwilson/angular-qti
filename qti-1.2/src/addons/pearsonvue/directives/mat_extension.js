@@ -1,5 +1,11 @@
 angular.module('qti').directive('pearsonvueMatExtension', function ($compile, helpers) {
 
+    var css = function (el, prop, value) {
+        var styles = el.getAttribute('style') || '';
+        styles += ';' + prop + ':' + value;
+        el.setAttribute('style', styles);
+    };
+
     var strToValue = function (type, value) {
         switch (type) {
             case 'numeric':
@@ -41,19 +47,27 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                 }
             };
 
-            var str, xml, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
+            var str, table, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
 
+            // :: get the XML template ::
             str = el[0].innerHTML;
+            table = helpers.strToXML(str).firstChild;
+            if (table.hasAttribute('border')) {
+                css(table, 'border-width', table.getAttribute('border') + 'px');
+            }
 
-            xml = helpers.strToXML(str).firstChild;
+            if (table.hasAttribute('cellspacing')) {
+                var cellSpacing = (table.getAttribute('cellspacing') || 0) + 'px';
+                css(table, 'border-spacing', cellSpacing);
+            }
 
-            colgroups = xml.querySelectorAll('colgroup');
+            // :: parse XML looking for stuff ::
+            colgroups = table.querySelectorAll('colgroup');
 
-            th = xml.querySelectorAll('th');
-
-            // setup data
-            td = xml.querySelectorAll('td');
+            th = table.querySelectorAll('th');
+            td = table.querySelectorAll('td');
             tableCells = [];
+
             for (i = 0; i < td.length; i++) {
                 tableCells.push(td[i].textContent);
                 col = i % th.length;
@@ -68,19 +82,23 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                 };
             }
 
-            // setup template
+            var cellPadding = (table.getAttribute('cellpadding') || 0) + 'px';
+
+            // :: setup template ::
             for (i = 0; i < th.length; i++) {
+                css(th[i], 'padding', cellPadding);
                 th[i].setAttribute('ng-click', 'changeSorting(\'col_' + i + '.value\')');
                 th[i].insertAdjacentHTML('afterBegin', '<span style="float:right" ng-class="selectedCls(\'col_' + i + '.value\')" class=""></span>');
             }
 
-            tbody = xml.querySelector('tbody');
+            tbody = table.querySelector('tbody');
 
-            tr = xml.querySelector('tbody tr');
+            tr = table.querySelector('tbody tr');
             tr.setAttribute('ng-repeat', 'row in body | orderBy:sort.column:sort.reverse');
 
-            tds = xml.querySelectorAll('tbody > tr > td');
+            tds = table.querySelectorAll('tbody > tr > td');
             for (i = 0; i < th.length; i += 1) {
+                css(tds[i], 'padding', cellPadding);
                 node = tds[i];
                 while (node.firstChild) {
                     node = node.firstChild;
@@ -89,7 +107,7 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             }
             tbody.innerHTML = tr.outerHTML;
 
-            linkFn = $compile(xml.outerHTML);
+            linkFn = $compile(table.outerHTML);
             content = linkFn(scope);
             el.empty();
             el.append(content);
