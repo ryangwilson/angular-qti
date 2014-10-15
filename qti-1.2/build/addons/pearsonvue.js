@@ -55,9 +55,11 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     sort.reverse = false;
                 }
             };
-            var str, table, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content;
+            var str, table, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
             str = el[0].innerHTML;
             table = helpers.strToXML(str).firstChild;
+            borderColor = table.querySelector("thead tr").getAttribute("bgcolor") || "red";
+            console.log("WHOIS", borderColor);
             if (table.hasAttribute("border")) {
                 css(table, "border-width", table.getAttribute("border") + "px");
             }
@@ -69,6 +71,7 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                 var bgColor = table.getAttribute("bgcolor");
                 css(table, "background-color", bgColor);
             }
+            css(table, "border-color", borderColor);
             colgroups = table.querySelectorAll("colgroup");
             th = table.querySelectorAll("th");
             td = table.querySelectorAll("td");

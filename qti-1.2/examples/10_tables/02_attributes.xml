@@ -16,12 +16,12 @@
                             <material>
                                 <pearsonvue:mat_extension name="table" organization="pearsonvue" version="1.0.0">
 <![CDATA[
-<table version="1.0" border="4" rules="none" cellpadding="10" cellspacing="10" frame="box">
+<table version="1.0" border="4" rules="all" cellpadding="10" cellspacing="10" frame="box">
     <colgroup sort_rule="dictionary" width="100"/>
     <colgroup sort_rule="dictionary" width="75"/>
     <colgroup sort_rule="numeric" width="125"/>
     <thead>
-        <tr bgcolor="#C0C0C0">
+        <tr bgcolor="#3498db">
             <th><p><font size="14"><b>City</b></font></p></th>
             <th><p><font size="14"><b>State</b></font></p></th>
             <th><p><font size="14"><b>Population</b></font></p></th>
