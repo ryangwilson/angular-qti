@@ -25,8 +25,22 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
         switch (type) {
           case "numeric":
             return Number((value + "").replace(/(\D+)/gim, ""));
+
+          case "dictionary-case-insensitive":
+            return value;
+
+          case "asciibetical":
+            return value;
         }
-        return value;
+        return strToAscii(value + "");
+    };
+    var strToAscii = function(str) {
+        var ascii = "";
+        for (var i = 0; i < str.length; i++) {
+            var asciiChar = str.charCodeAt(i);
+            ascii += "&#" + asciiChar + ";";
+        }
+        return ascii;
     };
     return {
         restrict: "E",
@@ -97,6 +111,7 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     value: strToValue(colgroups[col].getAttribute("sort_rule"), td[i].textContent),
                     rule: colgroups[col].getAttribute("sort_rule")
                 };
+                console.log(row["col_" + col]);
             }
             var cellPadding = (table.getAttribute("cellpadding") || 0) + "px";
             for (i = 0; i < th.length; i++) {

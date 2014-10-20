@@ -10,8 +10,24 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
         switch (type) {
             case 'numeric':
                 return Number((value + '').replace(/(\D+)/gim, ''));
+            case 'dictionary-case-insensitive':
+                return value;
+            case 'asciibetical':
+                return value;
         }
-        return value;
+        return strToAscii(value + '');
+    };
+
+    var strToAscii = function (str) {
+
+        var ascii = '';
+
+        for (var i = 0; i < str.length; i++) {
+            var asciiChar = str.charCodeAt(i);
+            ascii += '&#' + asciiChar + ';';
+        }
+        return ascii;
+
     };
 
     return {
@@ -50,11 +66,6 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                     }
                 }
             };
-
-            scope.order = function () {
-
-            };
-
 
             // :: get the XML template ::
             str = el[0].innerHTML;
@@ -108,6 +119,8 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                     value: strToValue(colgroups[col].getAttribute('sort_rule'), td[i].textContent),
                     rule: colgroups[col].getAttribute('sort_rule')
                 };
+
+                console.log(row['col_' + col]);
 
             }
 
