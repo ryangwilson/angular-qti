@@ -95,6 +95,10 @@ thead {
 }
 
 thead {
+    cursor: default;
+}
+
+thead th[ng-click] {
     cursor: pointer;
 }
 

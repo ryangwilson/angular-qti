@@ -31,12 +31,10 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
     return {
         restrict: "E",
         link: function(scope, el, attr) {
+            var str, table, tableBorderWidth, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
             scope.head = {};
             scope.body = [];
-            scope.sort = {
-                column: "col_0.value",
-                reverse: false
-            };
+            scope.sort = {};
             scope.selectedCls = function(column) {
                 if (column === scope.sort.column) {
                     if (scope.sort.reverse) {
@@ -46,16 +44,17 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     }
                 }
             };
-            scope.changeSorting = function(column) {
-                var sort = scope.sort;
-                if (sort.column === column) {
-                    sort.reverse = !sort.reverse;
-                } else {
-                    sort.column = column;
-                    sort.reverse = false;
+            scope.changeSorting = function(column, rule) {
+                if (rule) {
+                    var sort = scope.sort;
+                    if (sort.column === column) {
+                        sort.reverse = !sort.reverse;
+                    } else {
+                        sort.column = column;
+                        sort.reverse = false;
+                    }
                 }
             };
-            var str, table, tableBorderWidth, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
             str = el[0].innerHTML;
             var nthChild = str.match(/<nth-child(.|\n)*?nth-child>/gim);
             if (nthChild) {
@@ -95,14 +94,18 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                 row["col_" + col] = {
                     width: colgroups[col].getAttribute("width"),
                     label: td[i].textContent,
-                    value: strToValue(colgroups[col].getAttribute("sort_rule"), td[i].textContent)
+                    value: strToValue(colgroups[col].getAttribute("sort_rule"), td[i].textContent),
+                    rule: colgroups[col].getAttribute("sort_rule")
                 };
             }
             var cellPadding = (table.getAttribute("cellpadding") || 0) + "px";
             for (i = 0; i < th.length; i++) {
                 css(th[i], "padding", cellPadding);
-                th[i].setAttribute("ng-click", "changeSorting('col_" + i + ".value')");
-                th[i].insertAdjacentHTML("afterBegin", '<span class="sort-indicator" ng-class="selectedCls(\'col_' + i + ".value')\"></span>");
+                var rule = colgroups[i].getAttribute("sort_rule") || "";
+                if (rule) {
+                    th[i].setAttribute("ng-click", "changeSorting('col_" + i + ".value', '" + rule + "')");
+                    th[i].insertAdjacentHTML("afterBegin", '<span class="sort-indicator" ng-class="selectedCls(\'col_' + i + ".value')\"></span>");
+                }
             }
             tbody = table.querySelector("tbody");
             tr = table.querySelector("tbody tr");

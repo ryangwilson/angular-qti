@@ -18,12 +18,14 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
         restrict: 'E',
         link: function (scope, el, attr) {
 
+            var str, table, tableBorderWidth, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
+
             // :: internal model :: //
             scope.head = {};
             scope.body = [];
             scope.sort = {
-                column: 'col_0.value',
-                reverse: false
+//                column: 'col_0.value',
+//                reverse: false
             };
 
             // :: functions for handling sort :: //
@@ -37,17 +39,22 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                 }
             };
 
-            scope.changeSorting = function (column) {
-                var sort = scope.sort;
-                if (sort.column === column) {
-                    sort.reverse = !sort.reverse;
-                } else {
-                    sort.column = column;
-                    sort.reverse = false;
+            scope.changeSorting = function (column, rule) {
+                if (rule) {
+                    var sort = scope.sort;
+                    if (sort.column === column) {
+                        sort.reverse = !sort.reverse;
+                    } else {
+                        sort.column = column;
+                        sort.reverse = false;
+                    }
                 }
             };
 
-            var str, table, tableBorderWidth, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
+            scope.order = function () {
+
+            };
+
 
             // :: get the XML template ::
             str = el[0].innerHTML;
@@ -98,8 +105,10 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                 row['col_' + col] = {
                     width: colgroups[col].getAttribute('width'),
                     label: td[i].textContent,
-                    value: strToValue(colgroups[col].getAttribute('sort_rule'), td[i].textContent)
+                    value: strToValue(colgroups[col].getAttribute('sort_rule'), td[i].textContent),
+                    rule: colgroups[col].getAttribute('sort_rule')
                 };
+
             }
 
             var cellPadding = (table.getAttribute('cellpadding') || 0) + 'px';
@@ -107,8 +116,11 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             // :: setup template ::
             for (i = 0; i < th.length; i++) {
                 css(th[i], 'padding', cellPadding);
-                th[i].setAttribute('ng-click', 'changeSorting(\'col_' + i + '.value\')');
-                th[i].insertAdjacentHTML('afterBegin', '<span class="sort-indicator" ng-class="selectedCls(\'col_' + i + '.value\')"></span>');
+                var rule = colgroups[i].getAttribute('sort_rule') || '';
+                if (rule) {
+                    th[i].setAttribute('ng-click', 'changeSorting(\'col_' + i + '.value\', \'' + rule + '\')');
+                    th[i].insertAdjacentHTML('afterBegin', '<span class="sort-indicator" ng-class="selectedCls(\'col_' + i + '.value\')"></span>');
+                }
             }
 
             tbody = table.querySelector('tbody');
