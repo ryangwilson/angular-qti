@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="reset.css"/>
+    <style>
+        body {
+            padding: 10px;
+        }
+
+        table[data-border]:not([frame]) {
+            border-style: solid;
+        }
+
+        table[frame=void] {
+            border-style: hidden;
+        }
+
+        table[frame=above] {
+            border-top-style: solid;
+        }
+
+        table[frame=below] {
+            border-bottom-style: solid;
+        }
+
+        table[frame=hsides] {
+            border-top-style: solid;
+            border-bottom-style: solid;
+        }
+
+        table[frame=lhs] {
+            border-left-style: solid;
+        }
+
+        table[frame=rhs] {
+            border-right-style: solid;
+        }
+
+        table[frame=hsides] {
+            border-left-style: solid;
+            border-right-style: solid;
+        }
+
+        table[frame=box] {
+            border-top-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            border-right-style: solid;
+        }
+
+    </style>
+</head>
+<body>
+
+<table data-border="10" frame="below" rules="all" cellpadding="10" style="border-width: 10px;border-color: red">
+    <caption>American Film Institute’s Top Five Films</caption>
+    <col>
+    <col>
+    <col>
+    <thead>
+    <tr>
+        <th>Position
+        <th>Movie
+        <th>Year of Release
+    </thead>
+    <tbody>
+    <tr>
+        <td>1
+        <td>Citizen Kane
+        <td>1941
+    <tr>
+        <td>2
+        <td>The Godfather
+        <td>1972
+    <tr>
+        <td>3
+        <td>Casablanca
+        <td>1942
+    <tr>
+        <td>4
+        <td>Raging Bull
+        <td>1980
+    <tr>
+        <td>5
+        <td>Singin’ In The Rain
+        <td>1952
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -55,13 +55,22 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     sort.reverse = false;
                 }
             };
-            var str, table, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
+            var str, table, tableBorderWidth, i, colgroups, tbody, tds, tr, th, td, node, tableCells, col, row, linkFn, content, borderColor;
             str = el[0].innerHTML;
+            var nthChild = str.match(/<nth-child(.|\n)*?nth-child>/gim);
+            if (nthChild) {
+                nthChild = helpers.strToXML(nthChild[0]).firstChild;
+            }
+            str = str.replace(/<nth-child(.|\n)*?nth-child>/gim, "");
             table = helpers.strToXML(str).firstChild;
-            borderColor = table.querySelector("thead tr").getAttribute("bgcolor") || "red";
-            console.log("WHOIS", borderColor);
             if (table.hasAttribute("border")) {
-                css(table, "border-width", table.getAttribute("border") + "px");
+                tableBorderWidth = table.getAttribute("border") || "1";
+            }
+            borderColor = table.querySelector("thead tr").getAttribute("bgcolor") || "red";
+            if (tableBorderWidth) {
+                css(table, "border-width", tableBorderWidth + "px");
+                table.removeAttribute("border");
+                table.setAttribute("data-border", tableBorderWidth);
             }
             if (table.hasAttribute("cellspacing")) {
                 var cellSpacing = (table.getAttribute("cellspacing") || 0) + "px";
@@ -98,6 +107,11 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
             tbody = table.querySelector("tbody");
             tr = table.querySelector("tbody tr");
             tr.setAttribute("ng-repeat", "row in body | orderBy:sort.column:sort.reverse");
+            if (nthChild) {
+                tr.setAttribute("ng-class-odd", "'odd'");
+                tr.setAttribute("ng-class-even", "'even'");
+                console.log("nthChild", nthChild.getAttribute("count"));
+            }
             tds = table.querySelectorAll("tbody > tr > td");
             for (i = 0; i < th.length; i += 1) {
                 css(tds[i], "padding", cellPadding);

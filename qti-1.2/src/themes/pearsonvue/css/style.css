@@ -35,6 +35,83 @@ b, strong {
     color: #ffffff;
 }
 
+table[data-border]:not([frame]) {
+    border-style: solid;
+}
+
+table[frame=void] {
+    border-style: hidden;
+}
+
+table[frame=above] {
+    border-top-style: solid;
+}
+
+table[frame=below] {
+    border-bottom-style: solid;
+}
+
+table[frame=hsides] {
+    border-top-style: solid;
+    border-bottom-style: solid;
+}
+
+table[frame=lhs] {
+    border-left-style: solid;
+}
+
+table[frame=rhs] {
+    border-right-style: solid;
+}
+
+table[frame=hsides] {
+    border-left-style: solid;
+    border-right-style: solid;
+}
+
+table[frame=box] {
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+}
+
+table .sort-indicator {
+    position: absolute;
+    right: 4px;
+}
+
+table th {
+    position: relative;
+}
+
+thead {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+thead {
+    cursor: pointer;
+}
+
+th, td {
+    outline: 0;
+    /*padding: 4px !important;*/
+}
+
+thead .fa {
+    padding: 0 4px;
+}
+
+.odd {
+    background: yellow;
+}
+
+
 .qti-content {
     padding: 10px;
 }
@@ -82,98 +159,4 @@ resprocessing {
     display: none;
 }
 
-table {
-    border-collapse: separate;
-    border: 0px solid rgba(0, 0, 0, 0);
-}
-
-table .sort-indicator {
-    position: absolute;
-    right: 4px;
-}
-
-table th {
-    position: relative;
-}
-
-table[rules=all] {
-    border: 1px solid #C0C0C0;
-}
-
-table[rules=rows] tr {
-    border-bottom: 1px solid #C0C0C0;
-}
-
-table[rules=rows] tr:last-child {
-    border-bottom: none;
-    border-bottom: 0px solid rgba(0, 0, 0, 0);
-}
-
-table[rules=cols] th, table[rules=cols] td {
-    border-left: 1px solid #C0C0C0;
-    border-right: 1px solid #C0C0C0;
-}
-
-table[frame=above] {
-    border-top: 1px solid #C0C0C0;
-}
-
-table[frame=below] {
-    border-bottom: 1px solid #C0C0C0;
-}
-
-table[frame=lhs] {
-    border-left: 1px solid #C0C0C0;
-}
-
-table[frame=rhs] {
-    border-right: 1px solid #C0C0C0;
-}
-
-table[frame=hsides] {
-    border-left: 1px solid #C0C0C0;
-    border-right: 1px solid #C0C0C0;
-}
-
-table[frame=vsides] {
-    border-top: 1px solid #C0C0C0;
-    border-bottom: 1px solid #C0C0C0;
-}
-
-table[frame=box] {
-    border-top: 1px solid #C0C0C0;
-    border-bottom: 1px solid #C0C0C0;
-    border-left: 1px solid #C0C0C0;
-    border-right: 1px solid #C0C0C0;
-}
-
-table[rules=cols] th:first-child,
-table[rules=cols] th:last-child,
-table[rules=cols] td:first-child,
-table[rules=cols] td:last-child {
-    border-left: none;
-    border-right: 0px solid rgba(0, 0, 0, 0);
-}
-
-thead {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-thead {
-    cursor: pointer;
-}
-
-th, td {
-    outline: 0;
-    /*padding: 4px !important;*/
-}
-
-thead .fa {
-    padding: 0 4px;
-}
 
