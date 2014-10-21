@@ -1,4 +1,5 @@
 angular.module('qti').directive('pearsonvueMatExtension', function ($compile, helpers) {
+    'use strict';
 
     var css = function (el, prop, value) {
         var styles = el.getAttribute('style') || '';
@@ -28,6 +29,10 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
         }
         return ascii;
 
+    };
+
+    var isNumber = function (n) {
+        return n === parseFloat(n, 10);
     };
 
     return {
@@ -65,6 +70,14 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                         sort.reverse = false;
                     }
                 }
+            };
+
+            scope.isEven = function (n) {
+                return isNumber(n) && (n % 2 === 0);
+            };
+
+            scope.isOdd = function (n) {
+                return isNumber(n) && (Math.abs(n) % 2 === 1);
             };
 
             // :: get the XML template ::
@@ -119,9 +132,6 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
                     value: strToValue(colgroups[col].getAttribute('sort_rule'), td[i].textContent),
                     rule: colgroups[col].getAttribute('sort_rule')
                 };
-
-                console.log(row['col_' + col]);
-
             }
 
             var cellPadding = (table.getAttribute('cellpadding') || 0) + 'px';
@@ -142,8 +152,19 @@ angular.module('qti').directive('pearsonvueMatExtension', function ($compile, he
             tr.setAttribute('ng-repeat', 'row in body | orderBy:sort.column:sort.reverse');
 
             if (nthChild) {
-                tr.setAttribute('ng-class-odd', '\'odd\'');
-                tr.setAttribute('ng-class-even', '\'even\'');
+                var count = nthChild.getAttribute('count');
+                var rowColor = nthChild.getAttribute('bgcolor');
+                switch (count) {
+                    case 'odd':
+                        tr.setAttribute('ng-style', '{ background: (isOdd($index) && \'' + rowColor + '\' || \'none\') }');
+                        break;
+                    case 'even':
+                        tr.setAttribute('ng-style', '{ background: (isEven($index) && \'' + rowColor + '\' || \'none\') }');
+                        break;
+                    default:
+                        tr.setAttribute('ng-style', '{ background: ($index == ' + (count - 1) + ' && \'' + rowColor + '\' || \'none\') }');
+                }
+
                 console.log('nthChild', nthChild.getAttribute('count'));
             }
 

@@ -16,6 +16,7 @@ angular.module("qti").directive("font", function() {
 });
 
 angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
+    "use strict";
     var css = function(el, prop, value) {
         var styles = el.getAttribute("style") || "";
         styles += ";" + prop + ":" + value;
@@ -41,6 +42,9 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
             ascii += "&#" + asciiChar + ";";
         }
         return ascii;
+    };
+    var isNumber = function(n) {
+        return n === parseFloat(n, 10);
     };
     return {
         restrict: "E",
@@ -68,6 +72,12 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                         sort.reverse = false;
                     }
                 }
+            };
+            scope.isEven = function(n) {
+                return isNumber(n) && n % 2 === 0;
+            };
+            scope.isOdd = function(n) {
+                return isNumber(n) && Math.abs(n) % 2 === 1;
             };
             str = el[0].innerHTML;
             var nthChild = str.match(/<nth-child(.|\n)*?nth-child>/gim);
@@ -111,7 +121,6 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
                     value: strToValue(colgroups[col].getAttribute("sort_rule"), td[i].textContent),
                     rule: colgroups[col].getAttribute("sort_rule")
                 };
-                console.log(row["col_" + col]);
             }
             var cellPadding = (table.getAttribute("cellpadding") || 0) + "px";
             for (i = 0; i < th.length; i++) {
@@ -126,8 +135,20 @@ angular.module("qti").directive("pearsonvueMatExtension", [ "$compile", "helpers
             tr = table.querySelector("tbody tr");
             tr.setAttribute("ng-repeat", "row in body | orderBy:sort.column:sort.reverse");
             if (nthChild) {
-                tr.setAttribute("ng-class-odd", "'odd'");
-                tr.setAttribute("ng-class-even", "'even'");
+                var count = nthChild.getAttribute("count");
+                var rowColor = nthChild.getAttribute("bgcolor");
+                switch (count) {
+                  case "odd":
+                    tr.setAttribute("ng-style", "{ background: (isOdd($index) && '" + rowColor + "' || 'none') }");
+                    break;
+
+                  case "even":
+                    tr.setAttribute("ng-style", "{ background: (isEven($index) && '" + rowColor + "' || 'none') }");
+                    break;
+
+                  default:
+                    tr.setAttribute("ng-style", "{ background: ($index == " + (count - 1) + " && '" + rowColor + "' || 'none') }");
+                }
                 console.log("nthChild", nthChild.getAttribute("count"));
             }
             tds = table.querySelectorAll("tbody > tr > td");

@@ -17,7 +17,7 @@
                                 <pearsonvue:mat_extension name="table" organization="pearsonvue" version="1.0.0">
 <![CDATA[
 <table version="1.0" border="4" rules="all" cellpadding="10" cellspacing="10" frame="box" width="600" height="400">
-    <nth-child count="odd" bgcolor="#C0C0C0"/>
+    <nth-child count="3" bgcolor="#C0C0C0"/>
     <colgroup sort_rule="dictionary" width="100"/>
     <colgroup sort_rule="dictionary" width="75"/>
     <colgroup sort_rule="numeric" width="125"/>
@@ -29,7 +29,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr ng-style="{ background: ($index % 2 && 'red' || 'none') }">
             <td>Minneapolis</td>
             <td>MN</td>
             <td><p align="right">390,504</p></td>
