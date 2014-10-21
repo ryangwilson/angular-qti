@@ -26,7 +26,35 @@ angular.module("qti").directive("assessment", function() {
     };
 });
 
-angular.module("qti").directive("qtiEngine", [ "$http", "$compile", function($http, $compile) {
+angular.module("qti").directive("qtiEngine", [ "$http", "$compile", "helpers", function($http, $compile, helpers) {
+    function _replaceSpaces(match, group) {
+        return match.split(" ").join("__SPACE__");
+    }
+    function _replaceTabs(match, group) {
+        return match.split(" ").join("__TAB__");
+    }
+    function fixMattext(xmlStr) {
+        var xml = helpers.strToXML(xmlStr);
+        var mattexts = xml.querySelectorAll("mattext");
+        var mattext, childNodes, childNode, str;
+        for (var i = 0; i < mattexts.length; i++) {
+            mattext = mattexts[i];
+            childNodes = mattext.childNodes;
+            for (var n = 0; n < childNodes.length; n++) {
+                childNode = childNodes[n];
+                if (childNode.nodeType === 3) {
+                    str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
+                    str = str.replace(/\t{2,}/gim, _replaceTabs);
+                    childNode.nodeValue = str;
+                }
+            }
+        }
+        var oSerializer = new XMLSerializer();
+        xmlStr = oSerializer.serializeToString(xml);
+        xmlStr = xmlStr.split("__SPACE__").join("&nbsp;&#8203;");
+        xmlStr = xmlStr.split("__TAB__").join("&nbsp;&nbsp;&nbsp;&#8203;");
+        return xmlStr;
+    }
     function stripCDATA(str) {
         return str.split("<![CDATA[").join("").split("]]>").join("");
     }
@@ -60,10 +88,11 @@ angular.module("qti").directive("qtiEngine", [ "$http", "$compile", function($ht
         link: function(scope, el, attr) {
             $http.get(attr.src).then(function(response) {
                 var template = response.data;
+                var xml = helpers.strToXML(template);
+                template = fixMattext(template);
                 template = stripCDATA(template);
                 template = replaceDyn(template);
                 template = replaceShorthand(template);
-                template = formatWhitespace(template);
                 var linkFn = $compile(template);
                 var content = linkFn(scope);
                 el.append(content);

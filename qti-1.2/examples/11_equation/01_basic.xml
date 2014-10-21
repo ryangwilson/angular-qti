@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="TableAssessment" title="Equation :: Basic Example">
+        <section ident="TableSection">
+            <item ident="TableItem">
+                <presentation>
+                    <flow> <material>
+                        <mattext>This is a sample of MathML: <math xmlns:m="http://www.w3.org/1998/Math/MathML">
+                            <m:mrow>
+                                <m:msup>
+                                    <m:mfenced>
+                                        <m:mrow>
+                                            <m:mi>a</m:mi>
+                                            <m:mo>+</m:mo>
+                                            <m:mi>b</m:mi>
+                                            <m:mo>+</m:mo>
+                                            <m:mi>c</m:mi>
+                                        </m:mrow>
+                                    </m:mfenced>
+                                    <m:mn>2</m:mn> </m:msup>
+                            </m:mrow>
+                        </math>   embedded in a line of text. </mattext>
+                    </material> </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>
