@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         'less',
         'cssmin',
         'copy',
-        //'clean:tmp'
+        'clean:tmp'
     ];
 
     grunt.registerTask('default', tasks);
