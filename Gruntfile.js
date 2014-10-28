@@ -4,15 +4,17 @@ module.exports = function (grunt) {
         'ngtemplates',
         'ngAnnotate',
         'uglify',
+        'less',
         'cssmin',
+        'copy',
         'clean:tmp'
     ];
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*\n' +
-            '* <%= pkg.name %> <%= pkg.version %>\n' +
-            '*/\n',
+        '* <%= pkg.name %> <%= pkg.version %>\n' +
+        '*/\n',
         jshint: {
             // define the files to lint
             files: ['scripts/**/*.js'],
@@ -25,6 +27,15 @@ module.exports = function (grunt) {
                 ignores: [
                     'scripts/libs/**/*.js'
                 ]
+            }
+        },
+        less: {
+            themes: {
+                files: {
+                    "qti-1.2/build/themes/engine/styles.css": "qti-1.2/src/themes/engine/css/main.less",
+                    "qti-1.2/build/themes/pearsonvue/styles.css": "qti-1.2/src/themes/pearsonvue/css/main.less",
+                    "qti-1.2/build/themes/summary/styles.css": "qti-1.2/src/themes/summary/css/main.less"
+                }
             }
         },
         ngAnnotate: {
@@ -139,9 +150,31 @@ module.exports = function (grunt) {
                 }
             }
         },
+        copy: {
+            main: {
+                files: [
+                    // includes files within path
+                    //{expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'},
+
+                    // includes files within path and its sub-directories
+                    {
+                        expand: true,
+                        cwd: 'qti-1.2/src/themes/engine/css/',
+                        src: ['*/**'],
+                        dest: 'qti-1.2/build/themes/engine/'
+                    },
+
+                    // makes all src relative to cwd
+                    //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
+
+                    // flattens results to a single level
+                    //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'},
+                ]
+            }
+        },
         ngtemplates: {
             'summary': {
-                cwd:'qti-1.2/src/themes/summary',
+                cwd: 'qti-1.2/src/themes/summary',
                 src: 'templates/**.html',
                 dest: 'qti-1.2/build/themes/summary/templates.js',
                 options: {
@@ -159,7 +192,7 @@ module.exports = function (grunt) {
                 }
             },
             'engine': {
-                cwd:'qti-1.2/src/themes/engine',
+                cwd: 'qti-1.2/src/themes/engine',
                 src: 'templates/**.html',
                 dest: 'qti-1.2/build/themes/engine/templates.js',
                 options: {
@@ -177,7 +210,7 @@ module.exports = function (grunt) {
                 }
             },
             'pearsonvue': {
-                cwd:'qti-1.2/src/themes/pearsonvue',
+                cwd: 'qti-1.2/src/themes/pearsonvue',
                 src: 'templates/**.html',
                 dest: 'qti-1.2/build/themes/pearsonvue/templates.js',
                 options: {
@@ -220,10 +253,12 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-angular-templates');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-wrap');
 
