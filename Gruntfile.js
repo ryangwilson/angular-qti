@@ -57,21 +57,21 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            videogular: {
-                files: {
-                    '.tmp/1.2/videogular.js': [
-                        'qti-1.2/src/addons/videogular/*.js',
-                        'qti-1.2/src/addons/videogular/constants/*.js',
-                        'qti-1.2/src/addons/videogular/directives/*.js',
-                        'qti-1.2/src/addons/videogular/plugins/*.js',
-                        'qti-1.2/src/addons/videogular/plugins/widgets/*.js',
-                        'qti-1.2/src/addons/videogular/services/*.js'
-                    ]
-                }
-            },
+            //videogular: {
+            //    files: {
+            //        '.tmp/1.2/videogular.js': [
+            //            'qti-1.2/src/addons/videogular/*.js',
+            //            'qti-1.2/src/addons/videogular/constants/*.js',
+            //            'qti-1.2/src/addons/videogular/directives/*.js',
+            //            'qti-1.2/src/addons/videogular/plugins/*.js',
+            //            'qti-1.2/src/addons/videogular/plugins/widgets/*.js',
+            //            'qti-1.2/src/addons/videogular/services/*.js'
+            //        ]
+            //    }
+            //},
             videogular2: {
                 files: {
-                    '.tmp/1.2/videogular2.js': [
+                    '.tmp/1.2/videogular.js': [
                         'qti-1.2/src/addons/videogular2/*.js',
                         'qti-1.2/src/addons/videogular2/plugins/*.js'
                     ]
@@ -129,14 +129,14 @@ module.exports = function (grunt) {
                 options: {
                     mangle: false,
                     compress: false,
-                    preserveComments: 'some',
+                    preserveComments: 'none',
                     beautify: true,
                     exportAll: true,
                     banner: '<%= banner %>'
                 },
                 files: {
-                    'qti-1.2/build/addons/videogular.js': ['.tmp/1.2/videogular.js'],
-                    'qti-1.2/build/addons/videogular2.js': ['.tmp/1.2/videogular2.js']
+                    //'qti-1.2/build/addons/videogular.js': ['.tmp/1.2/videogular.js'],
+                    'qti-1.2/build/addons/videogular.js': ['.tmp/1.2/videogular.js']
                 }
             },
             videogular_min: {

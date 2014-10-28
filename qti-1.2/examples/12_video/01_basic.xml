@@ -2,7 +2,7 @@
 <!DOCTYPE questestinterop SYSTEM
         "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
 <questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
-    <assessment ident="TableAssessment" title="Equation :: Basic Example">
+    <assessment ident="TableAssessment" title="Video :: Basic Example">
         <section ident="TableSection">
             <item ident="TableItem">
                 <presentation>
