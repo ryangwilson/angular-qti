@@ -1,5 +1,5 @@
 /**
- * @license Videogular v0.6.1 http://videogular.com
+ * @license Videogular v0.6.2 http://videogular.com
  * Two Fucking Developers http://twofuckingdevelopers.com
  * License: MIT
  */
@@ -20,7 +20,7 @@
  * ```
  *
  */
-angular.module("videogular", [])
+angular.module("com.2fdevs.videogular.plugins.overlayplay", [])
 	.directive(
 	"vgOverlayPlay",
 	["VG_STATES", function (VG_STATES) {

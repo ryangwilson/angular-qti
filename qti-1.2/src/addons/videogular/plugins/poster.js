@@ -1,11 +1,12 @@
 /**
- * @license Videogular v0.6.1 http://videogular.com
+ * @license Videogular v0.6.2 http://videogular.com
  * Two Fucking Developers http://twofuckingdevelopers.com
  * License: MIT
  */
 "use strict";
 /**
  * @ngdoc directive
+ * @name com.2fdevs.videogular.plugins.poster:vgPoster
  * @restrict E
  * @description
  * Shows an image when player hasn't been played or has been completed a video.
@@ -21,7 +22,7 @@
  * ```
  *
  */
-angular.module("videogular", [])
+angular.module("com.2fdevs.videogular.plugins.poster", [])
 	.directive(
 	"vgPosterImage",
 	["VG_STATES", function (VG_STATES) {

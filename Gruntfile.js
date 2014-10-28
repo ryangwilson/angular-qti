@@ -7,7 +7,7 @@ module.exports = function (grunt) {
         'less',
         'cssmin',
         'copy',
-        'clean:tmp'
+        //'clean:tmp'
     ];
 
     grunt.initConfig({
@@ -36,9 +36,21 @@ module.exports = function (grunt) {
                     "qti-1.2/build/themes/pearsonvue/styles.css": "qti-1.2/src/themes/pearsonvue/css/main.less",
                     "qti-1.2/build/themes/summary/styles.css": "qti-1.2/src/themes/summary/css/main.less"
                 }
+            },
+            themes_all: {
+                files: {
+                    "qti-1.2/build/themes/all/styles.css": [
+                        "qti-1.2/src/themes/engine/css/main.less",
+                        "qti-1.2/src/themes/pearsonvue/css/main.less",
+                        "qti-1.2/src/themes/summary/css/main.less"
+                    ]
+                }
             }
         },
         ngAnnotate: {
+            options: {
+                singleQuotes: true
+            },
             engine: {
                 files: {
                     '.tmp/1.2/qti.js': [
@@ -57,23 +69,25 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            //videogular: {
-            //    files: {
-            //        '.tmp/1.2/videogular.js': [
-            //            'qti-1.2/src/addons/videogular/*.js',
-            //            'qti-1.2/src/addons/videogular/constants/*.js',
-            //            'qti-1.2/src/addons/videogular/directives/*.js',
-            //            'qti-1.2/src/addons/videogular/plugins/*.js',
-            //            'qti-1.2/src/addons/videogular/plugins/widgets/*.js',
-            //            'qti-1.2/src/addons/videogular/services/*.js'
-            //        ]
-            //    }
-            //},
-            videogular2: {
+            videogular: {
                 files: {
                     '.tmp/1.2/videogular.js': [
-                        'qti-1.2/src/addons/videogular2/*.js',
-                        'qti-1.2/src/addons/videogular2/plugins/*.js'
+                        'qti-1.2/src/addons/videogular/*.js',
+                        'qti-1.2/src/addons/videogular/plugins/*.js'
+                    ]
+                }
+            },
+            all: {
+                files: {
+                    '.tmp/1.2/qti-all.js': [
+                        'qti-1.2/src/addons/videogular/*.js',
+                        'qti-1.2/src/addons/videogular/plugins/*.js',
+                        'qti-1.2/src/engine/bootstrap.js',
+                        'qti-1.2/src/engine/consts.js',
+                        'qti-1.2/src/engine/**/*.js',
+                        'qti-1.2/src/addons/pearsonvue/bootstrap.js',
+                        'qti-1.2/src/addons/pearsonvue/consts.js',
+                        'qti-1.2/src/addons/pearsonvue/**/*.js',
                     ]
                 }
             }
@@ -148,7 +162,34 @@ module.exports = function (grunt) {
                 files: {
                     'qti-1.2/build/addons/videogular.min.js': ['.tmp/1.2/videogular.js']
                 }
-            }
+            },
+            qti_all: {
+                options: {
+                    mangle: false,
+                    compress: false,
+                    preserveComments: 'none',
+                    beautify: true,
+                    exportAll: true,
+                    banner: '<%= banner %>'
+                },
+                files: {
+                    'qti-1.2/build/qti-all.js': [
+                        '.tmp/1.2/qti-all.js',
+                        'qti-1.2/build/themes/engine/templates.js',
+                        'qti-1.2/build/themes/pearsonvue/templates.js'
+                    ]
+                }
+            },
+            qti_all_min: {
+                options: {
+                    report: 'min',
+                    wrap: '<%= pkg.packageName %>',
+                    banner: '<%= banner %>'
+                },
+                files: {
+                    'qti-1.2/build/qti-all.min.js': ['.tmp/1.2/qti-all.js']
+                }
+            },
         },
         copy: {
             main: {
