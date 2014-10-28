@@ -1,0 +1,8 @@
+{
+  "build": [
+    "<%= buildDir %>"
+  ],
+  "tmp": [
+    ".tmp"
+  ]
+}

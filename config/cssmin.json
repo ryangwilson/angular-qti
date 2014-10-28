@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "options": {
+      "banner": "/* My minified css file */"
+    },
+    "files": {
+      "qti-1.2/build/themes/summary/styles.css": [
+        "qti-1.2/src/themes/summary/css/style.css"
+      ]
+    }
+  },
+  "pearsonvue": {
+    "options": {
+      "banner": "/* My minified css file */"
+    },
+    "files": {
+      "qti-1.2/build/themes/pearsonvue/styles.css": [
+        "qti-1.2/src/themes/pearsonvue/css/style.css"
+      ]
+    }
+  }
+}

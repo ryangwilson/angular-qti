@@ -1,0 +1,56 @@
+{
+  "summary": {
+    "cwd": "qti-1.2/src/themes/summary",
+    "src": "templates/**.html",
+    "dest": "qti-1.2/build/themes/summary/templates.js",
+    "options": {
+      "module": "qti",
+      "htmlmin": {
+        "collapseBooleanAttributes": true,
+        "collapseWhitespace": true,
+        "removeAttributeQuotes": true,
+        "removeComments": true,
+        "removeEmptyAttributes": false,
+        "removeRedundantAttributes": true,
+        "removeScriptTypeAttributes": true,
+        "removeStyleLinkTypeAttributes": true
+      }
+    }
+  },
+  "engine": {
+    "cwd": "qti-1.2/src/themes/engine",
+    "src": "templates/**.html",
+    "dest": "qti-1.2/build/themes/engine/templates.js",
+    "options": {
+      "module": "qti",
+      "htmlmin": {
+        "collapseBooleanAttributes": true,
+        "collapseWhitespace": true,
+        "removeAttributeQuotes": true,
+        "removeComments": true,
+        "removeEmptyAttributes": false,
+        "removeRedundantAttributes": true,
+        "removeScriptTypeAttributes": true,
+        "removeStyleLinkTypeAttributes": true
+      }
+    }
+  },
+  "pearsonvue": {
+    "cwd": "qti-1.2/src/themes/pearsonvue",
+    "src": "templates/**.html",
+    "dest": "qti-1.2/build/themes/pearsonvue/templates.js",
+    "options": {
+      "module": "qti",
+      "htmlmin": {
+        "collapseBooleanAttributes": true,
+        "collapseWhitespace": true,
+        "removeAttributeQuotes": true,
+        "removeComments": true,
+        "removeEmptyAttributes": false,
+        "removeRedundantAttributes": true,
+        "removeScriptTypeAttributes": true,
+        "removeStyleLinkTypeAttributes": true
+      }
+    }
+  }
+}

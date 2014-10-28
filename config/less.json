@@ -1,0 +1,18 @@
+{
+  "themes": {
+    "files": {
+      "qti-1.2/build/themes/engine/styles.css": "qti-1.2/src/themes/engine/css/main.less",
+      "qti-1.2/build/themes/pearsonvue/styles.css": "qti-1.2/src/themes/pearsonvue/css/main.less",
+      "qti-1.2/build/themes/summary/styles.css": "qti-1.2/src/themes/summary/css/main.less"
+    }
+  },
+  "themes_all": {
+    "files": {
+      "qti-1.2/build/themes/all/styles.css": [
+        "qti-1.2/src/themes/engine/css/main.less",
+        "qti-1.2/src/themes/pearsonvue/css/main.less",
+        "qti-1.2/src/themes/summary/css/main.less"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "options": {
+    "singleQuotes": true
+  },
+  "engine": {
+    "files": {
+      ".tmp/1.2/qti.js": [
+        "qti-1.2/src/engine/bootstrap.js",
+        "qti-1.2/src/engine/consts.js",
+        "qti-1.2/src/engine/**/*.js"
+      ]
+    }
+  },
+  "pearsonvue": {
+    "files": {
+      ".tmp/1.2/pearsonvue.js": [
+        "qti-1.2/src/addons/pearsonvue/bootstrap.js",
+        "qti-1.2/src/addons/pearsonvue/consts.js",
+        "qti-1.2/src/addons/pearsonvue/**/*.js"
+      ]
+    }
+  },
+  "videogular": {
+    "files": {
+      ".tmp/1.2/videogular.js": [
+        "qti-1.2/src/addons/videogular/*.js",
+        "qti-1.2/src/addons/videogular/plugins/*.js"
+      ]
+    }
+  },
+  "all": {
+    "files": {
+      ".tmp/1.2/qti-all.js": [
+        ".tmp/1.2/pearsonvue.js",
+        ".tmp/1.2/videogular.js",
+        ".tmp/1.2/qti.js"
+      ]
+    }
+  }
+}

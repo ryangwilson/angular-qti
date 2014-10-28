@@ -1,0 +1,14 @@
+{
+  "main": {
+    "files": [
+      {
+        "expand": true,
+        "cwd": "qti-1.2/src/themes/engine/css/",
+        "src": [
+          "*/**"
+        ],
+        "dest": "qti-1.2/build/themes/engine/"
+      }
+    ]
+  }
+}

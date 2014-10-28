@@ -1,0 +1,13 @@
+{
+  "files": [
+    "scripts/**/*.js"
+  ],
+  "options": {
+    "globals": {
+      "loopfunc": false
+    },
+    "ignores": [
+      "scripts/libs/**/*.js"
+    ]
+  }
+}
