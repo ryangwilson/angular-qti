@@ -1,7 +1,6 @@
 /* global angular */
 angular.module('app', ['qti']);
 angular.module('app').controller('SystemCtrl', function ($scope) {
-
     function User(data) {
 
         var getFullName = function () {
@@ -22,5 +21,4 @@ angular.module('app').controller('SystemCtrl', function ($scope) {
     this.getUser = function () {
         return this.User;
     };
-
 });

@@ -1,3 +1,3 @@
 /* global angular */
-angular.module('qti').constant('PV_CONFIG', {
+angular.module('pearsonvue').constant('PV_CONFIG', {
 });

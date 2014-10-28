@@ -53,33 +53,6 @@
       ]
     }
   },
-  "videogular": {
-    "options": {
-      "mangle": false,
-      "compress": false,
-      "preserveComments": "none",
-      "beautify": true,
-      "exportAll": true,
-      "banner": "<%= banner %>"
-    },
-    "files": {
-      "qti-1.2/build/addons/videogular.js": [
-        ".tmp/1.2/videogular.js"
-      ]
-    }
-  },
-  "videogular_min": {
-    "options": {
-      "report": "min",
-      "wrap": "<%= name %>",
-      "banner": "<%= banner %>"
-    },
-    "files": {
-      "qti-1.2/build/addons/videogular.min.js": [
-        ".tmp/1.2/videogular.js"
-      ]
-    }
-  },
   "qti_all": {
     "options": {
       "mangle": false,
