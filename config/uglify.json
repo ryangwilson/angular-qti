@@ -9,7 +9,7 @@
       "banner": "<%= banner %>"
     },
     "files": {
-      "qti-1.2/build/qti-1.2.js": [
+      "qti-1.2/build/qti.js": [
         ".tmp/1.2/qti.js"
       ]
     }
@@ -21,7 +21,7 @@
       "banner": "<%= banner %>"
     },
     "files": {
-      "qti-1.2/build/qti-1.2.min.js": [
+      "qti-1.2/build/qti.min.js": [
         ".tmp/1.2/qti.js"
       ]
     }
