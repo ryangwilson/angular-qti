@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('qti').directive('img', function ($compile) {
+angular.module('qti').directive('img', function () {
 
     return {
         restrict: 'E',

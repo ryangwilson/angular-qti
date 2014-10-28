@@ -45,6 +45,26 @@ module.exports = function (grunt) {
                         'qti-1.2/src/addons/pearsonvue/**/*.js'
                     ]
                 }
+            },
+            videogular: {
+                files: {
+                    '.tmp/1.2/videogular.js': [
+                        'qti-1.2/src/addons/videogular/*.js',
+                        'qti-1.2/src/addons/videogular/constants/*.js',
+                        'qti-1.2/src/addons/videogular/directives/*.js',
+                        'qti-1.2/src/addons/videogular/plugins/*.js',
+                        'qti-1.2/src/addons/videogular/plugins/widgets/*.js',
+                        'qti-1.2/src/addons/videogular/services/*.js'
+                    ]
+                }
+            },
+            videogular2: {
+                files: {
+                    '.tmp/1.2/videogular2.js': [
+                        'qti-1.2/src/addons/videogular2/*.js',
+                        'qti-1.2/src/addons/videogular2/plugins/*.js'
+                    ]
+                }
             }
         },
         uglify: {
@@ -93,13 +113,55 @@ module.exports = function (grunt) {
                 files: {
                     'qti-1.2/build/addons/pearsonvue.min.js': ['.tmp/1.2/pearsonvue.js']
                 }
+            },
+            videogular: {
+                options: {
+                    mangle: false,
+                    compress: false,
+                    preserveComments: 'some',
+                    beautify: true,
+                    exportAll: true,
+                    banner: '<%= banner %>'
+                },
+                files: {
+                    'qti-1.2/build/addons/videogular.js': ['.tmp/1.2/videogular.js'],
+                    'qti-1.2/build/addons/videogular2.js': ['.tmp/1.2/videogular2.js']
+                }
+            },
+            videogular_min: {
+                options: {
+                    report: 'min',
+                    wrap: '<%= pkg.packageName %>',
+                    banner: '<%= banner %>'
+                },
+                files: {
+                    'qti-1.2/build/addons/videogular.min.js': ['.tmp/1.2/videogular.js']
+                }
             }
         },
         ngtemplates: {
             'summary': {
                 cwd:'qti-1.2/src/themes/summary',
                 src: 'templates/**.html',
-                dest: 'qti-1.2/build/themes/summary.js',
+                dest: 'qti-1.2/build/themes/summary/templates.js',
+                options: {
+                    module: 'qti',
+                    htmlmin: {
+                        collapseBooleanAttributes: true,
+                        collapseWhitespace: true,
+                        removeAttributeQuotes: true,
+                        removeComments: true, // Only if you don't use comment directives!
+                        removeEmptyAttributes: false,
+                        removeRedundantAttributes: true,
+                        removeScriptTypeAttributes: true,
+                        removeStyleLinkTypeAttributes: true
+                    }
+                }
+            },
+            'engine': {
+                cwd:'qti-1.2/src/themes/engine',
+                src: 'templates/**.html',
+                dest: 'qti-1.2/build/themes/engine/templates.js',
                 options: {
                     module: 'qti',
                     htmlmin: {
@@ -117,7 +179,7 @@ module.exports = function (grunt) {
             'pearsonvue': {
                 cwd:'qti-1.2/src/themes/pearsonvue',
                 src: 'templates/**.html',
-                dest: 'qti-1.2/build/themes/pearsonvue.js',
+                dest: 'qti-1.2/build/themes/pearsonvue/templates.js',
                 options: {
                     module: 'qti',
                     htmlmin: {
@@ -139,7 +201,7 @@ module.exports = function (grunt) {
                     banner: '/* My minified css file */'
                 },
                 files: {
-                    'qti-1.2/build/themes/summary.css': ['qti-1.2/src/themes/summary/css/style.css']
+                    'qti-1.2/build/themes/summary/styles.css': ['qti-1.2/src/themes/summary/css/style.css']
                 }
             },
             pearsonvue: {
@@ -147,7 +209,7 @@ module.exports = function (grunt) {
                     banner: '/* My minified css file */'
                 },
                 files: {
-                    'qti-1.2/build/themes/pearsonvue.css': ['qti-1.2/src/themes/pearsonvue/css/style.css']
+                    'qti-1.2/build/themes/pearsonvue/styles.css': ['qti-1.2/src/themes/pearsonvue/css/style.css']
                 }
             }
         },

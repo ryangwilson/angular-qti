@@ -33,29 +33,13 @@ angular.module('qti').directive('p', function ($compile) {
             var tabStops = parseTabStops(attr.tabStops);
             var html = el.html();
             var linkFn, content;
-            if (tabStops.hasOwnProperty('interval')) {
-                html = html.split('\t').join('<span style="padding-right:' + tabStops.interval + 'in"></span>');
+            html = html.split('\t').join('<span style="padding-right:' + tabStops.interval + 'in"></span>');
 
-                html = '<div>' + html + '</div>';
-                linkFn = $compile(html);
-                content = linkFn(scope);
-                el.empty();
-                el.append(content);
-
-            } else if (tabStops.hasOwnProperty('tabset')) {
-
-                var htmlStr = '';
-                html = html.split('\t');
-                for (var i = 0; i < html.length; i += 1) {
-                    htmlStr += html[i] + '<span style="padding-right:' + tabStops.tabset[i] + 'in"></span>';
-                }
-
-                html = '<div>' + htmlStr + '</div>';
-                linkFn = $compile(html);
-                content = linkFn(scope);
-                el.empty();
-                el.append(content);
-            }
+            html = '<div>' + html + '</div>';
+            linkFn = $compile(html);
+            content = linkFn(scope);
+            el.empty();
+            el.append(content);
         }
     };
 });
