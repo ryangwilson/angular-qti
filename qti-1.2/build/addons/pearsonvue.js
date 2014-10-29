@@ -1,6 +1,3 @@
-/*
-* qti-1.2-engine 0.1.0
-*/
 angular.module("pearsonvue", []);
 
 angular.module("pearsonvue").constant("PV_CONFIG", {});
