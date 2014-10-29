@@ -1721,6 +1721,13 @@ angular.module("qti").directive("matvideo", [ "$compile", function($compile) {
                 }, {
                     src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/videogular.ogg") + "",
                     type: "video/ogg"
+                } ],
+                tracks: [ {
+                    src: "assets/subs/pale-blue-dot.vtt",
+                    kind: "subtitles",
+                    srclang: "en",
+                    label: "English",
+                    "default": ""
                 } ]
             }, {
                 sources: [ {

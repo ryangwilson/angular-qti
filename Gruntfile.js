@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         'ngAnnotate',
         'uglify',
         'less',
-        'cssmin',
+        //'cssmin',
         'copy',
         'clean:tmp'
     ];

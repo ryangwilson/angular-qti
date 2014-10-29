@@ -1,5 +1,5 @@
 {
-  "main": {
+  "engine": {
     "files": [
       {
         "expand": true,
@@ -8,6 +8,18 @@
           "*/**"
         ],
         "dest": "qti-1.2/build/themes/engine/"
+      }
+    ]
+  },
+  "all": {
+    "files": [
+      {
+        "expand": true,
+        "cwd": "qti-1.2/src/themes/engine/css/",
+        "src": [
+          "*/**"
+        ],
+        "dest": "qti-1.2/build/themes/all/"
       }
     ]
   }
