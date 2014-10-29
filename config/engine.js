@@ -7,25 +7,25 @@ module.exports = function (grunt) {
         banner: '/*\n* <%= name %> <%= version %>\n*/\n',
         sourcePath: '',
         tmpPath: '.tmp',
-        buildPath: 'qti-1.2/build/qti/'
+        buildPath: 'build/qti/'
     };
 
     return {
         tasks: {
-            "clean:engine": ["qti-1.2/build"],
+            "clean:engine": ["build/qti"],
             "copy:engine": {
                 "files": [
                     {
                         "expand": true,
-                        "cwd": "qti-1.2/src/themes/engine/css/",
+                        "cwd": "src/themes/engine/css/",
                         "src": ["*/**"],
-                        "dest": "qti-1.2/build/qti/css/"
+                        "dest": "build/qti/css/"
                     }
                 ]
             },
             "less:engine": {
                 "files": {
-                    "qti-1.2/build/qti/css/styles.css": "qti-1.2/src/themes/engine/css/main.less"
+                    "build/qti/css/styles.css": "src/themes/engine/css/main.less"
                 }
             },
             "ngAnnotate:engine": {
@@ -34,13 +34,13 @@ module.exports = function (grunt) {
                 },
                 "files": {
                     ".tmp/qti/qti.js": [
-                        "qti-1.2/src/engine/vendors/**/**.js",
-                        "qti-1.2/src/engine/**/**.js"
+                        "src/engine/vendors/**/**.js",
+                        "src/engine/**/**.js"
                     ]
                 }
             },
             "ngtemplates:engine": {
-                "cwd": "qti-1.2/src/themes/engine",
+                "cwd": "src/themes/engine",
                 "src": "templates/**.html",
                 "dest": ".tmp/qti/templates.js",
                 "options": {
@@ -67,7 +67,7 @@ module.exports = function (grunt) {
                     "banner": config.banner
                 },
                 "files": {
-                    "qti-1.2/build/qti/qti.js": [
+                    "build/qti/qti.js": [
                         ".tmp/qti/qti.js",
                         '.tmp/qti/templates.js'
                     ]
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
                     "banner": config.banner
                 },
                 "files": {
-                    "qti-1.2/build/qti/qti.min.js": [
+                    "build/qti/qti.min.js": [
                         ".tmp/qti/qti.js",
                         '.tmp/qti/templates.js'
                     ]

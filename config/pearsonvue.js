@@ -8,15 +8,15 @@ module.exports = function (grunt, options) {
         banner: '/*\n* pearsonvue\n*/\n',
         sourcePath: '',
         tmpPath: '.tmp',
-        buildPath: 'qti-1.2/build/addons/pearsonvue/'
+        buildPath: 'build/addons/pearsonvue/'
     };
 
     return {
         tasks: {
-            "clean:pearsonvue": ["qti-1.2/build/themes/pearsonvue", "qti-1.2/build/qti.js", "qti-1.2/build/qti.min.js"],
+            "clean:pearsonvue": ["build/addons/pearsonvue"],
             "less:pearsonvue": {
                 "files": {
-                    "qti-1.2/build/addons/pearsonvue/css/styles.css": "qti-1.2/src/themes/pearsonvue/css/main.less"
+                    "build/addons/pearsonvue/css/styles.css": "src/themes/pearsonvue/css/main.less"
                 }
             },
             "ngAnnotate:pearsonvue": {
@@ -25,12 +25,12 @@ module.exports = function (grunt, options) {
                 },
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
-                        "qti-1.2/src/addons/pearsonvue/**/**.js"
+                        "src/addons/pearsonvue/**/**.js"
                     ]
                 }
             },
             "ngtemplates:pearsonvue": {
-                "cwd": "qti-1.2/src/themes/pearsonvue",
+                "cwd": "src/themes/pearsonvue",
                 "src": "templates/**.html",
                 "dest": ".tmp/pearsonvue/templates.js",
                 "options": {
@@ -57,7 +57,7 @@ module.exports = function (grunt, options) {
                     "banner": "<%= banner %>"
                 },
                 "files": {
-                    "qti-1.2/build/addons/pearsonvue/pearsonvue.js": [
+                    "build/addons/pearsonvue/pearsonvue.js": [
                         ".tmp/pearsonvue/pearsonvue.js",
                         ".tmp/pearsonvue/templates.js"
                     ]
@@ -70,7 +70,7 @@ module.exports = function (grunt, options) {
                     "banner": "<%= banner %>"
                 },
                 "files": {
-                    "qti-1.2/build/addons/pearsonvue/pearsonvue.min.js": [
+                    "build/addons/pearsonvue/pearsonvue.min.js": [
                         ".tmp/pearsonvue/pearsonvue.js",
                         ".tmp/pearsonvue/templates.js"
                     ]
