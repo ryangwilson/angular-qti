@@ -34,8 +34,11 @@ module.exports = function (grunt) {
                 },
                 "files": {
                     ".tmp/qti/qti.js": [
-                        "src/engine/vendors/**/**.js",
-                        "src/engine/**/**.js"
+                        "src/vendors/**/**.js",
+                        "src/directives/**/**.js",
+                        "src/filters/**/**.js",
+                        "src/vendors/**/**.js",
+                        "src/*.js"
                     ]
                 }
             },
