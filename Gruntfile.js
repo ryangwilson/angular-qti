@@ -39,6 +39,7 @@ module.exports = function (grunt) {
         'ngtemplates:pearsonvue',
         'uglify:pearsonvue',
         'uglify:pearsonvue_min',
+        'less:pearsonvue',
         'clean:common'
     ];
 

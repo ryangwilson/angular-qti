@@ -1,11 +1,6 @@
 /*
 * qti-1.2-engine 0.1.0
 */
-/**
- * @license Videogular v0.6.2 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular.plugins.buffering", []).directive("vgBuffering", [ "VG_UTILS", function(VG_UTILS) {
@@ -61,11 +56,6 @@ angular.module("com.2fdevs.videogular.plugins.buffering", []).directive("vgBuffe
     };
 } ]);
 
-/**
- * @license Videogular v0.6.0 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular.plugins.controls", []).directive("vgControls", [ "$timeout", "VG_STATES", function($timeout, VG_STATES) {
@@ -540,11 +530,6 @@ angular.module("com.2fdevs.videogular.plugins.controls", []).directive("vgContro
     };
 } ]);
 
-/**
- * @license Videogular v0.6.2 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular.plugins.imaads", []).directive("vgImaAds", [ "$window", "VG_STATES", function($window, VG_STATES) {
@@ -699,11 +684,6 @@ angular.module("com.2fdevs.videogular.plugins.imaads", []).directive("vgImaAds",
     };
 } ]);
 
-/**
- * @license Videogular v0.6.2 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular.plugins.overlayplay", []).directive("vgOverlayPlay", [ "VG_STATES", function(VG_STATES) {
@@ -756,11 +736,6 @@ angular.module("com.2fdevs.videogular.plugins.overlayplay", []).directive("vgOve
     };
 } ]);
 
-/**
- * @license Videogular v0.6.2 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular.plugins.poster", []).directive("vgPosterImage", [ "VG_STATES", function(VG_STATES) {
@@ -794,11 +769,6 @@ angular.module("com.2fdevs.videogular.plugins.poster", []).directive("vgPosterIm
     };
 } ]);
 
-/**
- * @license Videogular v0.6.2 http://videogular.com
- * Two Fucking Developers http://twofuckingdevelopers.com
- * License: MIT
- */
 "use strict";
 
 angular.module("com.2fdevs.videogular", [ "ngSanitize" ]).constant("VG_STATES", {
@@ -1713,3 +1683,8 @@ angular.module("qti").service("helpers", function() {
         return xmlDoc;
     };
 });
+
+angular.module("qti").run([ "$templateCache", function($templateCache) {
+    "use strict";
+    $templateCache.put("templates/video.html", "<div class=qti-video><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-video vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-video><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button></vg-play-pause-button><vg-timedisplay>{{ currentTime | date:'mm:ss' }}</vg-timedisplay><vg-scrubbar><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><vg-timedisplay>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay><vg-volume><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton></vg-fullscreenbutton></vg-controls><vg-poster-image vg-url=config.plugins.poster.url></vg-poster-image><vg-buffering></vg-buffering><vg-overlay-play vg-play-icon=config.theme.playIcon></vg-overlay-play></videogular></div>");
+} ]);
