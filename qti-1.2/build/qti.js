@@ -1592,16 +1592,10 @@ angular.module("qti").directive("matvideo", [ "$compile", function($compile) {
                 tracks: $scope.videos[0].tracks,
                 loop: true,
                 preload: "auto",
-                transclude: true,
+                transclude: false,
                 controls: undefined,
-                theme: {
-                    url: "styles/themes/default/videogular.css"
-                },
-                plugins: {
-                    poster: {
-                        url: "assets/images/videogular.png"
-                    }
-                }
+                theme: {},
+                plugins: {}
             };
             $scope.changeSource = function() {
                 $scope.config.sources = $scope.videos[1].sources;

@@ -75,15 +75,15 @@ angular.module('qti').directive('matvideo', function ($compile) {
                 tracks: $scope.videos[0].tracks,
                 loop: true,
                 preload: "auto",
-                transclude: true,
+                transclude: false,
                 controls: undefined,
                 theme: {
-                    url: "styles/themes/default/videogular.css"
+                    //url: "styles/themes/default/videogular.css"
                 },
                 plugins: {
-                    poster: {
-                        url: "assets/images/videogular.png"
-                    }
+                    //poster: {
+                    //    url: "assets/images/videogular.png"
+                    //}
                 }
             };
 
