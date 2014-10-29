@@ -8,15 +8,15 @@ module.exports = function (grunt, options) {
         banner: '/*\n* pearsonvue\n*/\n',
         sourcePath: '',
         tmpPath: '.tmp',
-        buildPath: 'build/addons/pearsonvue/'
+        buildPath: 'build/plugins/pearsonvue/'
     };
 
     return {
         tasks: {
-            "clean:pearsonvue": ["build/addons/pearsonvue"],
+            "clean:pearsonvue": ["build/plugins/pearsonvue"],
             "less:pearsonvue": {
                 "files": {
-                    "build/addons/pearsonvue/css/styles.css": "src/themes/pearsonvue/css/main.less"
+                    "build/plugins/pearsonvue/css/styles.css": "src/themes/pearsonvue/css/main.less"
                 }
             },
             "ngAnnotate:pearsonvue": {
@@ -25,7 +25,7 @@ module.exports = function (grunt, options) {
                 },
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
-                        "src/addons/pearsonvue/**/**.js"
+                        "src/plugins/pearsonvue/**/**.js"
                     ]
                 }
             },
@@ -34,7 +34,7 @@ module.exports = function (grunt, options) {
                 "src": "templates/**.html",
                 "dest": ".tmp/pearsonvue/templates.js",
                 "options": {
-                    "module": "pearsonvue",
+                    "module": "qti.plugins.pearsonvue",
                     "htmlmin": {
                         "collapseBooleanAttributes": true,
                         "collapseWhitespace": true,
@@ -57,7 +57,7 @@ module.exports = function (grunt, options) {
                     "banner": "<%= banner %>"
                 },
                 "files": {
-                    "build/addons/pearsonvue/pearsonvue.js": [
+                    "build/plugins/pearsonvue/pearsonvue.js": [
                         ".tmp/pearsonvue/pearsonvue.js",
                         ".tmp/pearsonvue/templates.js"
                     ]
@@ -70,7 +70,7 @@ module.exports = function (grunt, options) {
                     "banner": "<%= banner %>"
                 },
                 "files": {
-                    "build/addons/pearsonvue/pearsonvue.min.js": [
+                    "build/plugins/pearsonvue/pearsonvue.min.js": [
                         ".tmp/pearsonvue/pearsonvue.js",
                         ".tmp/pearsonvue/templates.js"
                     ]

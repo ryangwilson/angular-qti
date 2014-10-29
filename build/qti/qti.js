@@ -1280,7 +1280,7 @@ angular.module("com.2fdevs.videogular", [ "ngSanitize" ]).constant("VG_STATES", 
     };
 } ]);
 
-angular.module("qti", [ "ngSanitize", "pearsonvue", "com.2fdevs.videogular", "com.2fdevs.videogular.plugins.controls", "com.2fdevs.videogular.plugins.overlayplay", "com.2fdevs.videogular.plugins.buffering", "com.2fdevs.videogular.plugins.poster" ]);
+angular.module("qti", [ "ngSanitize", "com.2fdevs.videogular", "com.2fdevs.videogular.plugins.controls", "com.2fdevs.videogular.plugins.overlayplay", "com.2fdevs.videogular.plugins.buffering", "com.2fdevs.videogular.plugins.poster" ]);
 
 angular.module("qti").constant("ATTR_MAP", {
     fontsize: "font-size",

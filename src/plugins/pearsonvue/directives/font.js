@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('pearsonvue').directive('font', function () {
+angular.module('qti.plugins.pearsonvue').directive('font', function () {
 
     return {
         restrict: 'E',

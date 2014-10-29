@@ -1,8 +1,8 @@
-angular.module("pearsonvue", []);
+angular.module("qti.plugins.pearsonvue", []);
 
-angular.module("pearsonvue").constant("PV_CONFIG", {});
+angular.module("qti.plugins.pearsonvue").constant("PV_CONFIG", {});
 
-angular.module("pearsonvue").directive("font", function() {
+angular.module("qti.plugins.pearsonvue").directive("font", function() {
     return {
         restrict: "E",
         scope: true,
@@ -14,7 +14,7 @@ angular.module("pearsonvue").directive("font", function() {
     };
 });
 
-angular.module("pearsonvue").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
+angular.module("qti.plugins.pearsonvue").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
     "use strict";
     var css = function(el, prop, value) {
         var styles = el.getAttribute("style") || "";
@@ -168,21 +168,21 @@ angular.module("pearsonvue").directive("pearsonvueMatExtension", [ "$compile", "
     };
 } ]);
 
-angular.module("pearsonvue").directive("pearsonvueObjectivesref", function() {
+angular.module("qti.plugins.pearsonvue").directive("pearsonvueObjectivesref", function() {
     return {
         restrict: "E",
         link: function(scope, el, attr) {}
     };
 });
 
-angular.module("pearsonvue").directive("pearsonvueScalefactor", function() {
+angular.module("qti.plugins.pearsonvue").directive("pearsonvueScalefactor", function() {
     return {
         restrict: "E",
         link: function(scope, el, attr) {}
     };
 });
 
-angular.module("pearsonvue").run([ "$templateCache", function($templateCache) {
+angular.module("qti.plugins.pearsonvue").run([ "$templateCache", function($templateCache) {
     "use strict";
     $templateCache.put("templates/assessment.html", '<div class=qti-assessment><div class=qti-title>{{assessment.title}}</div><div class=qti-content><div ng-transclude=""></div></div></div>');
     $templateCache.put("templates/presentation.html", '<div><div ng-transclude=""></div></div>');

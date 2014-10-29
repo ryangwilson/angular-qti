@@ -1,4 +1,4 @@
-angular.module('pearsonvue').directive('pearsonvueMatExtension', function ($compile, helpers) {
+angular.module('qti.plugins.pearsonvue').directive('pearsonvueMatExtension', function ($compile, helpers) {
     'use strict';
 
     var css = function (el, prop, value) {

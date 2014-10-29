@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('app', ['qti']);
+angular.module('app', ['qti', 'qti.plugins.pearsonvue']);
 angular.module('app').controller('SystemCtrl', function ($scope) {
     function User(data) {
 
