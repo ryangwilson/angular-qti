@@ -19,13 +19,13 @@ module.exports = function (grunt) {
                         "expand": true,
                         "cwd": "src/themes/engine/css/",
                         "src": ["*/**"],
-                        "dest": "build/qti/css/"
+                        "dest": "build/css/"
                     }
                 ]
             },
             "less:engine": {
                 "files": {
-                    "build/qti/css/styles.css": "src/themes/engine/css/main.less"
+                    "build/css/styles.css": "src/themes/engine/css/main.less"
                 }
             },
             "ngAnnotate:engine": {
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                     "banner": config.banner
                 },
                 "files": {
-                    "build/qti/qti.js": [
+                    "build/qti.js": [
                         ".tmp/qti/qti.js",
                         '.tmp/qti/templates.js'
                     ]
@@ -99,7 +99,7 @@ module.exports = function (grunt) {
                     "banner": config.banner
                 },
                 "files": {
-                    "build/qti/qti.min.js": [
+                    "build/qti.min.js": [
                         ".tmp/qti/qti.js",
                         '.tmp/qti/templates.js'
                     ]
