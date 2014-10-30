@@ -34,11 +34,12 @@ module.exports = function (grunt) {
                 },
                 "files": {
                     ".tmp/qti/qti.js": [
-                        "src/vendors/**/**.js",
+                        "src/*.js",
+                        "src/plugins/videogular/videogular.js",
+                        "src/plugins/videogular/plugins/*.js",
                         "src/directives/**/**.js",
                         "src/filters/**/**.js",
-                        "src/vendors/**/**.js",
-                        "src/*.js"
+                        "src/vendors/**/**.js"
                     ]
                 }
             },
@@ -58,6 +59,21 @@ module.exports = function (grunt) {
                         "removeScriptTypeAttributes": true,
                         "removeStyleLinkTypeAttributes": true
                     }
+                }
+            },
+            "string-replace:engine": {
+                files: {'.tmp/qti/qti.js': '.tmp/qti/qti.js'},
+                options: {
+                    replacements: [
+                        { // fix up module declaration - angular.module('qti.plugins.videogular', [])
+                            pattern: '"com.2fdevs.videogular"',
+                            replacement: '"qti.plugins.videogular"'
+                        },
+                        { // fixes up so there is only one module decaration - angular.module('qti.plugins.videogular')
+                            pattern: /angular.module\("(com.2fdevs.videogular.*)?\)/gim,
+                            replacement: 'angular.module("qti.plugins.videogular")'
+                        }
+                    ]
                 }
             },
             "uglify:engine": {

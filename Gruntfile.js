@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-wrap');
 
     var package = grunt.file.readJSON('package.json');
@@ -22,14 +23,27 @@ module.exports = function (grunt) {
         'clean:engine',
         'ngtemplates:engine',
         'ngAnnotate:engine',
+        'string-replace:engine',
         'uglify:engine',
         'uglify:engine_min',
         'less:engine',
         'copy:engine',
-        'clean:common'
+        //'clean:common'
     ];
 
     grunt.registerTask('default', tasksEngine);
+
+    // videogular tasks
+    var tasksVideogular = [
+        'clean:videogular',
+        'ngAnnotate:videogular',
+        'string-replace:videogular',
+        'uglify:videogular',
+        'uglify:videogular_min',
+        //'clean:common'
+    ];
+
+    grunt.registerTask('videogular', tasksVideogular);
 
 
     // pearsonvue tasks

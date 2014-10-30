@@ -1,7 +1,9 @@
 {
   "name": "qti-1.2-engine",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "grunt-string-replace": "^1.0.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-angular-templates": "^0.5.7",

@@ -1,777 +1,34 @@
 /*
 * qti-1.2-engine 0.1.0
 */
-"use strict";
+angular.module("qti", [ "ngSanitize" ]);
 
-angular.module("com.2fdevs.videogular.plugins.buffering", []).directive("vgBuffering", [ "VG_UTILS", function(VG_UTILS) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        template: "<div class='bufferingContainer'>" + "<div ng-class='spinnerClass' class='loadingSpinner'></div>" + "</div>",
-        link: function(scope, elem, attr, API) {
-            function showSpinner() {
-                scope.spinnerClass = {
-                    stop: API.isBuffering
-                };
-                elem.css("display", "block");
-            }
-            function hideSpinner() {
-                scope.spinnerClass = {
-                    stop: API.isBuffering
-                };
-                elem.css("display", "none");
-            }
-            function setState(isBuffering) {
-                if (isBuffering) {
-                    showSpinner();
-                } else {
-                    hideSpinner();
-                }
-            }
-            function onPlayerReady(isReady) {
-                if (isReady) {
-                    hideSpinner();
-                }
-            }
-            showSpinner();
-            if (VG_UTILS.isMobileDevice()) {
-                hideSpinner();
-            } else {
-                scope.$watch(function() {
-                    return API.isReady;
-                }, function(newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        onPlayerReady(newVal);
-                    }
-                });
-            }
-            scope.$watch(function() {
-                return API.isBuffering;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    setState(newVal);
-                }
-            });
+angular.module("qti").constant("ATTR_MAP", {
+    fontsize: "font-size",
+    fontface: "font-family",
+    backgroundColor: "background-color",
+    width: "width",
+    height: "height"
+});
+
+angular.module("qti").service("helpers", function() {
+    this.strToXML = function(str) {
+        var parser, xmlDoc;
+        if (window.DOMParser) {
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(str, "text/xml");
+        } else {
+            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async = false;
+            xmlDoc.loadXML(str);
         }
+        return xmlDoc;
     };
-} ]);
+});
 
 "use strict";
 
-angular.module("com.2fdevs.videogular.plugins.controls", []).directive("vgControls", [ "$timeout", "VG_STATES", function($timeout, VG_STATES) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        transclude: true,
-        template: '<div id="controls-container" ng-mousemove="onMouseMove()" ng-class="animationClass" ng-transclude></div>',
-        scope: {
-            autoHide: "=vgAutohide",
-            autoHideTime: "=vgAutohideTime"
-        },
-        link: function(scope, elem, attr, API) {
-            var w = 0;
-            var h = 0;
-            var autoHideTime = 2e3;
-            var hideInterval;
-            scope.onMouseMove = function onMouseMove() {
-                if (scope.autoHide) showControls();
-            };
-            function hideControls() {
-                scope.animationClass = "hide-animation";
-            }
-            function showControls() {
-                scope.animationClass = "show-animation";
-                $timeout.cancel(hideInterval);
-                if (scope.autoHide) hideInterval = $timeout(hideControls, autoHideTime);
-            }
-            if (scope.autoHide != undefined) {
-                scope.$watch("autoHide", function(value) {
-                    if (value) {
-                        scope.animationClass = "hide-animation";
-                    } else {
-                        scope.animationClass = "";
-                        $timeout.cancel(hideInterval);
-                        showControls();
-                    }
-                });
-            }
-            if (scope.autoHideTime != undefined) {
-                scope.$watch("autoHideTime", function(value) {
-                    autoHideTime = value;
-                });
-            }
-        }
-    };
-} ]).directive("vgPlayPauseButton", [ "VG_STATES", function(VG_STATES) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        template: "<button class='iconButton' ng-click='onClickPlayPause()' ng-class='playPauseIcon' aria-label='Play/Pause'></button>",
-        link: function(scope, elem, attr, API) {
-            function setState(newState) {
-                switch (newState) {
-                  case VG_STATES.PLAY:
-                    scope.playPauseIcon = {
-                        pause: true
-                    };
-                    break;
-
-                  case VG_STATES.PAUSE:
-                    scope.playPauseIcon = {
-                        play: true
-                    };
-                    break;
-
-                  case VG_STATES.STOP:
-                    scope.playPauseIcon = {
-                        play: true
-                    };
-                    break;
-                }
-            }
-            scope.onClickPlayPause = function onClickPlayPause() {
-                API.playPause();
-            };
-            scope.playPauseIcon = {
-                play: true
-            };
-            scope.$watch(function() {
-                return API.currentState;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    setState(newVal);
-                }
-            });
-        }
-    };
-} ]).directive("vgTimedisplay", [ function() {
-    return {
-        require: "^videogular",
-        restrict: "E",
-        link: function(scope, elem, attr, API) {
-            scope.$watch(function() {
-                return API.currentTime;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    scope.currentTime = newVal;
-                }
-            });
-            scope.$watch(function() {
-                return API.timeLeft;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    scope.timeLeft = newVal;
-                }
-            });
-            scope.$watch(function() {
-                return API.totalTime;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    scope.totalTime = newVal;
-                }
-            });
-        }
-    };
-} ]).directive("vgScrubbar", [ "VG_STATES", "VG_UTILS", function(VG_STATES, VG_UTILS) {
-    return {
-        restrict: "AE",
-        require: "^videogular",
-        transclude: true,
-        template: '<div role="slider" aria-valuemax="{{ariaTime(API.totalTime)}}" ' + 'aria-valuenow="{{ariaTime(API.currentTime)}}" ' + 'aria-valuemin="0" aria-label="Time scrub bar" tabindex="0" ' + 'ng-transclude ng-keydown="onScrubBarKeyDown($event)"></div>',
-        link: function(scope, elem, attr, API) {
-            var isSeeking = false;
-            var isPlaying = false;
-            var isPlayingWhenSeeking = false;
-            var touchStartX = 0;
-            var LEFT = 37;
-            var RIGHT = 39;
-            var NUM_PERCENT = 1;
-            scope.API = API;
-            scope.ariaTime = function(time) {
-                return time === 0 ? "0" : Math.round(time.getTime() / 1e3);
-            };
-            function onScrubBarTouchStart($event) {
-                var event = $event.originalEvent || $event;
-                var touches = event.touches;
-                var touchX;
-                if (VG_UTILS.isiOSDevice()) {
-                    touchStartX = (touches[0].clientX - event.layerX) * -1;
-                } else {
-                    touchStartX = event.layerX;
-                }
-                touchX = touches[0].clientX + touchStartX - touches[0].target.offsetLeft;
-                isSeeking = true;
-                if (isPlaying) isPlayingWhenSeeking = true;
-                API.pause();
-                seekTime(touchX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                scope.$apply();
-            }
-            function onScrubBarTouchMove($event) {
-                var event = $event.originalEvent || $event;
-                if (isPlayingWhenSeeking) {
-                    isPlayingWhenSeeking = false;
-                    API.play();
-                }
-                isSeeking = false;
-                scope.$apply();
-            }
-            function onScrubBarTouchMove($event) {
-                var event = $event.originalEvent || $event;
-                var touches = event.touches;
-                var touchX;
-                if (isSeeking) {
-                    touchX = touches[0].clientX + touchStartX - touches[0].target.offsetLeft;
-                    seekTime(touchX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                }
-                scope.$apply();
-            }
-            function onScrubBarTouchLeave(event) {
-                isSeeking = false;
-                scope.$apply();
-            }
-            function onScrubBarMouseDown(event) {
-                event = VG_UTILS.fixEventOffset(event);
-                isSeeking = true;
-                if (isPlaying) isPlayingWhenSeeking = true;
-                API.pause();
-                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                scope.$apply();
-            }
-            function onScrubBarMouseUp(event) {
-                event = VG_UTILS.fixEventOffset(event);
-                if (isPlayingWhenSeeking) {
-                    isPlayingWhenSeeking = false;
-                    API.play();
-                }
-                isSeeking = false;
-                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                scope.$apply();
-            }
-            function onScrubBarMouseMove(event) {
-                if (isSeeking) {
-                    event = VG_UTILS.fixEventOffset(event);
-                    seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                }
-                scope.$apply();
-            }
-            function onScrubBarMouseLeave(event) {
-                isSeeking = false;
-                scope.$apply();
-            }
-            scope.onScrubBarKeyDown = function(event) {
-                var currentPercent = API.currentTime.getTime() / API.totalTime.getTime() * 100;
-                if (event.which === LEFT || event.keyCode === LEFT) {
-                    API.seekTime(currentPercent - NUM_PERCENT, true);
-                    event.preventDefault();
-                } else if (event.which === RIGHT || event.keyCode === RIGHT) {
-                    API.seekTime(currentPercent + NUM_PERCENT, true);
-                    event.preventDefault();
-                }
-            };
-            function seekTime(time) {
-                API.seekTime(time, false);
-            }
-            function setState(newState) {
-                if (!isSeeking) {
-                    switch (newState) {
-                      case VG_STATES.PLAY:
-                        isPlaying = true;
-                        break;
-
-                      case VG_STATES.PAUSE:
-                        isPlaying = false;
-                        break;
-
-                      case VG_STATES.STOP:
-                        isPlaying = false;
-                        break;
-                    }
-                }
-            }
-            scope.$watch(function() {
-                return API.currentState;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    setState(newVal);
-                }
-            });
-            if (VG_UTILS.isMobileDevice()) {
-                elem.bind("touchstart", onScrubBarTouchStart);
-                elem.bind("touchend", onScrubBarTouchEnd);
-                elem.bind("touchmove", onScrubBarTouchMove);
-                elem.bind("touchleave", onScrubBarTouchLeave);
-            } else {
-                elem.bind("mousedown", onScrubBarMouseDown);
-                elem.bind("mouseup", onScrubBarMouseUp);
-                elem.bind("mousemove", onScrubBarMouseMove);
-                elem.bind("mouseleave", onScrubBarMouseLeave);
-            }
-        }
-    };
-} ]).directive("vgScrubbarcurrenttime", [ function() {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        link: function(scope, elem, attr, API) {
-            var percentTime = 0;
-            function onUpdateTime(newCurrentTime) {
-                if (newCurrentTime && API.totalTime) {
-                    percentTime = newCurrentTime.getTime() * -1 / 1e3 * 100 / (API.totalTime.getTime() * -1 / 1e3);
-                    elem.css("width", percentTime + "%");
-                }
-            }
-            function onComplete() {
-                percentTime = 0;
-                elem.css("width", percentTime + "%");
-            }
-            scope.$watch(function() {
-                return API.currentTime;
-            }, function(newVal, oldVal) {
-                onUpdateTime(newVal);
-            });
-            scope.$watch(function() {
-                return API.isCompleted;
-            }, function(newVal, oldVal) {
-                onComplete(newVal);
-            });
-        }
-    };
-} ]).directive("vgVolume", [ "VG_UTILS", function(VG_UTILS) {
-    return {
-        restrict: "E",
-        link: function(scope, elem, attr) {
-            function onMouseOverVolume() {
-                scope.volumeVisibility = "visible";
-                scope.$apply();
-            }
-            function onMouseLeaveVolume() {
-                scope.volumeVisibility = "hidden";
-                scope.$apply();
-            }
-            if (VG_UTILS.isMobileDevice()) {
-                elem.css("display", "none");
-            } else {
-                scope.volumeVisibility = "hidden";
-                elem.bind("mouseover", onMouseOverVolume);
-                elem.bind("mouseleave", onMouseLeaveVolume);
-            }
-        }
-    };
-} ]).directive("vgVolumebar", [ "VG_UTILS", function(VG_UTILS) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        template: "<div class='verticalVolumeBar'>" + "<div class='volumeBackground' ng-click='onClickVolume($event)' ng-mousedown='onMouseDownVolume()' ng-mouseup='onMouseUpVolume()' ng-mousemove='onMouseMoveVolume($event)' ng-mouseleave='onMouseLeaveVolume()'>" + "<div class='volumeValue'></div>" + "<div class='volumeClickArea'></div>" + "</div>" + "</div>",
-        link: function(scope, elem, attr, API) {
-            var isChangingVolume = false;
-            var volumeBackElem = angular.element(elem[0].getElementsByClassName("volumeBackground"));
-            var volumeValueElem = angular.element(elem[0].getElementsByClassName("volumeValue"));
-            scope.onClickVolume = function onClickVolume(event) {
-                event = VG_UTILS.fixEventOffset(event);
-                var volumeHeight = parseInt(volumeBackElem.prop("offsetHeight"));
-                var value = event.offsetY * 100 / volumeHeight;
-                var volValue = 1 - value / 100;
-                API.setVolume(volValue);
-            };
-            scope.onMouseDownVolume = function onMouseDownVolume() {
-                isChangingVolume = true;
-            };
-            scope.onMouseUpVolume = function onMouseUpVolume() {
-                isChangingVolume = false;
-            };
-            scope.onMouseLeaveVolume = function onMouseLeaveVolume() {
-                isChangingVolume = false;
-            };
-            scope.onMouseMoveVolume = function onMouseMoveVolume(event) {
-                if (isChangingVolume) {
-                    event = VG_UTILS.fixEventOffset(event);
-                    var volumeHeight = parseInt(volumeBackElem.prop("offsetHeight"));
-                    var value = event.offsetY * 100 / volumeHeight;
-                    var volValue = 1 - value / 100;
-                    API.setVolume(volValue);
-                }
-            };
-            function updateVolumeView(value) {
-                value = value * 100;
-                volumeValueElem.css("height", value + "%");
-                volumeValueElem.css("top", 100 - value + "%");
-            }
-            function onChangeVisibility(value) {
-                elem.css("visibility", value);
-            }
-            elem.css("visibility", scope.volumeVisibility);
-            scope.$watch("volumeVisibility", onChangeVisibility);
-            scope.$watch(function() {
-                return API.volume;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    updateVolumeView(newVal);
-                }
-            });
-        }
-    };
-} ]).directive("vgMutebutton", [ function() {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        template: "<button class='iconButton' ng-class='muteIcon'" + " ng-click='onClickMute()' ng-focus='onMuteButtonFocus()' ng-blur='onMuteButtonLoseFocus()' ng-keydown='onMuteButtonKeyDown($event)'" + " aria-label='Mute'></button>",
-        link: function(scope, elem, attr, API) {
-            var isMuted = false;
-            var UP = 38;
-            var DOWN = 40;
-            var CHANGE_PER_PRESS = .05;
-            scope.onClickMute = function onClickMute() {
-                if (isMuted) {
-                    scope.currentVolume = scope.defaultVolume;
-                } else {
-                    scope.currentVolume = 0;
-                    scope.muteIcon = {
-                        mute: true
-                    };
-                }
-                isMuted = !isMuted;
-                API.setVolume(scope.currentVolume);
-            };
-            scope.onMuteButtonFocus = function() {
-                scope.volumeVisibility = "visible";
-            };
-            scope.onMuteButtonLoseFocus = function() {
-                scope.volumeVisibility = "hidden";
-            };
-            scope.onMuteButtonKeyDown = function(event) {
-                var currentVolume = API.volume != null ? API.volume : 1;
-                if (event.which === UP || event.keyCode === UP) {
-                    API.setVolume(currentVolume + CHANGE_PER_PRESS);
-                    event.preventDefault();
-                } else if (event.which === DOWN || event.keyCode === DOWN) {
-                    API.setVolume(currentVolume - CHANGE_PER_PRESS);
-                    event.preventDefault();
-                }
-            };
-            function onSetVolume(newVolume) {
-                scope.currentVolume = newVolume;
-                if (!isMuted) {
-                    scope.defaultVolume = newVolume;
-                } else {
-                    if (newVolume > 0) {
-                        scope.defaultVolume = newVolume;
-                    }
-                }
-                var percentValue = Math.round(newVolume * 100);
-                if (percentValue == 0) {
-                    scope.muteIcon = {
-                        mute: true
-                    };
-                } else if (percentValue > 0 && percentValue < 25) {
-                    scope.muteIcon = {
-                        level0: true
-                    };
-                } else if (percentValue >= 25 && percentValue < 50) {
-                    scope.muteIcon = {
-                        level1: true
-                    };
-                } else if (percentValue >= 50 && percentValue < 75) {
-                    scope.muteIcon = {
-                        level2: true
-                    };
-                } else if (percentValue >= 75) {
-                    scope.muteIcon = {
-                        level3: true
-                    };
-                }
-            }
-            scope.defaultVolume = 1;
-            scope.currentVolume = scope.defaultVolume;
-            scope.muteIcon = {
-                level3: true
-            };
-            scope.$watch(function() {
-                return API.volume;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onSetVolume(newVal);
-                }
-            });
-        }
-    };
-} ]).directive("vgFullscreenbutton", [ function() {
-    return {
-        restrict: "AE",
-        require: "^videogular",
-        scope: {
-            vgEnterFullScreenIcon: "=",
-            vgExitFullScreenIcon: "="
-        },
-        template: "<button class='iconButton' ng-click='onClickFullScreen()' ng-class='fullscreenIcon' aria-label='Toggle full screen'></button>",
-        link: function(scope, elem, attr, API) {
-            function onChangeFullScreen(isFullScreen) {
-                var result = scope.fullscreenIcon = {
-                    enter: !isFullScreen,
-                    exit: isFullScreen
-                };
-            }
-            scope.onClickFullScreen = function onClickFullScreen() {
-                API.toggleFullScreen();
-            };
-            scope.fullscreenIcon = {
-                exit: false
-            };
-            scope.fullscreenIcon = {
-                enter: true
-            };
-            scope.$watch(function() {
-                return API.isFullScreen;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onChangeFullScreen(newVal);
-                }
-            });
-        }
-    };
-} ]);
-
-"use strict";
-
-angular.module("com.2fdevs.videogular.plugins.imaads", []).directive("vgImaAds", [ "$window", "VG_STATES", function($window, VG_STATES) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        scope: {
-            vgNetwork: "=",
-            vgUnitPath: "=",
-            vgCompanion: "=",
-            vgCompanionSize: "=",
-            vgAdTagUrl: "=",
-            vgSkipButton: "="
-        },
-        link: function(scope, elem, attr, API) {
-            var adDisplayContainer = new google.ima.AdDisplayContainer(elem[0]);
-            var adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-            var adsManager = null;
-            var adsLoaded = false;
-            var w;
-            var h;
-            var onContentEnded = function() {
-                adsLoader.contentComplete();
-            };
-            var currentAd = 0;
-            var skipButton = angular.element(scope.vgSkipButton);
-            function onPlayerReady(isReady) {
-                if (isReady) {
-                    API.mediaElement[0].addEventListener("ended", onContentEnded);
-                    w = API.videogularElement[0].offsetWidth;
-                    h = API.videogularElement[0].offsetHeight;
-                    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false, this);
-                    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false, this);
-                    if (scope.vgCompanion) {
-                        googletag.cmd.push(function() {
-                            googletag.defineSlot("/" + scope.vgNetwork + "/" + scope.vgUnitPath, scope.vgCompanionSize, scope.vgCompanion).addService(googletag.companionAds()).addService(googletag.pubads());
-                            googletag.companionAds().setRefreshUnfilledSlots(true);
-                            googletag.pubads().enableVideoAds();
-                            googletag.enableServices();
-                        });
-                    }
-                }
-            }
-            function onUpdateState(newState) {
-                switch (newState) {
-                  case VG_STATES.PLAY:
-                    if (!adsLoaded) {
-                        API.pause();
-                        adDisplayContainer.initialize();
-                        requestAds(scope.vgAdTagUrl);
-                        adsLoaded = true;
-                    }
-                    break;
-
-                  case VG_STATES.STOP:
-                    adsLoader.contentComplete();
-                    break;
-                }
-            }
-            function requestAds(adTagUrl) {
-                show();
-                var adsRequest = new google.ima.AdsRequest();
-                var computedStyle = $window.getComputedStyle(elem[0]);
-                adsRequest.adTagUrl = adTagUrl;
-                adsRequest.linearAdSlotWidth = parseInt(computedStyle.width, 10);
-                adsRequest.linearAdSlotHeight = parseInt(computedStyle.height, 10);
-                adsRequest.nonLinearAdSlotWidth = parseInt(computedStyle.width, 10);
-                adsRequest.nonLinearAdSlotHeight = parseInt(computedStyle.height, 10);
-                adsLoader.requestAds(adsRequest);
-            }
-            function onAdsManagerLoaded(adsManagerLoadedEvent) {
-                show();
-                adsManager = adsManagerLoadedEvent.getAdsManager(API.mediaElement[0]);
-                processAdsManager(adsManager);
-            }
-            function processAdsManager(adsManager) {
-                adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, onContentPauseRequested, false, this);
-                adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, onContentResumeRequested, false, this);
-                adsManager.addEventListener(google.ima.AdEvent.Type.SKIPPABLE_STATE_CHANGED, onSkippableStateChanged, false, this);
-                adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, onAllAdsComplete, false, this);
-                adsManager.addEventListener(google.ima.AdEvent.Type.COMPLETE, onAdComplete, false, this);
-                adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false, this);
-                adsManager.init(w, h, google.ima.ViewMode.NORMAL);
-                adsManager.start();
-            }
-            function onSkippableStateChanged() {
-                var isSkippable = adsManager.getAdSkippableState();
-                if (isSkippable) {
-                    skipButton.css("display", "block");
-                } else {
-                    skipButton.css("display", "none");
-                }
-            }
-            function onClickSkip() {
-                adsManager.skip();
-            }
-            function onContentPauseRequested() {
-                show();
-                API.mediaElement[0].removeEventListener("ended", onContentEnded);
-                API.pause();
-            }
-            function onContentResumeRequested() {
-                API.mediaElement[0].addEventListener("ended", onContentEnded);
-                API.play();
-                hide();
-            }
-            function onAdError() {
-                if (adsManager) adsManager.destroy();
-                hide();
-                API.play();
-            }
-            function onAllAdsComplete() {
-                hide();
-            }
-            function onAdComplete() {
-                currentAd++;
-            }
-            function show() {
-                elem.css("display", "block");
-            }
-            function hide() {
-                elem.css("display", "none");
-            }
-            skipButton.bind("click", onClickSkip);
-            elem.prepend(skipButton);
-            angular.element($window).bind("resize", function() {
-                w = API.videogularElement[0].offsetWidth;
-                h = API.videogularElement[0].offsetHeight;
-                if (adsManager) {
-                    if (API.isFullScreen) {
-                        adsManager.resize(w, h, google.ima.ViewMode.FULLSCREEN);
-                    } else {
-                        adsManager.resize(w, h, google.ima.ViewMode.NORMAL);
-                    }
-                }
-            });
-            scope.$watch(function() {
-                return API.isReady;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onPlayerReady(newVal);
-                }
-            });
-            scope.$watch(function() {
-                return API.currentState;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onUpdateState(newVal);
-                }
-            });
-        }
-    };
-} ]);
-
-"use strict";
-
-angular.module("com.2fdevs.videogular.plugins.overlayplay", []).directive("vgOverlayPlay", [ "VG_STATES", function(VG_STATES) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        template: "<div class='overlayPlayContainer' ng-click='onClickOverlayPlay()'>" + "<div class='iconButton' ng-class='overlayPlayIcon'></div>" + "</div>",
-        link: function(scope, elem, attr, API) {
-            function onComplete(target, params) {
-                scope.overlayPlayIcon = {
-                    play: true
-                };
-            }
-            function onPlay(target, params) {
-                scope.overlayPlayIcon = {};
-            }
-            function onChangeState(newState) {
-                switch (newState) {
-                  case VG_STATES.PLAY:
-                    scope.overlayPlayIcon = {};
-                    break;
-
-                  case VG_STATES.PAUSE:
-                    scope.overlayPlayIcon = {
-                        play: true
-                    };
-                    break;
-
-                  case VG_STATES.STOP:
-                    scope.overlayPlayIcon = {
-                        play: true
-                    };
-                    break;
-                }
-            }
-            scope.onClickOverlayPlay = function onClickOverlayPlay(event) {
-                API.playPause();
-            };
-            scope.overlayPlayIcon = {
-                play: true
-            };
-            scope.$watch(function() {
-                return API.currentState;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onChangeState(newVal);
-                }
-            });
-        }
-    };
-} ]);
-
-"use strict";
-
-angular.module("com.2fdevs.videogular.plugins.poster", []).directive("vgPosterImage", [ "VG_STATES", function(VG_STATES) {
-    return {
-        restrict: "E",
-        require: "^videogular",
-        scope: {
-            vgUrl: "="
-        },
-        template: '<img ng-src="{{vgUrl}}">',
-        link: function(scope, elem, attr, API) {
-            function onUpdateState(newState) {
-                switch (newState) {
-                  case VG_STATES.PLAY:
-                    elem.css("display", "none");
-                    break;
-
-                  case VG_STATES.STOP:
-                    elem.css("display", "block");
-                    break;
-                }
-            }
-            scope.$watch(function() {
-                return API.currentState;
-            }, function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    onUpdateState(newVal);
-                }
-            });
-        }
-    };
-} ]);
-
-"use strict";
-
-angular.module("com.2fdevs.videogular", [ "ngSanitize" ]).constant("VG_STATES", {
+angular.module("qti.plugins.videogular", [ "ngSanitize" ]).constant("VG_STATES", {
     PLAY: "play",
     PAUSE: "pause",
     STOP: "stop"
@@ -1280,15 +537,773 @@ angular.module("com.2fdevs.videogular", [ "ngSanitize" ]).constant("VG_STATES", 
     };
 } ]);
 
-angular.module("qti", [ "ngSanitize", "com.2fdevs.videogular", "com.2fdevs.videogular.plugins.controls", "com.2fdevs.videogular.plugins.overlayplay", "com.2fdevs.videogular.plugins.buffering", "com.2fdevs.videogular.plugins.poster" ]);
+"use strict";
 
-angular.module("qti").constant("ATTR_MAP", {
-    fontsize: "font-size",
-    fontface: "font-family",
-    backgroundColor: "background-color",
-    width: "width",
-    height: "height"
-});
+angular.module("qti.plugins.videogular").directive("vgBuffering", [ "VG_UTILS", function(VG_UTILS) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        template: "<div class='bufferingContainer'>" + "<div ng-class='spinnerClass' class='loadingSpinner'></div>" + "</div>",
+        link: function(scope, elem, attr, API) {
+            function showSpinner() {
+                scope.spinnerClass = {
+                    stop: API.isBuffering
+                };
+                elem.css("display", "block");
+            }
+            function hideSpinner() {
+                scope.spinnerClass = {
+                    stop: API.isBuffering
+                };
+                elem.css("display", "none");
+            }
+            function setState(isBuffering) {
+                if (isBuffering) {
+                    showSpinner();
+                } else {
+                    hideSpinner();
+                }
+            }
+            function onPlayerReady(isReady) {
+                if (isReady) {
+                    hideSpinner();
+                }
+            }
+            showSpinner();
+            if (VG_UTILS.isMobileDevice()) {
+                hideSpinner();
+            } else {
+                scope.$watch(function() {
+                    return API.isReady;
+                }, function(newVal, oldVal) {
+                    if (newVal != oldVal) {
+                        onPlayerReady(newVal);
+                    }
+                });
+            }
+            scope.$watch(function() {
+                return API.isBuffering;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    setState(newVal);
+                }
+            });
+        }
+    };
+} ]);
+
+"use strict";
+
+angular.module("qti.plugins.videogular").directive("vgControls", [ "$timeout", "VG_STATES", function($timeout, VG_STATES) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        transclude: true,
+        template: '<div id="controls-container" ng-mousemove="onMouseMove()" ng-class="animationClass" ng-transclude></div>',
+        scope: {
+            autoHide: "=vgAutohide",
+            autoHideTime: "=vgAutohideTime"
+        },
+        link: function(scope, elem, attr, API) {
+            var w = 0;
+            var h = 0;
+            var autoHideTime = 2e3;
+            var hideInterval;
+            scope.onMouseMove = function onMouseMove() {
+                if (scope.autoHide) showControls();
+            };
+            function hideControls() {
+                scope.animationClass = "hide-animation";
+            }
+            function showControls() {
+                scope.animationClass = "show-animation";
+                $timeout.cancel(hideInterval);
+                if (scope.autoHide) hideInterval = $timeout(hideControls, autoHideTime);
+            }
+            if (scope.autoHide != undefined) {
+                scope.$watch("autoHide", function(value) {
+                    if (value) {
+                        scope.animationClass = "hide-animation";
+                    } else {
+                        scope.animationClass = "";
+                        $timeout.cancel(hideInterval);
+                        showControls();
+                    }
+                });
+            }
+            if (scope.autoHideTime != undefined) {
+                scope.$watch("autoHideTime", function(value) {
+                    autoHideTime = value;
+                });
+            }
+        }
+    };
+} ]).directive("vgPlayPauseButton", [ "VG_STATES", function(VG_STATES) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        template: "<button class='iconButton' ng-click='onClickPlayPause()' ng-class='playPauseIcon' aria-label='Play/Pause'></button>",
+        link: function(scope, elem, attr, API) {
+            function setState(newState) {
+                switch (newState) {
+                  case VG_STATES.PLAY:
+                    scope.playPauseIcon = {
+                        pause: true
+                    };
+                    break;
+
+                  case VG_STATES.PAUSE:
+                    scope.playPauseIcon = {
+                        play: true
+                    };
+                    break;
+
+                  case VG_STATES.STOP:
+                    scope.playPauseIcon = {
+                        play: true
+                    };
+                    break;
+                }
+            }
+            scope.onClickPlayPause = function onClickPlayPause() {
+                API.playPause();
+            };
+            scope.playPauseIcon = {
+                play: true
+            };
+            scope.$watch(function() {
+                return API.currentState;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    setState(newVal);
+                }
+            });
+        }
+    };
+} ]).directive("vgTimedisplay", [ function() {
+    return {
+        require: "^videogular",
+        restrict: "E",
+        link: function(scope, elem, attr, API) {
+            scope.$watch(function() {
+                return API.currentTime;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    scope.currentTime = newVal;
+                }
+            });
+            scope.$watch(function() {
+                return API.timeLeft;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    scope.timeLeft = newVal;
+                }
+            });
+            scope.$watch(function() {
+                return API.totalTime;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    scope.totalTime = newVal;
+                }
+            });
+        }
+    };
+} ]).directive("vgScrubbar", [ "VG_STATES", "VG_UTILS", function(VG_STATES, VG_UTILS) {
+    return {
+        restrict: "AE",
+        require: "^videogular",
+        transclude: true,
+        template: '<div role="slider" aria-valuemax="{{ariaTime(API.totalTime)}}" ' + 'aria-valuenow="{{ariaTime(API.currentTime)}}" ' + 'aria-valuemin="0" aria-label="Time scrub bar" tabindex="0" ' + 'ng-transclude ng-keydown="onScrubBarKeyDown($event)"></div>',
+        link: function(scope, elem, attr, API) {
+            var isSeeking = false;
+            var isPlaying = false;
+            var isPlayingWhenSeeking = false;
+            var touchStartX = 0;
+            var LEFT = 37;
+            var RIGHT = 39;
+            var NUM_PERCENT = 1;
+            scope.API = API;
+            scope.ariaTime = function(time) {
+                return time === 0 ? "0" : Math.round(time.getTime() / 1e3);
+            };
+            function onScrubBarTouchStart($event) {
+                var event = $event.originalEvent || $event;
+                var touches = event.touches;
+                var touchX;
+                if (VG_UTILS.isiOSDevice()) {
+                    touchStartX = (touches[0].clientX - event.layerX) * -1;
+                } else {
+                    touchStartX = event.layerX;
+                }
+                touchX = touches[0].clientX + touchStartX - touches[0].target.offsetLeft;
+                isSeeking = true;
+                if (isPlaying) isPlayingWhenSeeking = true;
+                API.pause();
+                seekTime(touchX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                scope.$apply();
+            }
+            function onScrubBarTouchMove($event) {
+                var event = $event.originalEvent || $event;
+                if (isPlayingWhenSeeking) {
+                    isPlayingWhenSeeking = false;
+                    API.play();
+                }
+                isSeeking = false;
+                scope.$apply();
+            }
+            function onScrubBarTouchMove($event) {
+                var event = $event.originalEvent || $event;
+                var touches = event.touches;
+                var touchX;
+                if (isSeeking) {
+                    touchX = touches[0].clientX + touchStartX - touches[0].target.offsetLeft;
+                    seekTime(touchX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                }
+                scope.$apply();
+            }
+            function onScrubBarTouchLeave(event) {
+                isSeeking = false;
+                scope.$apply();
+            }
+            function onScrubBarMouseDown(event) {
+                event = VG_UTILS.fixEventOffset(event);
+                isSeeking = true;
+                if (isPlaying) isPlayingWhenSeeking = true;
+                API.pause();
+                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                scope.$apply();
+            }
+            function onScrubBarMouseUp(event) {
+                event = VG_UTILS.fixEventOffset(event);
+                if (isPlayingWhenSeeking) {
+                    isPlayingWhenSeeking = false;
+                    API.play();
+                }
+                isSeeking = false;
+                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                scope.$apply();
+            }
+            function onScrubBarMouseMove(event) {
+                if (isSeeking) {
+                    event = VG_UTILS.fixEventOffset(event);
+                    seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                }
+                scope.$apply();
+            }
+            function onScrubBarMouseLeave(event) {
+                isSeeking = false;
+                scope.$apply();
+            }
+            scope.onScrubBarKeyDown = function(event) {
+                var currentPercent = API.currentTime.getTime() / API.totalTime.getTime() * 100;
+                if (event.which === LEFT || event.keyCode === LEFT) {
+                    API.seekTime(currentPercent - NUM_PERCENT, true);
+                    event.preventDefault();
+                } else if (event.which === RIGHT || event.keyCode === RIGHT) {
+                    API.seekTime(currentPercent + NUM_PERCENT, true);
+                    event.preventDefault();
+                }
+            };
+            function seekTime(time) {
+                API.seekTime(time, false);
+            }
+            function setState(newState) {
+                if (!isSeeking) {
+                    switch (newState) {
+                      case VG_STATES.PLAY:
+                        isPlaying = true;
+                        break;
+
+                      case VG_STATES.PAUSE:
+                        isPlaying = false;
+                        break;
+
+                      case VG_STATES.STOP:
+                        isPlaying = false;
+                        break;
+                    }
+                }
+            }
+            scope.$watch(function() {
+                return API.currentState;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    setState(newVal);
+                }
+            });
+            if (VG_UTILS.isMobileDevice()) {
+                elem.bind("touchstart", onScrubBarTouchStart);
+                elem.bind("touchend", onScrubBarTouchEnd);
+                elem.bind("touchmove", onScrubBarTouchMove);
+                elem.bind("touchleave", onScrubBarTouchLeave);
+            } else {
+                elem.bind("mousedown", onScrubBarMouseDown);
+                elem.bind("mouseup", onScrubBarMouseUp);
+                elem.bind("mousemove", onScrubBarMouseMove);
+                elem.bind("mouseleave", onScrubBarMouseLeave);
+            }
+        }
+    };
+} ]).directive("vgScrubbarcurrenttime", [ function() {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        link: function(scope, elem, attr, API) {
+            var percentTime = 0;
+            function onUpdateTime(newCurrentTime) {
+                if (newCurrentTime && API.totalTime) {
+                    percentTime = newCurrentTime.getTime() * -1 / 1e3 * 100 / (API.totalTime.getTime() * -1 / 1e3);
+                    elem.css("width", percentTime + "%");
+                }
+            }
+            function onComplete() {
+                percentTime = 0;
+                elem.css("width", percentTime + "%");
+            }
+            scope.$watch(function() {
+                return API.currentTime;
+            }, function(newVal, oldVal) {
+                onUpdateTime(newVal);
+            });
+            scope.$watch(function() {
+                return API.isCompleted;
+            }, function(newVal, oldVal) {
+                onComplete(newVal);
+            });
+        }
+    };
+} ]).directive("vgVolume", [ "VG_UTILS", function(VG_UTILS) {
+    return {
+        restrict: "E",
+        link: function(scope, elem, attr) {
+            function onMouseOverVolume() {
+                scope.volumeVisibility = "visible";
+                scope.$apply();
+            }
+            function onMouseLeaveVolume() {
+                scope.volumeVisibility = "hidden";
+                scope.$apply();
+            }
+            if (VG_UTILS.isMobileDevice()) {
+                elem.css("display", "none");
+            } else {
+                scope.volumeVisibility = "hidden";
+                elem.bind("mouseover", onMouseOverVolume);
+                elem.bind("mouseleave", onMouseLeaveVolume);
+            }
+        }
+    };
+} ]).directive("vgVolumebar", [ "VG_UTILS", function(VG_UTILS) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        template: "<div class='verticalVolumeBar'>" + "<div class='volumeBackground' ng-click='onClickVolume($event)' ng-mousedown='onMouseDownVolume()' ng-mouseup='onMouseUpVolume()' ng-mousemove='onMouseMoveVolume($event)' ng-mouseleave='onMouseLeaveVolume()'>" + "<div class='volumeValue'></div>" + "<div class='volumeClickArea'></div>" + "</div>" + "</div>",
+        link: function(scope, elem, attr, API) {
+            var isChangingVolume = false;
+            var volumeBackElem = angular.element(elem[0].getElementsByClassName("volumeBackground"));
+            var volumeValueElem = angular.element(elem[0].getElementsByClassName("volumeValue"));
+            scope.onClickVolume = function onClickVolume(event) {
+                event = VG_UTILS.fixEventOffset(event);
+                var volumeHeight = parseInt(volumeBackElem.prop("offsetHeight"));
+                var value = event.offsetY * 100 / volumeHeight;
+                var volValue = 1 - value / 100;
+                API.setVolume(volValue);
+            };
+            scope.onMouseDownVolume = function onMouseDownVolume() {
+                isChangingVolume = true;
+            };
+            scope.onMouseUpVolume = function onMouseUpVolume() {
+                isChangingVolume = false;
+            };
+            scope.onMouseLeaveVolume = function onMouseLeaveVolume() {
+                isChangingVolume = false;
+            };
+            scope.onMouseMoveVolume = function onMouseMoveVolume(event) {
+                if (isChangingVolume) {
+                    event = VG_UTILS.fixEventOffset(event);
+                    var volumeHeight = parseInt(volumeBackElem.prop("offsetHeight"));
+                    var value = event.offsetY * 100 / volumeHeight;
+                    var volValue = 1 - value / 100;
+                    API.setVolume(volValue);
+                }
+            };
+            function updateVolumeView(value) {
+                value = value * 100;
+                volumeValueElem.css("height", value + "%");
+                volumeValueElem.css("top", 100 - value + "%");
+            }
+            function onChangeVisibility(value) {
+                elem.css("visibility", value);
+            }
+            elem.css("visibility", scope.volumeVisibility);
+            scope.$watch("volumeVisibility", onChangeVisibility);
+            scope.$watch(function() {
+                return API.volume;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    updateVolumeView(newVal);
+                }
+            });
+        }
+    };
+} ]).directive("vgMutebutton", [ function() {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        template: "<button class='iconButton' ng-class='muteIcon'" + " ng-click='onClickMute()' ng-focus='onMuteButtonFocus()' ng-blur='onMuteButtonLoseFocus()' ng-keydown='onMuteButtonKeyDown($event)'" + " aria-label='Mute'></button>",
+        link: function(scope, elem, attr, API) {
+            var isMuted = false;
+            var UP = 38;
+            var DOWN = 40;
+            var CHANGE_PER_PRESS = .05;
+            scope.onClickMute = function onClickMute() {
+                if (isMuted) {
+                    scope.currentVolume = scope.defaultVolume;
+                } else {
+                    scope.currentVolume = 0;
+                    scope.muteIcon = {
+                        mute: true
+                    };
+                }
+                isMuted = !isMuted;
+                API.setVolume(scope.currentVolume);
+            };
+            scope.onMuteButtonFocus = function() {
+                scope.volumeVisibility = "visible";
+            };
+            scope.onMuteButtonLoseFocus = function() {
+                scope.volumeVisibility = "hidden";
+            };
+            scope.onMuteButtonKeyDown = function(event) {
+                var currentVolume = API.volume != null ? API.volume : 1;
+                if (event.which === UP || event.keyCode === UP) {
+                    API.setVolume(currentVolume + CHANGE_PER_PRESS);
+                    event.preventDefault();
+                } else if (event.which === DOWN || event.keyCode === DOWN) {
+                    API.setVolume(currentVolume - CHANGE_PER_PRESS);
+                    event.preventDefault();
+                }
+            };
+            function onSetVolume(newVolume) {
+                scope.currentVolume = newVolume;
+                if (!isMuted) {
+                    scope.defaultVolume = newVolume;
+                } else {
+                    if (newVolume > 0) {
+                        scope.defaultVolume = newVolume;
+                    }
+                }
+                var percentValue = Math.round(newVolume * 100);
+                if (percentValue == 0) {
+                    scope.muteIcon = {
+                        mute: true
+                    };
+                } else if (percentValue > 0 && percentValue < 25) {
+                    scope.muteIcon = {
+                        level0: true
+                    };
+                } else if (percentValue >= 25 && percentValue < 50) {
+                    scope.muteIcon = {
+                        level1: true
+                    };
+                } else if (percentValue >= 50 && percentValue < 75) {
+                    scope.muteIcon = {
+                        level2: true
+                    };
+                } else if (percentValue >= 75) {
+                    scope.muteIcon = {
+                        level3: true
+                    };
+                }
+            }
+            scope.defaultVolume = 1;
+            scope.currentVolume = scope.defaultVolume;
+            scope.muteIcon = {
+                level3: true
+            };
+            scope.$watch(function() {
+                return API.volume;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onSetVolume(newVal);
+                }
+            });
+        }
+    };
+} ]).directive("vgFullscreenbutton", [ function() {
+    return {
+        restrict: "AE",
+        require: "^videogular",
+        scope: {
+            vgEnterFullScreenIcon: "=",
+            vgExitFullScreenIcon: "="
+        },
+        template: "<button class='iconButton' ng-click='onClickFullScreen()' ng-class='fullscreenIcon' aria-label='Toggle full screen'></button>",
+        link: function(scope, elem, attr, API) {
+            function onChangeFullScreen(isFullScreen) {
+                var result = scope.fullscreenIcon = {
+                    enter: !isFullScreen,
+                    exit: isFullScreen
+                };
+            }
+            scope.onClickFullScreen = function onClickFullScreen() {
+                API.toggleFullScreen();
+            };
+            scope.fullscreenIcon = {
+                exit: false
+            };
+            scope.fullscreenIcon = {
+                enter: true
+            };
+            scope.$watch(function() {
+                return API.isFullScreen;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onChangeFullScreen(newVal);
+                }
+            });
+        }
+    };
+} ]);
+
+"use strict";
+
+angular.module("qti.plugins.videogular").directive("vgImaAds", [ "$window", "VG_STATES", function($window, VG_STATES) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        scope: {
+            vgNetwork: "=",
+            vgUnitPath: "=",
+            vgCompanion: "=",
+            vgCompanionSize: "=",
+            vgAdTagUrl: "=",
+            vgSkipButton: "="
+        },
+        link: function(scope, elem, attr, API) {
+            var adDisplayContainer = new google.ima.AdDisplayContainer(elem[0]);
+            var adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+            var adsManager = null;
+            var adsLoaded = false;
+            var w;
+            var h;
+            var onContentEnded = function() {
+                adsLoader.contentComplete();
+            };
+            var currentAd = 0;
+            var skipButton = angular.element(scope.vgSkipButton);
+            function onPlayerReady(isReady) {
+                if (isReady) {
+                    API.mediaElement[0].addEventListener("ended", onContentEnded);
+                    w = API.videogularElement[0].offsetWidth;
+                    h = API.videogularElement[0].offsetHeight;
+                    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false, this);
+                    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false, this);
+                    if (scope.vgCompanion) {
+                        googletag.cmd.push(function() {
+                            googletag.defineSlot("/" + scope.vgNetwork + "/" + scope.vgUnitPath, scope.vgCompanionSize, scope.vgCompanion).addService(googletag.companionAds()).addService(googletag.pubads());
+                            googletag.companionAds().setRefreshUnfilledSlots(true);
+                            googletag.pubads().enableVideoAds();
+                            googletag.enableServices();
+                        });
+                    }
+                }
+            }
+            function onUpdateState(newState) {
+                switch (newState) {
+                  case VG_STATES.PLAY:
+                    if (!adsLoaded) {
+                        API.pause();
+                        adDisplayContainer.initialize();
+                        requestAds(scope.vgAdTagUrl);
+                        adsLoaded = true;
+                    }
+                    break;
+
+                  case VG_STATES.STOP:
+                    adsLoader.contentComplete();
+                    break;
+                }
+            }
+            function requestAds(adTagUrl) {
+                show();
+                var adsRequest = new google.ima.AdsRequest();
+                var computedStyle = $window.getComputedStyle(elem[0]);
+                adsRequest.adTagUrl = adTagUrl;
+                adsRequest.linearAdSlotWidth = parseInt(computedStyle.width, 10);
+                adsRequest.linearAdSlotHeight = parseInt(computedStyle.height, 10);
+                adsRequest.nonLinearAdSlotWidth = parseInt(computedStyle.width, 10);
+                adsRequest.nonLinearAdSlotHeight = parseInt(computedStyle.height, 10);
+                adsLoader.requestAds(adsRequest);
+            }
+            function onAdsManagerLoaded(adsManagerLoadedEvent) {
+                show();
+                adsManager = adsManagerLoadedEvent.getAdsManager(API.mediaElement[0]);
+                processAdsManager(adsManager);
+            }
+            function processAdsManager(adsManager) {
+                adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, onContentPauseRequested, false, this);
+                adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, onContentResumeRequested, false, this);
+                adsManager.addEventListener(google.ima.AdEvent.Type.SKIPPABLE_STATE_CHANGED, onSkippableStateChanged, false, this);
+                adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, onAllAdsComplete, false, this);
+                adsManager.addEventListener(google.ima.AdEvent.Type.COMPLETE, onAdComplete, false, this);
+                adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false, this);
+                adsManager.init(w, h, google.ima.ViewMode.NORMAL);
+                adsManager.start();
+            }
+            function onSkippableStateChanged() {
+                var isSkippable = adsManager.getAdSkippableState();
+                if (isSkippable) {
+                    skipButton.css("display", "block");
+                } else {
+                    skipButton.css("display", "none");
+                }
+            }
+            function onClickSkip() {
+                adsManager.skip();
+            }
+            function onContentPauseRequested() {
+                show();
+                API.mediaElement[0].removeEventListener("ended", onContentEnded);
+                API.pause();
+            }
+            function onContentResumeRequested() {
+                API.mediaElement[0].addEventListener("ended", onContentEnded);
+                API.play();
+                hide();
+            }
+            function onAdError() {
+                if (adsManager) adsManager.destroy();
+                hide();
+                API.play();
+            }
+            function onAllAdsComplete() {
+                hide();
+            }
+            function onAdComplete() {
+                currentAd++;
+            }
+            function show() {
+                elem.css("display", "block");
+            }
+            function hide() {
+                elem.css("display", "none");
+            }
+            skipButton.bind("click", onClickSkip);
+            elem.prepend(skipButton);
+            angular.element($window).bind("resize", function() {
+                w = API.videogularElement[0].offsetWidth;
+                h = API.videogularElement[0].offsetHeight;
+                if (adsManager) {
+                    if (API.isFullScreen) {
+                        adsManager.resize(w, h, google.ima.ViewMode.FULLSCREEN);
+                    } else {
+                        adsManager.resize(w, h, google.ima.ViewMode.NORMAL);
+                    }
+                }
+            });
+            scope.$watch(function() {
+                return API.isReady;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onPlayerReady(newVal);
+                }
+            });
+            scope.$watch(function() {
+                return API.currentState;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onUpdateState(newVal);
+                }
+            });
+        }
+    };
+} ]);
+
+"use strict";
+
+angular.module("qti.plugins.videogular").directive("vgOverlayPlay", [ "VG_STATES", function(VG_STATES) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        template: "<div class='overlayPlayContainer' ng-click='onClickOverlayPlay()'>" + "<div class='iconButton' ng-class='overlayPlayIcon'></div>" + "</div>",
+        link: function(scope, elem, attr, API) {
+            function onComplete(target, params) {
+                scope.overlayPlayIcon = {
+                    play: true
+                };
+            }
+            function onPlay(target, params) {
+                scope.overlayPlayIcon = {};
+            }
+            function onChangeState(newState) {
+                switch (newState) {
+                  case VG_STATES.PLAY:
+                    scope.overlayPlayIcon = {};
+                    break;
+
+                  case VG_STATES.PAUSE:
+                    scope.overlayPlayIcon = {
+                        play: true
+                    };
+                    break;
+
+                  case VG_STATES.STOP:
+                    scope.overlayPlayIcon = {
+                        play: true
+                    };
+                    break;
+                }
+            }
+            scope.onClickOverlayPlay = function onClickOverlayPlay(event) {
+                API.playPause();
+            };
+            scope.overlayPlayIcon = {
+                play: true
+            };
+            scope.$watch(function() {
+                return API.currentState;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onChangeState(newVal);
+                }
+            });
+        }
+    };
+} ]);
+
+"use strict";
+
+angular.module("qti.plugins.videogular").directive("vgPosterImage", [ "VG_STATES", function(VG_STATES) {
+    return {
+        restrict: "E",
+        require: "^videogular",
+        scope: {
+            vgUrl: "="
+        },
+        template: '<img ng-src="{{vgUrl}}">',
+        link: function(scope, elem, attr, API) {
+            function onUpdateState(newState) {
+                switch (newState) {
+                  case VG_STATES.PLAY:
+                    elem.css("display", "none");
+                    break;
+
+                  case VG_STATES.STOP:
+                    elem.css("display", "block");
+                    break;
+                }
+            }
+            scope.$watch(function() {
+                return API.currentState;
+            }, function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    onUpdateState(newVal);
+                }
+            });
+        }
+    };
+} ]);
 
 angular.module("qti").directive("assessment", function() {
     return {
@@ -1666,21 +1681,6 @@ angular.module("qti").filter("type", function() {
             return "Matching";
         }
         return "One Correct Option";
-    };
-});
-
-angular.module("qti").service("helpers", function() {
-    this.strToXML = function(str) {
-        var parser, xmlDoc;
-        if (window.DOMParser) {
-            parser = new DOMParser();
-            xmlDoc = parser.parseFromString(str, "text/xml");
-        } else {
-            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async = false;
-            xmlDoc.loadXML(str);
-        }
-        return xmlDoc;
     };
 });
 
