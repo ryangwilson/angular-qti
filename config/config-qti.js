@@ -94,7 +94,7 @@ module.exports = function (grunt, options) {
                 "expand": true,
                 "cwd": "src/elements/matvideo/styles/",
                 "src": ["assets/**", "fonts/**"],
-                "dest": "build/qti/css"
+                "dest": "build/qti/css/video"
             }
         }
     };
