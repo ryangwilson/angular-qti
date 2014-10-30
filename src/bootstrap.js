@@ -1,2 +1,3 @@
 /* global angular */
-angular.module('qti', [ 'ngSanitize' ]);
+angular.module('qti.plugins', []);
+angular.module('qti', ['qti.plugins', 'ngSanitize']);

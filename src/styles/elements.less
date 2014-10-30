@@ -1,0 +1,12 @@
+em {
+  font-style: italic;
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+/* Add a non-breaking space if paragraph is empty */
+p:empty:after {
+  content: '\00a0';
+}

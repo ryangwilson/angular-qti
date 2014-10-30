@@ -25,26 +25,13 @@ module.exports = function (grunt) {
         'ngAnnotate:qti',
         'string-replace:qti',
         'uglify:qti',
-        'uglify:engine_min',
+        'uglify:qti_min',
         'less:qti',
         'copy:qti',
         'clean:common'
     ];
 
     grunt.registerTask('default', tasksQti);
-
-    // videogular tasks
-    var tasksVideogular = [
-        'clean:videogular',
-        'ngAnnotate:videogular',
-        'string-replace:videogular',
-        'uglify:videogular',
-        'uglify:videogular_min',
-        'clean:common'
-    ];
-
-    grunt.registerTask('videogular', tasksVideogular);
-
 
     // pearsonvue tasks
     var tasksPearsonvue = [
@@ -58,20 +45,5 @@ module.exports = function (grunt) {
     ];
 
     grunt.registerTask('pearsonvue', tasksPearsonvue);
-
-
-    // all tasks
-    var tasksAll = [
-        'clean:all',
-        'ngtemplates:all',
-        'ngAnnotate:all',
-        'uglify:all',
-        'uglify:all_min',
-        'less:all',
-        'copy:all',
-        'clean:common'
-    ];
-
-    grunt.registerTask('all', tasksAll);
 
 };

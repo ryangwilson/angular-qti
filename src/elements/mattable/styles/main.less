@@ -1,0 +1,75 @@
+table[data-border]:not([frame]) {
+  border-style: solid;
+}
+
+table[frame=void] {
+  border-style: hidden;
+}
+
+table[frame=above] {
+  border-top-style: solid;
+}
+
+table[frame=below] {
+  border-bottom-style: solid;
+}
+
+table[frame=hsides] {
+  border-top-style: solid;
+  border-bottom-style: solid;
+}
+
+table[frame=lhs] {
+  border-left-style: solid;
+}
+
+table[frame=rhs] {
+  border-right-style: solid;
+}
+
+table[frame=hsides] {
+  border-left-style: solid;
+  border-right-style: solid;
+}
+
+table[frame=box] {
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+}
+
+table .sort-indicator {
+  position: absolute;
+  right: 4px;
+}
+
+table th {
+  position: relative;
+}
+
+thead {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+thead {
+  cursor: default;
+}
+
+thead th[ng-click] {
+  cursor: pointer;
+}
+
+th, td {
+  outline: 0;
+  /*padding: 4px !important;*/
+}
+
+thead .fa {
+  padding: 0 4px;
+}

@@ -3,18 +3,16 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="../common/css/reset.css"/>
-    <link rel="stylesheet" href="../../build/themes/pearsonvue.css"/>
+    <link rel="stylesheet" href="../../build/qti/css/styles.css"/>
+    <link rel="stylesheet" href="../../build/apps/pearsonvue/css/styles.css"/>
 </head>
-<body ng-cloak="">
+<body ng-cloak="" ng-controller="SystemCtrl as system">
 
-<qti-engine src="02_indent.xml"></qti-engine>
+<qti src="02_indent.xml"></qti>
 
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-sanitize.js"></script>
-<script src="../../build/qti-1.2.js"></script>
-<script src="../../build/themes/pearsonvue.js"></script>
-<script src="../../build/addons/pearsonvue.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-sanitize.js"></script>
+<script src="../../build/qti/qti.js"></script>
 <script src="../common/js/app.js"></script>
 
 </body>
