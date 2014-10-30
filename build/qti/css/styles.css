@@ -246,11 +246,8 @@ thead .fa {
 }
 
 /* Material text - p.3 White space created either by manual space characters or tab characters is preserved within a mattext element. */
-mattext {
-  /*white-space: pre-wrap;*/
-  display: inline-block;
-  /*unicode-bidi: embed;*/
-}
+/*white-space: pre-wrap;*/
+/*unicode-bidi: embed;*/
 
 .qti-video {
   max-width: 720px;

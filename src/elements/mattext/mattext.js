@@ -8,10 +8,12 @@ angular.module('qti').directive('mattext', function ($sce) {
 
             if (attr.hasOwnProperty('width')) {
                 el.css('width', attr.width + 'px');
+                el.css('display', 'inline-block');
             }
 
             if (attr.hasOwnProperty('height')) {
                 el.css('height', attr.height + 'px');
+                el.css('display', 'inline-block');
             }
 
             if (attr.hasOwnProperty('fontface')) {

@@ -921,9 +921,11 @@ angular.module("qti").directive("mattext", [ "$sce", function($sce) {
         link: function(scope, el, attr) {
             if (attr.hasOwnProperty("width")) {
                 el.css("width", attr.width + "px");
+                el.css("display", "inline-block");
             }
             if (attr.hasOwnProperty("height")) {
                 el.css("height", attr.height + "px");
+                el.css("display", "inline-block");
             }
             if (attr.hasOwnProperty("fontface")) {
                 el.css("font-family", attr.fontface);
