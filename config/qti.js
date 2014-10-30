@@ -12,8 +12,8 @@ module.exports = function (grunt) {
 
     return {
         tasks: {
-            "clean:engine": ["build/qti"],
-            "copy:engine": {
+            "clean:qti": ["build/qti"],
+            "copy:qti": {
                 "files": [
                     {
                         "expand": true,
@@ -23,12 +23,12 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            "less:engine": {
+            "less:qti": {
                 "files": {
                     "build/css/styles.css": "src/themes/engine/css/main.less"
                 }
             },
-            "ngAnnotate:engine": {
+            "ngAnnotate:qti": {
                 "options": {
                     "singleQuotes": true
                 },
@@ -43,7 +43,7 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            "ngtemplates:engine": {
+            "ngtemplates:qti": {
                 "cwd": "src/themes/engine",
                 "src": "templates/**.html",
                 "dest": ".tmp/qti/templates.js",
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            "string-replace:engine": {
+            "string-replace:qti": {
                 files: {'.tmp/qti/qti.js': '.tmp/qti/qti.js'},
                 options: {
                     replacements: [
@@ -76,7 +76,7 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            "uglify:engine": {
+            "uglify:qti": {
                 "options": {
                     "mangle": false,
                     "compress": false,

@@ -18,20 +18,20 @@ module.exports = function (grunt) {
 
     grunt.initConfig(configs);
 
-    // qti engine tasks
-    var tasksEngine = [
-        'clean:engine',
-        'ngtemplates:engine',
-        'ngAnnotate:engine',
-        'string-replace:engine',
-        'uglify:engine',
+    // qti tasks
+    var tasksQti = [
+        'clean:qti',
+        'ngtemplates:qti',
+        'ngAnnotate:qti',
+        'string-replace:qti',
+        'uglify:qti',
         'uglify:engine_min',
-        'less:engine',
-        'copy:engine',
-        //'clean:common'
+        'less:qti',
+        'copy:qti',
+        'clean:common'
     ];
 
-    grunt.registerTask('default', tasksEngine);
+    grunt.registerTask('default', tasksQti);
 
     // videogular tasks
     var tasksVideogular = [
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         'string-replace:videogular',
         'uglify:videogular',
         'uglify:videogular_min',
-        //'clean:common'
+        'clean:common'
     ];
 
     grunt.registerTask('videogular', tasksVideogular);
