@@ -26,37 +26,19 @@ angular.module("qti").service("helpers", function() {
         }
         return xmlDoc;
     };
+    this.xmlToStr = function(xmlObject) {
+        var str;
+        if (window.ActiveXObject) {
+            str = xmlObject.xml;
+        } else {
+            str = new XMLSerializer().serializeToString(xmlObject);
+        }
+        str = str.replace(/\sxmlns=".*?"/gim, "");
+        return str;
+    };
 });
 
 angular.module("qti").directive("qti", [ "$http", "$compile", "helpers", function($http, $compile, helpers) {
-    function _replaceSpaces(match, group) {
-        return match.split(" ").join("__SPACE__");
-    }
-    function _replaceTabs(match, group) {
-        return match.split(" ").join("__TAB__");
-    }
-    function fixMattext(xmlStr) {
-        var xml = helpers.strToXML(xmlStr);
-        var mattexts = xml.querySelectorAll("mattext");
-        var mattext, childNodes, childNode, str;
-        for (var i = 0; i < mattexts.length; i++) {
-            mattext = mattexts[i];
-            childNodes = mattext.childNodes;
-            for (var n = 0; n < childNodes.length; n++) {
-                childNode = childNodes[n];
-                if (childNode.nodeType === 3) {
-                    str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
-                    str = str.replace(/\t{2,}/gim, _replaceTabs);
-                    childNode.nodeValue = str;
-                }
-            }
-        }
-        var oSerializer = new XMLSerializer();
-        xmlStr = oSerializer.serializeToString(xml);
-        xmlStr = xmlStr.split("__SPACE__").join("&nbsp;&#8203;");
-        xmlStr = xmlStr.split("__TAB__").join("&nbsp;&nbsp;&nbsp;&#8203;");
-        return xmlStr;
-    }
     function stripCDATA(str) {
         return str.split("<![CDATA[").join("").split("]]>").join("");
     }
@@ -69,8 +51,7 @@ angular.module("qti").directive("qti", [ "$http", "$compile", "helpers", functio
             scope.content = null;
             $http.get(attr.src).then(function(response) {
                 scope.src = response.data;
-                scope.template = fixMattext(scope.src);
-                scope.template = stripCDATA(scope.template);
+                scope.template = stripCDATA(scope.src);
                 scope.$emit("qti::setup");
                 var linkFn = $compile(scope.template);
                 scope.content = linkFn(scope);
@@ -936,6 +917,43 @@ angular.module("qti").directive("mattext", [ "$sce", function($sce) {
         }
     };
 } ]);
+
+angular.module("qti").service("mattext", [ "$rootScope", "helpers", function($rootScope, helpers) {
+    var _replaceSpaces = function(match, group) {
+        return match.split(" ").join("__SPACE__");
+    };
+    var _replaceTabs = function(match, group) {
+        return match.split(" ").join("__TAB__");
+    };
+    var fixMattext = function(xmlStr) {
+        var xml = helpers.strToXML(xmlStr);
+        var mattexts = xml.querySelectorAll("mattext");
+        var mattext, childNodes, childNode, str;
+        for (var i = 0; i < mattexts.length; i++) {
+            mattext = mattexts[i];
+            var mattextStr = mattext.innerHTML;
+            if (mattextStr.indexOf("<") === -1) {
+                childNodes = mattext.childNodes;
+                for (var n = 0; n < childNodes.length; n++) {
+                    childNode = childNodes[n];
+                    if (childNode.nodeType === 3) {
+                        str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
+                        str = str.replace(/\t{2,}/gim, _replaceTabs);
+                        childNode.nodeValue = str;
+                    }
+                }
+            }
+        }
+        var oSerializer = new XMLSerializer();
+        xmlStr = oSerializer.serializeToString(xml);
+        xmlStr = xmlStr.split("__SPACE__").join("&nbsp;&#8203;");
+        xmlStr = xmlStr.split("__TAB__").join("&nbsp;&nbsp;&nbsp;&#8203;");
+        return xmlStr;
+    };
+    $rootScope.$on("qti::setup", function(evt) {
+        evt.targetScope.template = fixMattext(evt.targetScope.template);
+    });
+} ]).run([ "mattext", function(mattext) {} ]);
 
 angular.module("qti.plugins").directive("matvideo", [ "$compile", function($compile) {
     return {
