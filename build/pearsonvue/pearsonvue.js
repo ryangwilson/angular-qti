@@ -1,17 +1,15 @@
-angular.module("pearsonvue", []);
-
-if (window.hasOwnProperty("MathJax")) {
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            preferredFont: "STIX"
-        }
-    });
-    setTimeout(function() {
-        MathJax.Hub.Configured();
-    }, 2e3);
-}
-
-angular.module("pearsonvue").constant("PV_CONFIG", {});
+angular.module("qti.plugins").service("expression", function() {
+    if (window.hasOwnProperty("MathJax")) {
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+                preferredFont: "STIX"
+            }
+        });
+        setTimeout(function() {
+            MathJax.Hub.Configured();
+        }, 1e3);
+    }
+}).run([ "expression", function(expression) {} ]);
 
 angular.module("qti.plugins").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
     "use strict";
