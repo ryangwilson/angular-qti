@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         'uglify:pearsonvue',
         'uglify:pearsonvue_min',
         'less:pearsonvue',
-        'copy:pearsonvue',
+        'copy:pearsonvue_mattable',
         'clean:common'
     ];
 

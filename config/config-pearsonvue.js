@@ -81,11 +81,11 @@ module.exports = function (grunt, options) {
                     ]
                 }
             },
-            "copy:pearsonvue": {
+            "copy:pearsonvue_mattable": {
                 "expand": true,
                 "cwd": "src_apps/pearsonvue/elements/mattable/styles/",
                 "src": ["assets/**", "fonts/**"],
-                "dest": "build/pearsonvue/css"
+                "dest": "build/pearsonvue/css/mattable"
             }
         }
     };
