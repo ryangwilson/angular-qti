@@ -28,6 +28,7 @@ module.exports = function (grunt, options) {
                 },
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
+                        "src_apps/pearsonvue/*.js",
                         "src_apps/pearsonvue/elements/**/**.js"
                     ]
                 }
@@ -86,6 +87,12 @@ module.exports = function (grunt, options) {
                 "cwd": "src_apps/pearsonvue/elements/mattable/styles/",
                 "src": ["assets/**", "fonts/**"],
                 "dest": "build/pearsonvue/css/mattable"
+            },
+            "copy:pearsonvue_mathjax": {
+                "expand": true,
+                "cwd": "src_apps/pearsonvue/",
+                "src": ["vendor/**"],
+                "dest": "build/pearsonvue"
             }
         }
     };

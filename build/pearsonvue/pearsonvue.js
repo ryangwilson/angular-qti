@@ -1,4 +1,17 @@
-console.log("person here");
+angular.module("pearsonvue", []);
+
+if (window.hasOwnProperty("MathJax")) {
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            preferredFont: "STIX"
+        }
+    });
+    setTimeout(function() {
+        MathJax.Hub.Configured();
+    }, 2e3);
+}
+
+angular.module("pearsonvue").constant("PV_CONFIG", {});
 
 angular.module("qti.plugins").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
     "use strict";

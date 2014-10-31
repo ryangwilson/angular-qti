@@ -42,6 +42,7 @@ module.exports = function (grunt) {
         'uglify:pearsonvue_min',
         'less:pearsonvue',
         'copy:pearsonvue_mattable', // copy mattable assets
+        'copy:pearsonvue_mathjax', // copy mathjax assets
         'clean:common'
     ];
 

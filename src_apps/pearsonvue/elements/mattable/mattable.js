@@ -1,4 +1,3 @@
-console.log('person here');
 angular.module('qti.plugins').directive('pearsonvueMatExtension', function ($compile, helpers) {
 //angular.module('qti.plugins').directive('mattable', function ($compile, helpers) {
     'use strict';
