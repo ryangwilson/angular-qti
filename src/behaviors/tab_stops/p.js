@@ -25,26 +25,10 @@ angular.module('qti.plugins').directive('p', function ($compile) {
         return tabStops;
     }
 
-
     return {
         restrict: 'E',
         scope: true,
         link: function (scope, el, attr) {
-            //var html = el.html();
-            //var tabCount = html.split('\t').length - 1;
-            //if (tabCount) {
-            //    var linkFn, content;
-            //    var tabStops = parseTabStops(attr.tabStops);
-            //    console.log('tabStops', tabStops);
-            //    html = html.split('\t').join('<span style="padding-right:' + tabStops.interval + 'in"></span>');
-            //    html = '<div>' + html + '</div>';
-            //    linkFn = $compile(html);
-            //    content = linkFn(scope);
-            //    el.empty();
-            //    el.append(content);
-            //}
-
-
             var tabStops = parseTabStops(attr.tabStops);
             var html = el.html();
             var tabCount = html.split('\t').length - 1;

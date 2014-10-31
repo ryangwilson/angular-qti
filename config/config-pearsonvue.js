@@ -28,7 +28,7 @@ module.exports = function (grunt, options) {
                 },
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
-                        "src_apps/elements/**/**.js"
+                        "src_apps/pearsonvue/elements/**/**.js"
                     ]
                 }
             },
@@ -80,6 +80,12 @@ module.exports = function (grunt, options) {
                         ".tmp/pearsonvue/templates.js"
                     ]
                 }
+            },
+            "copy:pearsonvue": {
+                "expand": true,
+                "cwd": "src_apps/pearsonvue/elements/mattable/styles/",
+                "src": ["assets/**", "fonts/**"],
+                "dest": "build/pearsonvue/css"
             }
         }
     };

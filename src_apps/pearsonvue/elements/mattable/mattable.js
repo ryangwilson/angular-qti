@@ -1,5 +1,6 @@
-//angular.module('qti.plugins').directive('pearsonvueMatExtension', function ($compile, helpers) {
-angular.module('qti.plugins').directive('mattable', function ($compile, helpers) {
+console.log('person here');
+angular.module('qti.plugins').directive('pearsonvueMatExtension', function ($compile, helpers) {
+//angular.module('qti.plugins').directive('mattable', function ($compile, helpers) {
     'use strict';
 
     var css = function (el, prop, value) {
@@ -54,9 +55,9 @@ angular.module('qti.plugins').directive('mattable', function ($compile, helpers)
             scope.selectedCls = function (column) {
                 if (column === scope.sort.column) {
                     if (scope.sort.reverse) {
-                        return 'fa fa-chevron-down';
+                        return 'table-icon-chevron-down';
                     } else {
-                        return 'fa fa-chevron-up';
+                        return 'table-icon-chevron-up';
                     }
                 }
             };
