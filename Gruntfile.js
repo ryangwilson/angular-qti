@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         'uglify:qti',
         'uglify:qti_min',
         'less:qti',
-        'copy:qti',
+        'copy:qti_matvideo', // copy matvideo assets
         'clean:common'
     ];
 
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         'uglify:pearsonvue',
         'uglify:pearsonvue_min',
         'less:pearsonvue',
-        'copy:pearsonvue_mattable',
+        'copy:pearsonvue_mattable', // copy mattable assets
         'clean:common'
     ];
 

@@ -90,11 +90,11 @@ module.exports = function (grunt, options) {
                     ]
                 }
             },
-            "copy:qti": {
+            "copy:qti_matvideo": {
                 "expand": true,
                 "cwd": "src/elements/matvideo/styles/",
                 "src": ["assets/**", "fonts/**"],
-                "dest": "build/qti/css/video"
+                "dest": "build/qti/css/matvideo"
             }
         }
     };
