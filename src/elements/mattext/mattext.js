@@ -46,21 +46,22 @@ angular.module('qti').service('mattext', function ($rootScope, helpers) {
             mattext = mattexts[i];
             var mattextStr = mattext.innerHTML;
             if(mattextStr.indexOf('<') === -1) {
-                childNodes = mattext.childNodes;
-                for (var n = 0; n < childNodes.length; n++) {
-                    childNode = childNodes[n];
-                    if (childNode.nodeType === 3) { // text node
-                        str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
-                        str = str.replace(/\t{2,}/gim, _replaceTabs);
-                        childNode.nodeValue = str;
-                    }
-                }
+                helpers.addClass(mattext, 'qti-prewrap');
+                //childNodes = mattext.childNodes;
+                //for (var n = 0; n < childNodes.length; n++) {
+                //    childNode = childNodes[n];
+                //    if (childNode.nodeType === 3) { // text node
+                //        str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
+                //        str = str.replace(/\t{2,}/gim, _replaceTabs);
+                //        childNode.nodeValue = str;
+                //    }
+                //}
             }
         }
         var oSerializer = new XMLSerializer();
         xmlStr = oSerializer.serializeToString(xml);
-        xmlStr = xmlStr.split('__SPACE__').join('&nbsp;&#8203;');
-        xmlStr = xmlStr.split('__TAB__').join('&nbsp;&nbsp;&nbsp;&#8203;');
+        //xmlStr = xmlStr.split('__SPACE__').join('&nbsp;&#8203;');
+        //xmlStr = xmlStr.split('__TAB__').join('&nbsp;&nbsp;&nbsp;&#8203;');
         return xmlStr;
     };
 

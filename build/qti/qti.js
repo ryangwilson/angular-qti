@@ -26,15 +26,19 @@ angular.module("qti").service("helpers", function() {
         }
         return xmlDoc;
     };
-    this.xmlToStr = function(xmlObject) {
-        var str;
-        if (window.ActiveXObject) {
-            str = xmlObject.xml;
+    this.addClass = function(el, className) {
+        if (el.classList) {
+            el.classList.add(className);
         } else {
-            str = new XMLSerializer().serializeToString(xmlObject);
+            el.className += " " + className;
         }
-        str = str.replace(/\sxmlns=".*?"/gim, "");
-        return str;
+    };
+    this.removeClass = function(el, className) {
+        if (el.classList) {
+            el.classList.remove(className);
+        } else {
+            el.className = el.className.replace(new RegExp("(^|\\b)" + className.split(" ").join("|") + "(\\b|$)", "gi"), " ");
+        }
     };
 });
 
@@ -127,17 +131,30 @@ angular.module("qti.plugins").directive("p", [ "$compile", function($compile) {
         restrict: "E",
         scope: true,
         link: function(scope, el, attr) {
+            var tabStops = parseTabStops(attr.tabStops);
             var html = el.html();
             var tabCount = html.split("	").length - 1;
+            var linkFn, content;
             if (tabCount) {
-                var linkFn, content;
-                var tabStops = parseTabStops(attr.tabStops);
-                html = html.split("	").join('<span style="padding-right:' + tabStops.interval + 'in"></span>');
-                html = "<div>" + html + "</div>";
-                linkFn = $compile(html);
-                content = linkFn(scope);
-                el.empty();
-                el.append(content);
+                if (tabStops.hasOwnProperty("interval")) {
+                    html = html.split("	").join('<span style="padding-right:' + tabStops.interval + 'in"></span>');
+                    html = "<div>" + html + "</div>";
+                    linkFn = $compile(html);
+                    content = linkFn(scope);
+                    el.empty();
+                    el.append(content);
+                } else if (tabStops.hasOwnProperty("tabset")) {
+                    var htmlStr = "";
+                    html = html.split("	");
+                    for (var i = 0; i < html.length; i += 1) {
+                        htmlStr += html[i] + '<span style="padding-right:' + tabStops.tabset[i] + 'in"></span>';
+                    }
+                    html = "<div>" + htmlStr + "</div>";
+                    linkFn = $compile(html);
+                    content = linkFn(scope);
+                    el.empty();
+                    el.append(content);
+                }
             }
         }
     };
@@ -936,21 +953,11 @@ angular.module("qti").service("mattext", [ "$rootScope", "helpers", function($ro
             mattext = mattexts[i];
             var mattextStr = mattext.innerHTML;
             if (mattextStr.indexOf("<") === -1) {
-                childNodes = mattext.childNodes;
-                for (var n = 0; n < childNodes.length; n++) {
-                    childNode = childNodes[n];
-                    if (childNode.nodeType === 3) {
-                        str = childNode.nodeValue.replace(/\s{2,}/gim, _replaceSpaces);
-                        str = str.replace(/\t{2,}/gim, _replaceTabs);
-                        childNode.nodeValue = str;
-                    }
-                }
+                helpers.addClass(mattext, "qti-prewrap");
             }
         }
         var oSerializer = new XMLSerializer();
         xmlStr = oSerializer.serializeToString(xml);
-        xmlStr = xmlStr.split("__SPACE__").join("&nbsp;&#8203;");
-        xmlStr = xmlStr.split("__TAB__").join("&nbsp;&nbsp;&nbsp;&#8203;");
         return xmlStr;
     };
     $rootScope.$on("qti::setup", function(evt) {

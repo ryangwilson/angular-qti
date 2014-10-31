@@ -17,14 +17,30 @@ angular.module('qti').service('helpers', function () {
         return xmlDoc;
     };
 
-    this.xmlToStr = function (xmlObject) {
-        var str
-        if (window.ActiveXObject) {
-            str = xmlObject.xml;
+    //this.xmlToStr = function (xmlObject) {
+    //    var str
+    //    if (window.ActiveXObject) {
+    //        str = xmlObject.xml;
+    //    } else {
+    //        str = (new XMLSerializer()).serializeToString(xmlObject);
+    //    }
+    //    str = str.replace(/\sxmlns=".*?"/gim, '');
+    //    return str;
+    //};
+
+    this.addClass = function (el, className) {
+        if (el.classList) {
+            el.classList.add(className);
         } else {
-            str = (new XMLSerializer()).serializeToString(xmlObject);
+            el.className += ' ' + className;
         }
-        str = str.replace(/\sxmlns=".*?"/gim, '');
-        return str;
+    };
+
+    this.removeClass = function (el, className) {
+        if (el.classList) {
+            el.classList.remove(className);
+        } else {
+            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
     };
 });
