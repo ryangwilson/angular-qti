@@ -8,7 +8,7 @@
                 <presentation>
                     <flow>
                         <material>
-                            <matvideo uri="//videogular.com/assets/videos/videogular.mp4" embedURI="true"/>
+                            <mataudio uri="//videogular.com/assets/audios/videogular.mp3" embedURI="true"/>
                         </material>
                     </flow>
                 </presentation>

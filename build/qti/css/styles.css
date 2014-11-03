@@ -194,6 +194,9 @@ matimage {
   max-width: 720px;
   max-height: 576px;
 }
+.qti-audio {
+  height: 50px;
+}
 @font-face {
   font-family: 'icomoon';
   src: url('matvideo/fonts/icomoon.eot');

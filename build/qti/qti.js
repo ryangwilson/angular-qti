@@ -817,7 +817,6 @@ angular.module("qti.plugins").directive("matvideo", [ "$sce", function($sce) {
         scope: true,
         templateUrl: "templates/matvideo.html",
         link: function(scope, el, attrs) {
-            console.log("attrs", attrs);
             scope.currentTime = 0;
             scope.totalTime = 0;
             scope.state = null;
@@ -871,7 +870,69 @@ angular.module("qti.plugins").directive("matvideo", [ "$sce", function($sce) {
                 }
             };
             scope.config = config;
-            console.log(scope.config);
+        }
+    };
+} ]);
+
+angular.module("qti.plugins").directive("mataudio", [ "$sce", function($sce) {
+    return {
+        restrict: "E",
+        scope: true,
+        templateUrl: "templates/mataudio.html",
+        link: function(scope, el, attrs) {
+            scope.currentTime = 0;
+            scope.totalTime = 0;
+            scope.state = null;
+            scope.volume = 1;
+            scope.isCompleted = false;
+            scope.API = null;
+            scope.onPlayerReady = function(API) {
+                scope.API = API;
+            };
+            scope.onCompleteVideo = function() {
+                scope.isCompleted = true;
+            };
+            scope.onUpdateState = function(state) {
+                scope.state = state;
+            };
+            scope.onUpdateTime = function(currentTime, totalTime) {
+                scope.currentTime = currentTime;
+                scope.totalTime = totalTime;
+            };
+            scope.onUpdateVolume = function(newVol) {
+                scope.volume = newVol;
+            };
+            scope.onUpdateSize = function(width, height) {
+                scope.config.width = width;
+                scope.config.height = height;
+            };
+            var config = {};
+            config.autoHide = false;
+            config.autoHideTime = 3e3;
+            config.autoPlay = attrs.autoPlay === "true";
+            config.playAvailable = attrs.playAvailable !== "false";
+            config.pauseAvailable = attrs.pauseAvailable !== "false";
+            config.stopAvailable = attrs.stopAvailable !== "false";
+            config.progressAvailable = attrs.progressAvailable !== "false";
+            config.seekAvailable = attrs.seekAvailable !== "false";
+            config.volumeAvailable = attrs.volumeAvailable !== "false";
+            config.sources = [ {
+                src: $sce.trustAsResourceUrl(attrs.uri) + "",
+                type: "video/mp4"
+            } ];
+            config.loop = attrs.autoLoop === "true";
+            config.preload = "auto";
+            config.transclude = false;
+            config.controls = undefined;
+            config.theme = {
+                url: attrs.themeuri
+            };
+            config.plugins = {
+                poster: {
+                    url: attrs.posteruri
+                }
+            };
+            scope.config = config;
         }
     };
 } ]);
@@ -1706,6 +1767,7 @@ angular.module("qti").directive("responseLid", function() {
 angular.module("qti").run([ "$templateCache", function($templateCache) {
     "use strict";
     $templateCache.put("templates/assessment.html", '<div class=qti-assessment><div class=qti-title>{{assessment.title}}</div><div class=qti-content><div ng-transclude=""></div></div></div>');
-    $templateCache.put("templates/matvideo.html", '<div class="qti-video no-selectable"><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-video vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-video><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button ng-if="config.playAvailable && config.pauseAvailable"></vg-play-pause-button><vg-timedisplay ng-if=config.progressAvailable>{{ currentTime | date:\'mm:ss\' }}</vg-timedisplay><vg-scrubbar ng-if=config.progressAvailable><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><div ng-if=!config.progressAvailable style="width: 100%;display: table-cell;cursor: default"></div><vg-timedisplay ng-if=config.progressAvailable>{{ timeLeft | date:\'mm:ss\' }}</vg-timedisplay><vg-volume ng-if=config.volumeAvailable><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton ng-if=config.fullscreenAvailable></vg-fullscreenbutton></vg-controls><vg-poster-image vg-url=config.plugins.poster.url></vg-poster-image><vg-buffering></vg-buffering><vg-overlay-play vg-play-icon=config.theme.playIcon></vg-overlay-play></videogular></div>');
+    $templateCache.put("templates/mataudio.html", "<div class=qti-audio><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-audio vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-audio><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button ng-if=\"config.playAvailable && config.pauseAvailable\"></vg-play-pause-button><vg-timedisplay ng-if=config.progressAvailable>{{ currentTime | date:'mm:ss' }}</vg-timedisplay><vg-scrubbar ng-if=config.progressAvailable><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><div ng-if=!config.progressAvailable style=\"width: 100%;display: table-cell;cursor: default\"></div><vg-timedisplay ng-if=config.progressAvailable>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay><vg-volume ng-if=config.volumeAvailable><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton ng-if=config.fullscreenAvailable></vg-fullscreenbutton></vg-controls></videogular></div>");
+    $templateCache.put("templates/matvideo.html", "<div class=qti-video><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-video vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-video><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button ng-if=\"config.playAvailable && config.pauseAvailable\"></vg-play-pause-button><vg-timedisplay ng-if=config.progressAvailable>{{ currentTime | date:'mm:ss' }}</vg-timedisplay><vg-scrubbar ng-if=config.progressAvailable><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><div ng-if=!config.progressAvailable style=\"width: 100%;display: table-cell;cursor: default\"></div><vg-timedisplay ng-if=config.progressAvailable>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay><vg-volume ng-if=config.volumeAvailable><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton ng-if=config.fullscreenAvailable></vg-fullscreenbutton></vg-controls><vg-poster-image vg-url=config.plugins.poster.url></vg-poster-image><vg-buffering></vg-buffering><vg-overlay-play vg-play-icon=config.theme.playIcon></vg-overlay-play></videogular></div>");
     $templateCache.put("templates/presentation.html", '<div><div ng-transclude=""></div></div>');
 } ]);

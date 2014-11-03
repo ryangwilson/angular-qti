@@ -1,4 +1,4 @@
-<div class="qti-video">
+<div class="qti-audio">
     <videogular vg-player-ready="onPlayerReady"
                 vg-complete="onCompleteVideo"
                 vg-update-time="onUpdateTime"
@@ -6,12 +6,12 @@
                 vg-update-state="onUpdateState"
                 vg-theme="config.theme.url"
                 vg-autoplay="config.autoPlay">
-        <vg-video vg-src="config.sources"
+        <vg-audio vg-src="config.sources"
                   vg-tracks="config.tracks"
                   vg-loop="config.loop"
                   vg-preload="config.preload"
                   vg-native-controls="config.controls">
-        </vg-video>
+        </vg-audio>
 
         <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
             <vg-play-pause-button ng-if="config.playAvailable && config.pauseAvailable"></vg-play-pause-button>
@@ -28,8 +28,5 @@
             <vg-fullscreenButton ng-if="config.fullscreenAvailable"></vg-fullscreenButton>
         </vg-controls>
 
-        <vg-poster-image vg-url='config.plugins.poster.url'></vg-poster-image>
-        <vg-buffering></vg-buffering>
-        <vg-overlay-play vg-play-icon="config.theme.playIcon"></vg-overlay-play>
     </videogular>
 </div>

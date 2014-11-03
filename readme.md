@@ -9,9 +9,22 @@ These are notes as I am developing QTI.
 
 [http://mattiash.github.io/angular-tablesort/](http://mattiash.github.io/angular-tablesort/)
 
+#### Video / Audio
+---
+
+
+### Voiceover and sign language accommodations (p.32-35) 
+---
+
+**This is not currently implemented:**
+
 
 #### Equations
 ---
+
+The following items are not currently implemented:
+
+* Inline editor
 
 **MathJax**
 

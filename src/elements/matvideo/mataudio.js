@@ -1,9 +1,9 @@
 /* global angular */
-angular.module('qti.plugins').directive('mataudio', function ($sce) {
+angular.module('qti.plugins').directive('matvideo', function ($sce) {
     return {
         restrict: 'E',
         scope: true,
-        templateUrl: 'templates/mataudio.html',
+        templateUrl: 'templates/matvideo.html',
         link: function(scope, el, attrs) {
             scope.currentTime = 0;
             scope.totalTime = 0;
