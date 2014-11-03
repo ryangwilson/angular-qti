@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE questestinterop SYSTEM
+        "C:\Program Files\Pearson VUE\Compiler\lib\vue\exam\compiler\parsers\pearsonvue_full.dtd">
+<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:pearsonvue="http://www.vue.com/schemas">
+    <assessment ident="TableAssessment" title="Video :: Basic Example">
+        <section ident="TableSection">
+            <item ident="TableItem">
+                <presentation>
+                    <flow>
+                        <material>
+                            <matvideo uri="//videogular.com/assets/videos/videogular.mp4" embedURI="true"
+                                      posterURI="../../build/qti/css/matvideo/assets/images/videogular.png"
+                                      auto_play="false" auto_loop="true"
+                                      pause_available="true" play_available="true" progress_available="true"
+                                      seek_available="true" volume_available="true"/>
+                        </material>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

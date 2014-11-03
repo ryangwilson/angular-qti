@@ -16,7 +16,7 @@ These are notes as I am developing QTI.
 ### Voiceover and sign language accommodations (p.32-35) 
 ---
 
-**This is not currently implemented:**
+**This is not currently implemented:** Example needed
 
 
 #### Equations

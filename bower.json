@@ -1,0 +1,21 @@
+{
+  "name": "angular-qti",
+  "version": "0.1.0",
+  "homepage": "https://github.com/roboncode/angular-qti",
+  "authors": [
+    "Rob Taylor <roboncode@gmail.com>"
+  ],
+  "description": "Renders QTI 1.2 questions",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.1",
+    "angular-sanitize": "~1.3.1"
+  }
+}
