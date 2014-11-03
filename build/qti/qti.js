@@ -811,85 +811,68 @@ angular.module("qti").service("mattext", [ "$rootScope", "helpers", function($ro
     });
 } ]).run([ "mattext", function(mattext) {} ]);
 
-angular.module("qti.plugins").directive("matvideo", [ "$compile", function($compile) {
+angular.module("qti.plugins").directive("matvideo", [ "$sce", function($sce) {
     return {
         restrict: "E",
         scope: true,
         templateUrl: "templates/matvideo.html",
-        controller: [ "$scope", "$sce", function($scope, $sce) {
-            $scope.currentTime = 0;
-            $scope.totalTime = 0;
-            $scope.state = null;
-            $scope.volume = 1;
-            $scope.isCompleted = false;
-            $scope.API = null;
-            $scope.onPlayerReady = function(API) {
-                $scope.API = API;
+        link: function(scope, el, attrs) {
+            console.log("attrs", attrs);
+            scope.currentTime = 0;
+            scope.totalTime = 0;
+            scope.state = null;
+            scope.volume = 1;
+            scope.isCompleted = false;
+            scope.API = null;
+            scope.onPlayerReady = function(API) {
+                scope.API = API;
             };
-            $scope.onCompleteVideo = function() {
-                $scope.isCompleted = true;
+            scope.onCompleteVideo = function() {
+                scope.isCompleted = true;
             };
-            $scope.onUpdateState = function(state) {
-                $scope.state = state;
+            scope.onUpdateState = function(state) {
+                scope.state = state;
             };
-            $scope.onUpdateTime = function(currentTime, totalTime) {
-                $scope.currentTime = currentTime;
-                $scope.totalTime = totalTime;
+            scope.onUpdateTime = function(currentTime, totalTime) {
+                scope.currentTime = currentTime;
+                scope.totalTime = totalTime;
             };
-            $scope.onUpdateVolume = function(newVol) {
-                $scope.volume = newVol;
+            scope.onUpdateVolume = function(newVol) {
+                scope.volume = newVol;
             };
-            $scope.onUpdateSize = function(width, height) {
-                $scope.config.width = width;
-                $scope.config.height = height;
+            scope.onUpdateSize = function(width, height) {
+                scope.config.width = width;
+                scope.config.height = height;
             };
-            $scope.audio = [ {
-                src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/audios/videogular.mp3") + "",
-                type: "audio/mpeg"
-            }, {
-                src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/audios/videogular.ogg") + "",
-                type: "audio/ogg"
+            var config = {};
+            config.autoHide = false;
+            config.autoHideTime = 3e3;
+            config.autoPlay = attrs.autoPlay === "true";
+            config.playAvailable = attrs.playAvailable !== "false";
+            config.pauseAvailable = attrs.pauseAvailable !== "false";
+            config.stopAvailable = attrs.stopAvailable !== "false";
+            config.progressAvailable = attrs.progressAvailable !== "false";
+            config.seekAvailable = attrs.seekAvailable !== "false";
+            config.volumeAvailable = attrs.volumeAvailable !== "false";
+            config.sources = [ {
+                src: $sce.trustAsResourceUrl(attrs.uri) + "",
+                type: "video/mp4"
             } ];
-            $scope.videos = [ {
-                sources: [ {
-                    src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/videogular.mp4") + "",
-                    type: "video/mp4"
-                }, {
-                    src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/videogular.webm") + "",
-                    type: "video/webm"
-                }, {
-                    src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/videogular.ogg") + "",
-                    type: "video/ogg"
-                } ]
-            }, {
-                sources: [ {
-                    src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/big_buck_bunny_720p_h264.mov") + "",
-                    type: "video/mp4"
-                }, {
-                    src: $sce.trustAsResourceUrl("http://www.videogular.com/assets/videos/big_buck_bunny_720p_stereo.ogg") + "",
-                    type: "video/ogg"
-                } ]
-            } ];
-            $scope.config = {
-                autoHide: false,
-                autoHideTime: 3e3,
-                autoPlay: false,
-                sources: $scope.videos[0].sources,
-                tracks: $scope.videos[0].tracks,
-                loop: true,
-                preload: "auto",
-                transclude: false,
-                controls: undefined,
-                theme: {},
-                plugins: {}
+            config.loop = attrs.autoLoop === "true";
+            config.preload = "auto";
+            config.transclude = false;
+            config.controls = undefined;
+            config.theme = {
+                url: attrs.themeuri
             };
-            $scope.changeSource = function() {
-                $scope.config.sources = $scope.videos[1].sources;
-                $scope.config.tracks = undefined;
-                $scope.config.loop = false;
-                $scope.config.preload = true;
+            config.plugins = {
+                poster: {
+                    url: attrs.posteruri
+                }
             };
-        } ]
+            scope.config = config;
+            console.log(scope.config);
+        }
     };
 } ]);
 
@@ -1123,21 +1106,25 @@ angular.module("qti.plugins").directive("vgControls", [ "$timeout", "VG_STATES",
             }
             function onScrubBarMouseDown(event) {
                 event = VG_UTILS.fixEventOffset(event);
-                isSeeking = true;
-                if (isPlaying) isPlayingWhenSeeking = true;
-                API.pause();
-                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                scope.$apply();
+                if (scope.config.seekAvailable) {
+                    isSeeking = true;
+                    if (isPlaying) isPlayingWhenSeeking = true;
+                    API.pause();
+                    seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                    scope.$apply();
+                }
             }
             function onScrubBarMouseUp(event) {
                 event = VG_UTILS.fixEventOffset(event);
-                if (isPlayingWhenSeeking) {
-                    isPlayingWhenSeeking = false;
-                    API.play();
+                if (scope.config.seekAvailable) {
+                    if (isPlayingWhenSeeking) {
+                        isPlayingWhenSeeking = false;
+                        API.play();
+                    }
+                    isSeeking = false;
+                    seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
+                    scope.$apply();
                 }
-                isSeeking = false;
-                seekTime(event.offsetX * API.mediaElement[0].duration / elem[0].scrollWidth);
-                scope.$apply();
             }
             function onScrubBarMouseMove(event) {
                 if (isSeeking) {
@@ -1161,7 +1148,9 @@ angular.module("qti.plugins").directive("vgControls", [ "$timeout", "VG_STATES",
                 }
             };
             function seekTime(time) {
-                API.seekTime(time, false);
+                if (scope.config.seekAvailable) {
+                    API.seekTime(time, false);
+                }
             }
             function setState(newState) {
                 if (!isSeeking) {
@@ -1593,6 +1582,7 @@ angular.module("qti.plugins").directive("vgOverlayPlay", [ "VG_STATES", function
                 scope.overlayPlayIcon = {};
             }
             function onChangeState(newState) {
+                console.log("newstate", newState);
                 switch (newState) {
                   case VG_STATES.PLAY:
                     scope.overlayPlayIcon = {};
@@ -1612,7 +1602,11 @@ angular.module("qti.plugins").directive("vgOverlayPlay", [ "VG_STATES", function
                 }
             }
             scope.onClickOverlayPlay = function onClickOverlayPlay(event) {
-                API.playPause();
+                if (API.currentState === "play" && scope.config.pauseAvailable) {
+                    API.pause();
+                } else if (scope.config.playAvailable) {
+                    API.play();
+                }
             };
             scope.overlayPlayIcon = {
                 play: true
@@ -1712,6 +1706,6 @@ angular.module("qti").directive("responseLid", function() {
 angular.module("qti").run([ "$templateCache", function($templateCache) {
     "use strict";
     $templateCache.put("templates/assessment.html", '<div class=qti-assessment><div class=qti-title>{{assessment.title}}</div><div class=qti-content><div ng-transclude=""></div></div></div>');
-    $templateCache.put("templates/matvideo.html", "<div class=qti-video><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-video vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-video><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button></vg-play-pause-button><vg-timedisplay>{{ currentTime | date:'mm:ss' }}</vg-timedisplay><vg-scrubbar><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><vg-timedisplay>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay><vg-volume><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton></vg-fullscreenbutton></vg-controls><vg-poster-image vg-url=config.plugins.poster.url></vg-poster-image><vg-buffering></vg-buffering><vg-overlay-play vg-play-icon=config.theme.playIcon></vg-overlay-play></videogular></div>");
+    $templateCache.put("templates/matvideo.html", '<div class="qti-video no-selectable"><videogular vg-player-ready=onPlayerReady vg-complete=onCompleteVideo vg-update-time=onUpdateTime vg-update-volume=onUpdateVolume vg-update-state=onUpdateState vg-theme=config.theme.url vg-autoplay=config.autoPlay><vg-video vg-src=config.sources vg-tracks=config.tracks vg-loop=config.loop vg-preload=config.preload vg-native-controls=config.controls></vg-video><vg-controls vg-autohide=config.autoHide vg-autohide-time=config.autoHideTime><vg-play-pause-button ng-if="config.playAvailable && config.pauseAvailable"></vg-play-pause-button><vg-timedisplay ng-if=config.progressAvailable>{{ currentTime | date:\'mm:ss\' }}</vg-timedisplay><vg-scrubbar ng-if=config.progressAvailable><vg-scrubbarcurrenttime></vg-scrubbarcurrenttime></vg-scrubbar><div ng-if=!config.progressAvailable style="width: 100%;display: table-cell;cursor: default"></div><vg-timedisplay ng-if=config.progressAvailable>{{ timeLeft | date:\'mm:ss\' }}</vg-timedisplay><vg-volume ng-if=config.volumeAvailable><vg-mutebutton></vg-mutebutton><vg-volumebar></vg-volumebar></vg-volume><vg-fullscreenbutton ng-if=config.fullscreenAvailable></vg-fullscreenbutton></vg-controls><vg-poster-image vg-url=config.plugins.poster.url></vg-poster-image><vg-buffering></vg-buffering><vg-overlay-play vg-play-icon=config.theme.playIcon></vg-overlay-play></videogular></div>');
     $templateCache.put("templates/presentation.html", '<div><div ng-transclude=""></div></div>');
 } ]);

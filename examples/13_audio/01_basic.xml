@@ -8,11 +8,7 @@
                 <presentation>
                     <flow>
                         <material>
-                            <matvideo uri="//videogular.com/assets/videos/videogular.mp4" embedURI="true"
-                                      posterURI="../../build/qti/css/matvideo/assets/images/videogular.png"
-                                      auto_play="false" auto_loop="true"
-                                      pause_available="true" play_available="true" progress_available="true"
-                                      seek_available="false" volume_available="false"/>
+                            <matvideo uri="//videogular.com/assets/videos/videogular.mp4" embedURI="true"/>
                         </material>
                     </flow>
                 </presentation>

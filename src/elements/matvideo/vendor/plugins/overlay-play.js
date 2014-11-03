@@ -21,58 +21,62 @@
  *
  */
 angular.module("com.2fdevs.videogular.plugins.overlayplay", [])
-	.directive(
-	"vgOverlayPlay",
-	["VG_STATES", function (VG_STATES) {
-		return {
-			restrict: "E",
-			require: "^videogular",
-			template: "<div class='overlayPlayContainer' ng-click='onClickOverlayPlay()'>" +
-				"<div class='iconButton' ng-class='overlayPlayIcon'></div>" +
-				"</div>",
-			link: function (scope, elem, attr, API) {
-				function onComplete(target, params) {
-					scope.overlayPlayIcon = {play: true};
-				}
+    .directive("vgOverlayPlay", ["VG_STATES", function (VG_STATES) {
+        return {
+            restrict: "E",
+            require: "^videogular",
+            template: "<div class='overlayPlayContainer' ng-click='onClickOverlayPlay()'>" +
+            "<div class='iconButton' ng-class='overlayPlayIcon'></div>" +
+            "</div>",
+            link: function (scope, elem, attr, API) {
 
-				function onPlay(target, params) {
-					scope.overlayPlayIcon = {};
-				}
+                function onComplete(target, params) {
+                    scope.overlayPlayIcon = {play: true};
+                }
 
-				function onChangeState(newState) {
-					switch (newState) {
-						case VG_STATES.PLAY:
-							scope.overlayPlayIcon = {};
-							break;
+                function onPlay(target, params) {
+                    scope.overlayPlayIcon = {};
+                }
 
-						case VG_STATES.PAUSE:
-							scope.overlayPlayIcon = {play: true};
-							break;
+                function onChangeState(newState) {
+                    console.log('newstate', newState);
+                    switch (newState) {
+                        case VG_STATES.PLAY:
+                            scope.overlayPlayIcon = {};
+                            break;
 
-						case VG_STATES.STOP:
-							scope.overlayPlayIcon = {play: true};
-							break;
-					}
-				}
+                        case VG_STATES.PAUSE:
+                            scope.overlayPlayIcon = {play: true};
+                            break;
 
-				scope.onClickOverlayPlay = function onClickOverlayPlay(event) {
-					API.playPause();
-				};
+                        case VG_STATES.STOP:
+                            scope.overlayPlayIcon = {play: true};
+                            break;
+                    }
+                }
 
-				scope.overlayPlayIcon = {play: true};
+                scope.onClickOverlayPlay = function onClickOverlayPlay(event) {
+                    if (API.currentState === 'play' && scope.config.pauseAvailable) {
+                        API.pause();
+                    } else if (scope.config.playAvailable) {
+                        API.play();
+                    }
+                };
 
-				scope.$watch(
-					function () {
-						return API.currentState;
-					},
-					function (newVal, oldVal) {
-						if (newVal != oldVal) {
-							onChangeState(newVal);
-						}
-					}
-				);
-			}
-		}
-	}
-	]);
+                scope.overlayPlayIcon = {play: true};
+
+                scope.$watch(
+                    function () {
+                        return API.currentState;
+                    },
+                    function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            onChangeState(newVal);
+                        }
+                    }
+                );
+            }
+        };
+    }
+    ]);
 

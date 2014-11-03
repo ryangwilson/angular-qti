@@ -1,4 +1,4 @@
-<div class="qti-video">
+<div class="qti-video no-selectable">
     <videogular vg-player-ready="onPlayerReady"
                 vg-complete="onCompleteVideo"
                 vg-update-time="onUpdateTime"
@@ -14,17 +14,18 @@
         </vg-video>
 
         <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
-            <vg-play-pause-button></vg-play-pause-button>
-            <vg-timedisplay>{{ currentTime | date:'mm:ss' }}</vg-timedisplay>
-            <vg-scrubBar>
+            <vg-play-pause-button ng-if="config.playAvailable && config.pauseAvailable"></vg-play-pause-button>
+            <vg-timedisplay ng-if="config.progressAvailable">{{ currentTime | date:'mm:ss' }}</vg-timedisplay>
+            <vg-scrubBar ng-if="config.progressAvailable">
                 <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
             </vg-scrubBar>
-            <vg-timedisplay>{{ timeLeft | date:'mm:ss' }}</vg-timedisplay>
-            <vg-volume>
+            <div ng-if="!config.progressAvailable" style="width: 100%;display: table-cell;cursor: default"></div>
+            <vg-timedisplay ng-if="config.progressAvailable">{{ timeLeft | date:'mm:ss' }}</vg-timedisplay>
+            <vg-volume ng-if="config.volumeAvailable">
                 <vg-mutebutton></vg-mutebutton>
                 <vg-volumebar></vg-volumebar>
             </vg-volume>
-            <vg-fullscreenButton></vg-fullscreenButton>
+            <vg-fullscreenButton ng-if="config.fullscreenAvailable"></vg-fullscreenButton>
         </vg-controls>
 
         <vg-poster-image vg-url='config.plugins.poster.url'></vg-poster-image>
