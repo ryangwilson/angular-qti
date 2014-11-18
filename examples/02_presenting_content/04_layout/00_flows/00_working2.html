@@ -71,6 +71,7 @@
         flow[orientation="horizontal"] > flow {
             display: inline-block;
             height: 100%;
+            vertical-align: top;
         }
 
         material {
@@ -85,15 +86,19 @@
     <flow width="400" height="200" orientation="horizontal" class="cloud">
         <flow width="10" class="red"></flow>
         <flow width="25%" class="orange"></flow>
-        <flow width="25%" class="silver">
+        <flow name="silverback" width="25%" class="silver">
             <flow width="10" class="red"></flow>
             <flow width="25%" class="orange"></flow>
-            <flow width="100%" class="purple"></flow>
+            <flow width="50%" class="purple"></flow>
             <flow width="100%" class="blue"></flow>
         </flow>
         <flow width="25%" class="silver" orientation="horizontal">
             <flow width="10" class="red"></flow>
-            <flow width="25%" class="orange"></flow>
+            <flow width="25%" class="orange">
+                <material>
+                    <mattext>Hello World</mattext>
+                </material>
+            </flow>
             <flow width="100%" class="purple"></flow>
             <flow width="100%" class="blue"></flow>
         </flow>
@@ -125,9 +130,9 @@
                 <mattext>Hello again</mattext>
             </material>
         </flow>
-        <flow>
+        <flow width="40">
             <material>
-                <mattext>Hello World</mattext>
+                <img src="http://www.w3.org/html/logo/downloads/HTML5_Badge_512.png" alt=""/>
             </material>
         </flow>
     </flow>
@@ -139,23 +144,37 @@
         return {
             restrict: 'E',
             link: function (scope, el, attr) {
-                if(attr.width) {
+
+                if (attr.width) {
                     var unit = String(attr.width).match(/\D+/);
-                    if(unit) {
+                    if (unit) {
                         el[0].style.width = attr.width + unit[0];
                     } else {
                         el[0].style.width = attr.width + 'px';
+
+                        // width is greater than 40 and height is not set (p.62)
+                        if (attr.height === undefined) {
+                            if (parseInt(attr.width, 10) > 40) {
+                                el[0].style['overflow'] = 'auto';
+                            } else {
+                                el[0].style['overflow'] = 'hidden';
+                            }
+                        }
                     }
                 }
 
-                if(attr.height) {
+                if (attr.height) {
                     var unit = String(attr.height).match(/\D+/);
-                    if(unit) {
+                    if (unit) {
                         el[0].style.height = attr.height + unit[0];
                     } else {
                         el[0].style.height = attr.height + 'px';
                     }
                 }
+
+
+                // if we need to detect size changes use this
+                // https://github.com/sdecima/javascript-detect-element-resize
             }
         }
     });
