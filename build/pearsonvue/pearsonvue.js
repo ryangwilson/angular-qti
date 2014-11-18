@@ -11,6 +11,25 @@ angular.module("qti.plugins").service("expression", function() {
     }
 }).run([ "expression", function(expression) {} ]);
 
+angular.module("qti").directive("item", [ "$sce", function($sce) {
+    return {
+        restrict: "E",
+        require: [ "?item" ],
+        link: function(scope, el, attr) {
+            var _el = el[0];
+            if (_el.querySelector("pearsonvue_referencematerial")) {
+                if (_el.querySelector("pearsonvue_splitpresentation")) {
+                    console.log("yup there is a splitter");
+                }
+                var itemrefs = _el.querySelectorAll("pearsonvue_itemreference");
+                if (itemrefs.length) {
+                    console.log("item refs", itemrefs.length);
+                }
+            }
+        }
+    };
+} ]);
+
 angular.module("qti.plugins").directive("pearsonvueMatExtension", [ "$compile", "helpers", function($compile, helpers) {
     "use strict";
     var css = function(el, prop, value) {

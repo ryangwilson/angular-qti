@@ -46,6 +46,9 @@ angular.module("qti").directive("qti", [ "$http", "$compile", "helpers", functio
     function stripCDATA(str) {
         return str.split("<![CDATA[").join("").split("]]>").join("");
     }
+    function fixNamespace(str) {
+        return str.replace(/(<\/?\w+)(:)/gi, "$1_");
+    }
     return {
         restrict: "E",
         scope: true,
@@ -56,6 +59,7 @@ angular.module("qti").directive("qti", [ "$http", "$compile", "helpers", functio
             $http.get(attr.src).then(function(response) {
                 scope.src = response.data;
                 scope.template = stripCDATA(scope.src);
+                scope.template = fixNamespace(scope.template);
                 scope.$emit("qti::setup");
                 var linkFn = $compile(scope.template);
                 scope.content = linkFn(scope);
@@ -711,9 +715,6 @@ angular.module("qti").directive("item", [ "$sce", function($sce) {
         controller: [ "$scope", function($scope) {
             $scope.objective = null;
             $scope.item = {};
-            $scope.trustHtml = function(html) {
-                return $sce.trustAsHtml(html);
-            };
         } ]
     };
 } ]);

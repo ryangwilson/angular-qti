@@ -1,5 +1,8 @@
 ##QTI Development Notes
 
+1. This is for QTI 1.2 (not QTI 2.1)
+2. This will not included the full-spec. Only what is needed.
+
 These are notes as I am developing QTI.
 
 #### Tables

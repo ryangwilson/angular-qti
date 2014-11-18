@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+        }
+
+        .table {
+            display: table
+        }
+
+        [orientation="horizontal"] .tr {
+            display: table-row
+        }
+
+        [orientation="horizontal"] .td {
+            display: table-cell
+        }
+
+        /*.tr       { display: table-row }*/
+        /*.thead    { display: table-header-group }*/
+        /*.tbody    { display: table-row-group }*/
+        /*.tfoot    { display: table-footer-group }*/
+        /*.col      { display: table-column }*/
+        /*.colgroup { display: table-column-group }*/
+        /*.td, .th   { display: table-cell }*/
+        /*.caption  { display: table-caption }*/
+
+        .table {
+            background: lightblue;
+        }
+
+        .horiz-fill {
+            width: 100%;
+            margin: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -o-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .padding {
+            padding: 15px
+        }
+
+        .yellow {
+            background: yellow;
+        }
+
+        .orange {
+            background: orange;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="padding">
+    <div class="table" orientation="horizontal" style="width: 100%">
+        <div class="tr">
+            <div class="td" style="width: 300px">
+                <div class="yellow" style="width: 300px">a</div>
+            </div>
+            <div class="td" style="width: auto">
+                <div class="orange" style="width: 50%">b</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="padding">
+    <div class="table" style="width: 100%">
+        <div class="tr">
+            <div class="td" style="width: 300px">
+                <div class="yellow" style="width: 300px">a</div>
+            </div>
+            <div class="td" style="width: auto">
+                <div class="orange" style="width: 50%">b</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

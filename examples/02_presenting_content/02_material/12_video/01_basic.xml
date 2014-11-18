@@ -11,8 +11,8 @@
                             <matvideo uri="../../resources/videos/big_buck_bunny.mp4" embedURI="true"
                                       posterURI="../../resources/videos/big_buck_bunny.jpg"
                                       auto_play="false" auto_loop="true"
-                                      pause_available="true" play_available="true" progress_available="true"
-                                      seek_available="true" volume_available="true"/>
+                                      pause_available="false" play_available="true" progress_available="true"
+                                      seek_available="true" volume_available="false"/>
                         </material>
                     </flow>
                 </presentation>

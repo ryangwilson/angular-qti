@@ -5,6 +5,10 @@ angular.module('qti').directive('qti', function ($http, $compile, helpers) {
         return str.split('<![CDATA[').join('').split(']]>').join('');
     }
 
+    function fixNamespace(str) {
+        return str.replace(/(<\/?\w+)(:)/gi, '$1_');
+    }
+
     return {
         restrict: 'E',
         scope: true,
@@ -21,7 +25,7 @@ angular.module('qti').directive('qti', function ($http, $compile, helpers) {
 
                 // keep template
                 scope.template = stripCDATA(scope.src);
-
+                scope.template = fixNamespace(scope.template);
                 // dispatch setup so other services can respond and fix up template
                 // order should not matter
                 scope.$emit('qti::setup');

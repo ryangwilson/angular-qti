@@ -5,16 +5,15 @@ angular.module('qti').directive('item', function ($sce) {
         scope: true,
         link: function (scope, el, attr) {
             scope.item.questionId = attr.ident;
-//                console.log('item', scope.item.questionId);
             scope.$broadcast('item::ready');
         },
         controller: function ($scope) {
             $scope.objective = null;
             $scope.item = {};
 
-            $scope.trustHtml = function (html) {
-                return $sce.trustAsHtml(html);
-            };
+            //$scope.trustHtml = function (html) {
+            //    return $sce.trustAsHtml(html);
+            //};
         }
     };
 });

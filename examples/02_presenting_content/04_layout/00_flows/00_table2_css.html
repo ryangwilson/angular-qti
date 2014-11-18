@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+        }
+
+        .table {
+            /*display: table*/
+        }
+
+        *[orientation="horizontal"] {
+            display: table;
+            /*background: lightblue;*/
+            width: 100%
+        }
+
+        *[orientation="horizontal"] > material {
+            display: table-row
+        }
+
+        *[orientation="horizontal"] > material > * {
+            display: table-cell
+        }
+
+        .table {
+            background: lightblue;
+        }
+
+        .padding {
+            padding: 15px
+        }
+
+        .yellow {
+            background: yellow;
+        }
+
+        .orange {
+            background: orange;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="padding">
+    <flow orientation="horizontal">
+        <material>
+            <mattext class="td" style="width: 300px">
+                <div class="yellow" style="width: 300px">a</div>
+            </mattext>
+            <mattext class="td" style="width: auto">
+                <div class="orange" style="width: 50%">b</div>
+            </mattext>
+        </material>
+    </flow>
+</div>
+
+<div class="padding">
+    <flow orientation="vertical">
+        <material>
+            <mattext class="td" style="width: 300px">
+                <div class="yellow" style="width: 300px">a</div>
+            </mattext>
+            <mattext class="td" style="width: auto">
+                <div class="orange" style="width: 50%">b</div>
+            </mattext>
+        </material>
+    </flow>
+</div>
+
+
+</body>
+</html>

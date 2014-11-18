@@ -157,6 +157,9 @@ p:empty:after {
 .qti-prewrap {
   white-space: pre-wrap;
 }
+section {
+  display: flex;
+}
 
 flow {
   display: block;

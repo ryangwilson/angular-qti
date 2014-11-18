@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Angular QTI Examples</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <style>
+        body {
+            padding: 15px;
+        }
+
+        .tasks td:first-child {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h4>QTI Examples</h4>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th style="width: 200px">Module</th>
+        <th style="width: 200px">Item</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="2">Hello world</td>
+        <td><a href="ch_2_presenting_content/01_hello_world/01_basic.html">01 - Basic</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="ch_2_presenting_content/01_hello_world/02_indent.html">02 - Indent</a></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <h4>TODO</h4>
+
+    <table class="table table-bordered tasks">
+        <thead>
+        <tr>
+            <th style="width: 200px">Task</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>pearsonvue:referencematerial</td>
+            <td>Outlines a reference material that will be displayed. The following properties can be used to define the referencematerial.</td>
+        </tr>
+        <tr>
+            <td>pearsonvue:splitpresentation</td>
+            <td>A widget that will add a splitter (or resizer onto the referencematerial)</td>
+        </tr>
+
+        <tr>
+            <td>pearsonvue:itemreference</td>
+            <td>Refers to another element (either internal or external) and then injects it. Think of this like an include of XML. Need a loading mechanism to load and inject XML</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h4>Layout (Flow)</h4>
+
+    <table class="table table-bordered tasks">
+        <thead>
+        <tr>
+            <th style="width: 200px">Task</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>flow</td>
+            <td>p. 59</td>
+        </tr>
+        <tr>
+            <td>pearsonvue:scalefactor</td>
+            <td>p. 61</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
