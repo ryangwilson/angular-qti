@@ -3,10 +3,12 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css"/>
     <style>
         body {
             margin: 0;
             padding: 15px;
+            color: #ffffff;
         }
 
         .table {
@@ -15,7 +17,7 @@
 
         *[orientation="horizontal"] {
             display: table;
-            /*background: lightblue;*/
+            background: #ecf0f1;
             width: 100%
         }
 
@@ -36,11 +38,11 @@
         }
 
         .yellow {
-            background: yellow;
+            background: #e74c3c;
         }
 
         .orange {
-            background: orange;
+            background: #f39c12;
         }
 
     </style>
@@ -48,13 +50,25 @@
 <body>
 
 <div class="padding">
+    <flow orientation="vertical">
+        <material>
+            <mattext>Hello World</mattext>
+        </material>
+    </flow>
+</div>
+
+<div class="padding">
     <flow orientation="horizontal">
         <material>
             <mattext class="td" style="width: 300px">
-                <div class="yellow" style="width: 300px">a</div>
+                <div class="yellow" style="width: 100%">
+                    <div class="padding">300px</div>
+                </div>
             </mattext>
             <mattext class="td" style="width: auto">
-                <div class="orange" style="width: 50%">b</div>
+                <div class="orange" style="width: 50%">
+                    <div class="padding">50%</div>
+                </div>
             </mattext>
         </material>
     </flow>
@@ -64,15 +78,52 @@
     <flow orientation="vertical">
         <material>
             <mattext class="td" style="width: 300px">
-                <div class="yellow" style="width: 300px">a</div>
+                <div class="yellow" style="width: 300px">
+                    <div class="padding">300px</div>
+                </div>
             </mattext>
             <mattext class="td" style="width: auto">
-                <div class="orange" style="width: 50%">b</div>
+                <div class="orange" style="width: 50%">
+                    <div class="padding">50%</div>
+                </div>
             </mattext>
         </material>
     </flow>
 </div>
 
+<div class="padding">
+    <flow orientation="horizontal">
+        <material>
+            <mattext class="td" style="width: 300px">
+                <div class="yellow" style="width: 300px">
+                    <div class="padding">300px</div>
+                </div>
+            </mattext>
+            <mattext class="td" style="width: auto">
+                <div class="orange" style="width: 100%">
+                    <div class="padding">100%</div>
+                </div>
+            </mattext>
+        </material>
+    </flow>
+</div>
+
+<div class="padding" >
+    <flow orientation="horizontal" style="height: 350px">
+        <material style="height: 100%;">
+            <mattext class="td" style="width: 300px;height: 100%;">
+                <div class="yellow" style="width: 300px;height: 100%">
+                    <div class="padding">300px</div>
+                </div>
+            </mattext>
+            <mattext class="td" style="width: auto;height: 100%;">
+                <div class="orange" style="width: 100%;height: 100%">
+                    <div class="padding">100%</div>
+                </div>
+            </mattext>
+        </material>
+    </flow>
+</div>
 
 </body>
 </html>
