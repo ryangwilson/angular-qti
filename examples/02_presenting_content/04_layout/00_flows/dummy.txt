@@ -1,0 +1,59 @@
+              // https://docs.angularjs.org/guide/compiler
+                    // Step 0: html template
+                    var html = '<div><a href="" ng-click="zoomOut()">[Zoom Out]</a><a href="" ng-click="zoomIn()">[Zoom In]</a></div>';
+
+                    // Step 1: parse HTML into DOM element
+                    var template = angular.element(html);
+
+                    // Step 2: compile the template
+                    var linkFn = $compile(template);
+
+                    // Step 3: link the compiled template with the scope.
+                    var element = linkFn($scope);
+
+                    var scaleFactorsEl = $el[0].querySelectorAll('*');
+                    var scaleFactorEl, scaleFactor;
+                    var scaleFactors = [];
+                    var currentScaleFactor;
+
+                    for (var i = 0; i < scaleFactorsEl.length; i += 1) {
+                        scaleFactorEl = scaleFactorsEl[i];
+                        scaleFactor = {
+                            isDefault: !!scaleFactorEl.getAttribute('default'),
+                            factor: Number(scaleFactorEl.getAttribute('factor'))
+                        };
+                        debugger;
+                        scaleFactors.push(scaleFactor);
+                        if (scaleFactor.isDefault) {
+                            currentScaleFactor = scaleFactor;
+                        }
+                    }
+
+
+                    $scope.zoomIn = function () {
+                        for (var e in scaleFactors) {
+                            if (scaleFactors[e] === currentScaleFactor) {
+                                if (e < scaleFactors.length - 1) {
+                                    currentScaleFactor = scaleFactors[e];
+                                }
+                            }
+                        }
+                        debugger;
+                        $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor;
+                    };
+
+                    $scope.zoomOut = function () {
+                        $scope.zoomIn = function () {
+                            for (var e in scaleFactors) {
+                                if (scaleFactors[e] === currentScaleFactor) {
+                                    if (e > 0) {
+                                        currentScaleFactor = scaleFactors[e];
+                                    }
+                                }
+                            }
+                            $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor;
+                        };
+                    };
+
+                    // Step 4: Append to DOM (optional)
+                    $el.append(element);

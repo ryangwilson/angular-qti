@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    padding: 15px;
+    color: #666;
+    font-size: 18px;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+* html .clearfix {
+    zoom: 1;
+}
+
+*:first-child + html .clearfix {
+    zoom: 1;
+}
+
+.padding {
+    padding: 15px
+}
+
+.cloud {
+    background: #ecf0f1;
+}
+
+.red {
+    background: #e74c3c;
+}
+
+.orange {
+    background: #f39c12;
+}
+
+.purple {
+    background: #9b59b6;
+}
+
+.blue {
+    background: #3498db;
+}
+
+.silver {
+    background: #bdc3c7;
+}
