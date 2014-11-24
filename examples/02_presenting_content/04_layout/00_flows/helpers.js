@@ -28,19 +28,19 @@ angular.module('qti').service('helpers', function () {
     //    return str;
     //};
 
-    this.addClass = function (el, className) {
-        if (el.classList) {
-            el.classList.add(className);
-        } else {
-            el.className += ' ' + className;
-        }
-    };
-
-    this.removeClass = function (el, className) {
-        if (el.classList) {
-            el.classList.remove(className);
-        } else {
-            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
-    };
+    //this.addClass = function (el, className) {
+    //    if (el.classList) {
+    //        el.classList.add(className);
+    //    } else {
+    //        el.className += ' ' + className;
+    //    }
+    //};
+    //
+    //this.removeClass = function (el, className) {
+    //    if (el.classList) {
+    //        el.classList.remove(className);
+    //    } else {
+    //        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    //    }
+    //};
 });

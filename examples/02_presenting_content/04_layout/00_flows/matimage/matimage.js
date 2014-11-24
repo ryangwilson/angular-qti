@@ -1,6 +1,6 @@
 /* global angular */
 
-angular.module('qti').directive('matimage', function (helpers) {
+angular.module('qti').directive('matimage', function ($compile, helpers) {
 
     return {
         restrict: 'E',
@@ -8,8 +8,45 @@ angular.module('qti').directive('matimage', function (helpers) {
 //        template: '<img ng-src="{{url}}" />',
         link: function ($scope, $el, $attr) {
 
-            var str, xml;
-            xml = helpers.strToXML('<img />').firstChild;
+            var measureWidth = 0;
+            var measureHeight = 0;
+            var unitWidth = 'px';
+            var unitHeight = 'px';
+            //var scaleFactor = $scope.currentScaleFactor || 1;
+            var loaded = false;
+
+            var updateImageSize = function () {
+                if(loaded && $scope.currentScaleFactor) {
+                    imgEl.css('width', (measureWidth * $scope.currentScaleFactor.factor) + unitWidth);
+                    imgEl.css('height', (measureHeight * $scope.currentScaleFactor.factor) + unitHeight);
+                }
+            };
+
+            $scope.$on('scalefactor::changed', function (evt, factor) {
+                //scaleFactor = factor;
+                updateImageSize();
+            });
+
+            var imgEl = angular.element('<img ng-src="{{src}}" />');
+            //compile the view into a function.
+            var compiled = $compile(imgEl);
+            //append our view to the element of the directive.
+            $el.append(imgEl);
+            //bind our view to the scope!
+            compiled($scope);
+
+            imgEl.bind('load', function (evt) {
+                loaded = true;
+                var style = window.getComputedStyle(imgEl[0]);
+
+                measureWidth = style.width.replace(/\D+/i, '');
+                unitWidth = style.width.replace(/\d+/i, '');
+
+                measureHeight = style.height.replace(/\D+/i, '');
+                unitHeight = style.height.replace(/\d+/i, '');
+
+                updateImageSize();
+            });
 
             var valign;
             switch ($attr.valign) {
@@ -24,31 +61,22 @@ angular.module('qti').directive('matimage', function (helpers) {
                     break;
             }
 
-            var style = 'vertical-align:' + valign + ';';
+            imgEl.css('vertical-align', valign);
 
             if ($attr.hasOwnProperty('width')) {
-                style += 'width:' + $attr.width + 'px;';
+                imgEl.css('width', $attr.width + 'px');
             }
 
             if ($attr.hasOwnProperty('height')) {
-                style += 'height:' + $attr.height + 'px;';
+                imgEl.css('height', $attr.height + 'px');
             }
 
             if ($attr.hasOwnProperty('uri')) {
-                xml.setAttribute('src', $attr.uri);
+                $scope.src = $attr.uri;
             } else if ($attr.hasOwnProperty('embedded')) {
-                str = 'data:image/jpg;base64,';
-                xml.setAttribute('src', str + $el.text());
+                var str = 'data:image/jpg;base64,';
+                $scope.src = str + $el.text();
             }
-
-            if($attr.hasOwnProperty('alt')) {
-                xml.setAttribute('alt', $attr.alt);
-            }
-
-            xml.setAttribute('style', style);
-
-            $el.html(xml.outerHTML);
-
         }
     };
 });

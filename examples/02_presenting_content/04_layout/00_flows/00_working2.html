@@ -100,9 +100,9 @@
         </flow>
         <flow halign="center" border="2, 2, 2, 2" border_color="#000000" background_color="#C0C0C0">
             <pearsonvue:scalefactors>
-                <pearsonvue:scalefactor factor="1.0" default="true"/>
+                <pearsonvue:scalefactor factor="0.5" default="true"/>
+                <pearsonvue:scalefactor factor="1.0"/>
                 <pearsonvue:scalefactor factor="1.5"/>
-                <pearsonvue:scalefactor factor="2.0"/>
             </pearsonvue:scalefactors>
             <material>
                 <mattext>The flow that contains this material defines three scale factors, 0.5, 1.0 and 1.5.</mattext>
@@ -167,7 +167,7 @@
     <flow orientation="vertical" background_color="#f39c12" border="20, 2, 2, 2" border-color="#2c3e50">
         <flow halign="center">
             <material>
-                <img src="data:image/jpeg;base64,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"/>
+                <img src="Pearson.gif"/>
             </material>
         </flow>
         <flow inset="100, 50, 100, 0">
@@ -344,7 +344,6 @@
             var scaleFactorsEl = $el[0].querySelectorAll('*');
             var scaleFactorEl, scaleFactor;
             var scaleFactors = [];
-            var currentScaleFactor;
             var percent = '%';
 
             for (var i = 0; i < scaleFactorsEl.length; i += 1) {
@@ -356,30 +355,26 @@
 
                 scaleFactors.push(scaleFactor);
                 if (scaleFactor.isDefault) {
-                    currentScaleFactor = scaleFactor;
+                    $scope.currentScaleFactor = scaleFactor;
                 }
             }
 
             $scope.zoomIn = function () {
-                var index = scaleFactors.indexOf(currentScaleFactor);
+                var index = scaleFactors.indexOf($scope.currentScaleFactor);
                 if (index + 1 < scaleFactors.length) {
                     index += 1;
                 }
-                currentScaleFactor = scaleFactors[index];
-//                console.log('zoom in', currentScaleFactor, 100 * currentScaleFactor.factor);
-                $scope.$broadcast('scalefactor::changed', currentScaleFactor.factor);
-//                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
+                $scope.currentScaleFactor = scaleFactors[index];
+                $scope.$broadcast('scalefactor::changed', $scope.currentScaleFactor.factor);
             };
 
             $scope.zoomOut = function () {
-                var index = scaleFactors.indexOf(currentScaleFactor);
+                var index = scaleFactors.indexOf($scope.currentScaleFactor);
                 if (index - 1 >= 0) {
                     index -= 1;
                 }
-                currentScaleFactor = scaleFactors[index];
-//                console.log('zoomOut', currentScaleFactor, 100 * currentScaleFactor.factor);
-                $scope.$broadcast('scalefactor::changed', currentScaleFactor.factor);
-//                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
+                $scope.currentScaleFactor = scaleFactors[index];
+                $scope.$broadcast('scalefactor::changed', $scope.currentScaleFactor.factor);
             };
 
             //create an angular element. (this is still our "view")
@@ -397,7 +392,7 @@
             //(try commenting out this line to see what happens!)
             compiled($scope);
 
-            $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
+            $el[0].parentNode.style['font-size'] = 100 * $scope.currentScaleFactor.factor + percent;
         }
     });
 
@@ -407,33 +402,41 @@
         return {
             scope: true,
             link: function ($scope, $el, $attr) {
+
                 var el = $el[0];
                 var style = window.getComputedStyle(el);
                 var defaultFontSize = style.fontSize;
                 var measure = defaultFontSize.replace(/\D+/i, '');
                 var unit = defaultFontSize.replace(/\d+/i, '');
+                var scaleFactor = 1;
+
+                var updateFontSize = function () {
+                    $el.css('fontSize', (measure * scaleFactor) + unit)
+                };
+
                 $scope.$on('scalefactor::changed', function (evt, factor) {
-                    $el.css('fontSize', (measure * factor) + unit)
+                    scaleFactor = factor;
+                    updateFontSize();
                 });
             }
         }
     });
 
-//    angular.module('qti').directive('matimage', function () {
-//        return {
-//            scope: true,
-//            link: function ($scope, $el, $attr) {
-//                var el = $el[0];
-//                var style = window.getComputedStyle(el);
-//                var defaultFontSize = style.fontSize;
-//                var measure = defaultFontSize.replace(/\D+/i, '');
-//                var unit = defaultFontSize.replace(/\d+/i, '');
-//                $scope.$on('scalefactor::changed', function (evt, factor) {
-//                    $el.css('fontSize') = (measure * factor) + unit;
-//                });
-//            }
-//        }
-//    });
+    //    angular.module('qti').directive('matimage', function () {
+    //        return {
+    //            scope: true,
+    //            link: function ($scope, $el, $attr) {
+    //                var el = $el[0];
+    //                var style = window.getComputedStyle(el);
+    //                var defaultFontSize = style.fontSize;
+    //                var measure = defaultFontSize.replace(/\D+/i, '');
+    //                var unit = defaultFontSize.replace(/\d+/i, '');
+    //                $scope.$on('scalefactor::changed', function (evt, factor) {
+    //                    $el.css('fontSize') = (measure * factor) + unit;
+    //                });
+    //            }
+    //        }
+    //    });
 
 
 </script>
