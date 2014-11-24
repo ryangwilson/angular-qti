@@ -6,7 +6,8 @@ angular.module('qti').directive('qti', function ($http, $compile, helpers) {
     }
 
     function fixNamespace(str) {
-        return str.replace(/(<\/?\w+)(:)/gi, '$1_');
+        return str;
+        //return str.replace(/(<\/?\w+)(:)/gi, '$1_');
     }
 
     return {

@@ -47,7 +47,7 @@ angular.module("qti").directive("qti", [ "$http", "$compile", "helpers", functio
         return str.split("<![CDATA[").join("").split("]]>").join("");
     }
     function fixNamespace(str) {
-        return str.replace(/(<\/?\w+)(:)/gi, "$1_");
+        return str;
     }
     return {
         restrict: "E",

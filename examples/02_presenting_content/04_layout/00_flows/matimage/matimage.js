@@ -6,13 +6,13 @@ angular.module('qti').directive('matimage', function (helpers) {
         restrict: 'E',
         scope: true,
 //        template: '<img ng-src="{{url}}" />',
-        link: function (scope, el, attr) {
+        link: function ($scope, $el, $attr) {
 
             var str, xml;
             xml = helpers.strToXML('<img />').firstChild;
 
             var valign;
-            switch (attr.valign) {
+            switch ($attr.valign) {
                 case 'top':
                     valign = 'top';
                     break;
@@ -26,28 +26,28 @@ angular.module('qti').directive('matimage', function (helpers) {
 
             var style = 'vertical-align:' + valign + ';';
 
-            if (attr.hasOwnProperty('width')) {
-                style += 'width:' + attr.width + 'px;';
+            if ($attr.hasOwnProperty('width')) {
+                style += 'width:' + $attr.width + 'px;';
             }
 
-            if (attr.hasOwnProperty('height')) {
-                style += 'height:' + attr.height + 'px;';
+            if ($attr.hasOwnProperty('height')) {
+                style += 'height:' + $attr.height + 'px;';
             }
 
-            if (attr.hasOwnProperty('uri')) {
-                xml.setAttribute('src', attr.uri);
-            } else if (attr.hasOwnProperty('embedded')) {
+            if ($attr.hasOwnProperty('uri')) {
+                xml.setAttribute('src', $attr.uri);
+            } else if ($attr.hasOwnProperty('embedded')) {
                 str = 'data:image/jpg;base64,';
-                xml.setAttribute('src', str + el.text());
+                xml.setAttribute('src', str + $el.text());
             }
 
-            if(attr.hasOwnProperty('alt')) {
-                xml.setAttribute('alt', attr.alt);
+            if($attr.hasOwnProperty('alt')) {
+                xml.setAttribute('alt', $attr.alt);
             }
 
             xml.setAttribute('style', style);
 
-            el.html(xml.outerHTML);
+            $el.html(xml.outerHTML);
 
         }
     };

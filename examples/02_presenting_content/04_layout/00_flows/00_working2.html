@@ -63,9 +63,9 @@
 
     <style>
         /*mattext, matimage {*/
-            /*position: relative;*/
-            /*top: 50%;*/
-            /*transform: translateY(-50%);*/
+        /*position: relative;*/
+        /*top: 50%;*/
+        /*transform: translateY(-50%);*/
         /*}*/
 
         matimage {
@@ -299,6 +299,7 @@
     angular.module('qti').directive('flow', function () {
         return {
             restrict: 'E',
+            scope: true,
             link: function ($scope, $el, $attr) {
 
                 var el = $el[0];
@@ -352,7 +353,7 @@
                     isDefault: !!scaleFactorEl.getAttribute('default'),
                     factor: Number(scaleFactorEl.getAttribute('factor'))
                 };
-                debugger;
+
                 scaleFactors.push(scaleFactor);
                 if (scaleFactor.isDefault) {
                     currentScaleFactor = scaleFactor;
@@ -361,13 +362,13 @@
 
             $scope.zoomIn = function () {
                 var index = scaleFactors.indexOf(currentScaleFactor);
-                debugger;
                 if (index + 1 < scaleFactors.length) {
                     index += 1;
                 }
                 currentScaleFactor = scaleFactors[index];
-                console.log('zoom in', currentScaleFactor);
-                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
+//                console.log('zoom in', currentScaleFactor, 100 * currentScaleFactor.factor);
+                $scope.$broadcast('scalefactor::changed', currentScaleFactor.factor);
+//                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
             };
 
             $scope.zoomOut = function () {
@@ -376,8 +377,9 @@
                     index -= 1;
                 }
                 currentScaleFactor = scaleFactors[index];
-                console.log('zoomOut', currentScaleFactor);
-                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
+//                console.log('zoomOut', currentScaleFactor, 100 * currentScaleFactor.factor);
+                $scope.$broadcast('scalefactor::changed', currentScaleFactor.factor);
+//                $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
             };
 
             //create an angular element. (this is still our "view")
@@ -398,6 +400,40 @@
             $el[0].parentNode.style['font-size'] = 100 * currentScaleFactor.factor + percent;
         }
     });
+
+
+    // other
+    angular.module('qti').directive('mattext', function () {
+        return {
+            scope: true,
+            link: function ($scope, $el, $attr) {
+                var el = $el[0];
+                var style = window.getComputedStyle(el);
+                var defaultFontSize = style.fontSize;
+                var measure = defaultFontSize.replace(/\D+/i, '');
+                var unit = defaultFontSize.replace(/\d+/i, '');
+                $scope.$on('scalefactor::changed', function (evt, factor) {
+                    $el.css('fontSize', (measure * factor) + unit)
+                });
+            }
+        }
+    });
+
+//    angular.module('qti').directive('matimage', function () {
+//        return {
+//            scope: true,
+//            link: function ($scope, $el, $attr) {
+//                var el = $el[0];
+//                var style = window.getComputedStyle(el);
+//                var defaultFontSize = style.fontSize;
+//                var measure = defaultFontSize.replace(/\D+/i, '');
+//                var unit = defaultFontSize.replace(/\d+/i, '');
+//                $scope.$on('scalefactor::changed', function (evt, factor) {
+//                    $el.css('fontSize') = (measure * factor) + unit;
+//                });
+//            }
+//        }
+//    });
 
 
 </script>

@@ -6,23 +6,29 @@
         <section ident="TableSection">
             <item ident="TableItem">
                 <presentation>
-                    <flow> <material>
-                        <mattext>This is a sample of MathML: <math xmlns:m="http://www.w3.org/1998/Math/MathML">
-                            <m:mrow>
-                                <m:msup>
-                                    <m:mfenced>
-                                        <m:mrow>
-                                            <m:mi>a</m:mi>
-                                            <m:mo>+</m:mo>
-                                            <m:mi>b</m:mi>
-                                            <m:mo>+</m:mo>
-                                            <m:mi>c</m:mi>
-                                        </m:mrow>
-                                    </m:mfenced>
-                                    <m:mn>2</m:mn> </m:msup>
-                            </m:mrow>
-                        </math>   embedded in a line of text. </mattext>
-                    </material> </flow>
+                    <flow>
+                        <material>
+                            <mattext>This is a sample of MathML:
+                                <math xmlns:m="http://www.w3.org/1998/Math/MathML">
+                                    <m:mrow>
+                                        <m:msup>
+                                            <m:mfenced>
+                                                <m:mrow>
+                                                    <m:mi>a</m:mi>
+                                                    <m:mo>+</m:mo>
+                                                    <m:mi>b</m:mi>
+                                                    <m:mo>+</m:mo>
+                                                    <m:mi>c</m:mi>
+                                                </m:mrow>
+                                            </m:mfenced>
+                                            <m:mn>2</m:mn>
+                                        </m:msup>
+                                    </m:mrow>
+                                </math>
+                                embedded in a line of text.
+                            </mattext>
+                        </material>
+                    </flow>
                 </presentation>
             </item>
         </section>
