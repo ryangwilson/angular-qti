@@ -100,9 +100,9 @@
         </flow>
         <flow halign="center" border="2, 2, 2, 2" border_color="#000000" background_color="#C0C0C0">
             <pearsonvue:scalefactors>
-                <pearsonvue:scalefactor factor="0.5" default="true"/>
-                <pearsonvue:scalefactor factor="1.0"/>
+                <pearsonvue:scalefactor factor="1.0" default="true"/>
                 <pearsonvue:scalefactor factor="1.5"/>
+                <pearsonvue:scalefactor factor="2.0"/>
             </pearsonvue:scalefactors>
             <material>
                 <mattext>The flow that contains this material defines three scale factors, 0.5, 1.0 and 1.5.</mattext>
@@ -422,21 +422,43 @@
         }
     });
 
-    //    angular.module('qti').directive('matimage', function () {
-    //        return {
-    //            scope: true,
-    //            link: function ($scope, $el, $attr) {
-    //                var el = $el[0];
-    //                var style = window.getComputedStyle(el);
-    //                var defaultFontSize = style.fontSize;
-    //                var measure = defaultFontSize.replace(/\D+/i, '');
-    //                var unit = defaultFontSize.replace(/\d+/i, '');
-    //                $scope.$on('scalefactor::changed', function (evt, factor) {
-    //                    $el.css('fontSize') = (measure * factor) + unit;
-    //                });
-    //            }
-    //        }
-    //    });
+    angular.module('qti').directive('matimageAddon', function () {
+        return {
+            scope: true,
+            link: function ($scope, $el, $attr) {
+                var measureWidth = 0;
+                var measureHeight = 0;
+                var unitWidth = 'px';
+                var unitHeight = 'px';
+                //var scaleFactor = $scope.currentScaleFactor || 1;
+                var loaded = false;
+
+                var updateImageSize = function () {
+                    if (loaded && $scope.currentScaleFactor) {
+                        $el.css('width', (measureWidth * $scope.currentScaleFactor.factor) + unitWidth);
+                        $el.css('height', (measureHeight * $scope.currentScaleFactor.factor) + unitHeight);
+                    }
+                };
+
+                $scope.$on('scalefactor::changed', function (evt) {
+                    updateImageSize();
+                });
+
+                $el.bind('load', function (evt) {
+                    loaded = true;
+                    var style = window.getComputedStyle($el[0]);
+
+                    measureWidth = style.width.replace(/\D+/i, '');
+                    unitWidth = style.width.replace(/\d+/i, '');
+
+                    measureHeight = style.height.replace(/\D+/i, '');
+                    unitHeight = style.height.replace(/\d+/i, '');
+
+                    updateImageSize();
+                });
+            }
+        }
+    });
 
 
 </script>
