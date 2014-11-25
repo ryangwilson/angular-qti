@@ -833,15 +833,19 @@ angular.module("qti").directive("inset", function() {
     };
 });
 
-angular.module("qti.plugins").directive("matimage", [ "helpers", function(helpers) {
+angular.module("qti").directive("matimage", [ "$compile", function($compile) {
     return {
         restrict: "E",
         scope: true,
-        link: function(scope, el, attr) {
-            var str, xml;
-            xml = helpers.strToXML("<img />").firstChild;
+        link: function($scope, $el, $attr) {
+            var px = "px";
+            var base64 = "data:image/jpg;base64";
+            var imgEl = angular.element('<img ng-src="{{src}}" matimage-img />');
+            var compiled = $compile(imgEl);
+            $el.append(imgEl);
+            compiled($scope);
             var valign;
-            switch (attr.valign) {
+            switch ($attr.valign) {
               case "top":
                 valign = "top";
                 break;
@@ -854,24 +858,18 @@ angular.module("qti.plugins").directive("matimage", [ "helpers", function(helper
                 valign = "middle";
                 break;
             }
-            var style = "vertical-align:" + valign + ";";
-            if (attr.hasOwnProperty("width")) {
-                style += "width:" + attr.width + "px;";
+            imgEl.css("vertical-align", valign);
+            if ($attr.hasOwnProperty("width")) {
+                imgEl.css("width", $attr.width + px);
             }
-            if (attr.hasOwnProperty("height")) {
-                style += "height:" + attr.height + "px;";
+            if ($attr.hasOwnProperty("height")) {
+                imgEl.css("height", $attr.height + px);
             }
-            if (attr.hasOwnProperty("uri")) {
-                xml.setAttribute("src", attr.uri);
-            } else if (attr.hasOwnProperty("embedded")) {
-                str = "data:image/jpg;base64,";
-                xml.setAttribute("src", str + el.text());
+            if ($attr.hasOwnProperty("uri")) {
+                $scope.src = $attr.uri;
+            } else if ($attr.hasOwnProperty("embedded")) {
+                $scope.src = base64 + "," + $el.text();
             }
-            if (attr.hasOwnProperty("alt")) {
-                xml.setAttribute("alt", attr.alt);
-            }
-            xml.setAttribute("style", style);
-            el.html(xml.outerHTML);
         }
     };
 } ]);

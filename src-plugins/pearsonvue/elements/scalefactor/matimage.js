@@ -1,4 +1,4 @@
-angular.module('qti').directive('matimageAddon', function () {
+angular.module('qti').directive('matimageImg', function () {
     return {
         scope: true,
         link: function ($scope, $el, $attr) {

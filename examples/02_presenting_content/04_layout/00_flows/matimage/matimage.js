@@ -10,7 +10,7 @@ angular.module('qti').directive('matimage', function ($compile, helpers) {
             var px = 'px';
             var base64 = 'data:image/jpg;base64';
 
-            var imgEl = angular.element('<img ng-src="{{src}}" matimage-addon />');
+            var imgEl = angular.element('<img ng-src="{{src}}" matimage-img />');
             //compile the view into a function.
             var compiled = $compile(imgEl);
             //append our view to the element of the directive.
