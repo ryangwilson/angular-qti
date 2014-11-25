@@ -107,7 +107,7 @@ angular.module("qti.plugins").service("scripting", [ "$rootScope", function($roo
     });
 } ]).run([ "scripting", function(scripting) {} ]);
 
-angular.module("qti.plugins").directive("p", [ "$compile", function($compile) {
+angular.module("qti.plugins").directive("tabStops", [ "$compile", function($compile) {
     function parseTabStops(attributes) {
         var tabStops = {};
         if (attributes) {
@@ -132,8 +132,7 @@ angular.module("qti.plugins").directive("p", [ "$compile", function($compile) {
         return tabStops;
     }
     return {
-        restrict: "E",
-        scope: true,
+        restrict: "A",
         link: function(scope, el, attr) {
             var tabStops = parseTabStops(attr.tabStops);
             var html = el.html();
@@ -695,9 +694,10 @@ angular.module("qti").directive("flowMat", [ "ATTR_MAP", function(ATTR_MAP) {
         restrict: "E",
         scope: true,
         link: function(scope, el, attr) {
+            var px = "px";
             for (var e in attr) {
                 if (ATTR_MAP[e]) {
-                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + "px");
+                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + px);
                 }
             }
         }
@@ -718,6 +718,120 @@ angular.module("qti").directive("item", [ "$sce", function($sce) {
         } ]
     };
 } ]);
+
+angular.module("qti").directive("backgroundColor", function() {
+    return {
+        restrict: "A",
+        link: function($scope, $el, $attr) {
+            if ($attr.backgroundColor) {
+                $el[0].style["background-color"] = $attr.backgroundColor;
+            }
+        }
+    };
+});
+
+angular.module("qti").directive("border", function() {
+    return {
+        restrict: "A",
+        link: function($scope, $el, $attr) {
+            var el = $el[0];
+            var px = "px";
+            if ($attr.border) {
+                el.style["border-style"] = "solid";
+                if ($attr.border.indexOf(",") === -1) {
+                    el.style.border = parseInt($attr.border, 10) + px;
+                } else {
+                    var borders = $attr.border.split(",");
+                    el.style["border-top-width"] = parseInt(borders[0], 10) + px;
+                    el.style["border-left-width"] = parseInt(borders[1], 10) + px;
+                    el.style["border-bottom-width"] = parseInt(borders[2], 10) + px;
+                    el.style["border-right-width"] = parseInt(borders[3], 10) + px;
+                }
+            }
+            if ($attr.borderColor) {
+                el.style["border-color"] = $attr.borderColor;
+            }
+        }
+    };
+});
+
+angular.module("qti").directive("firstlineindent", function() {
+    return {
+        restrict: "A",
+        link: function($scope, $el, $attr) {
+            var mattexts, str, i, len;
+            str = "";
+            len = parseInt($attr.firstlineindent, 10);
+            for (i = 0; i < len; i += 1) {
+                str += "&nbsp;";
+            }
+            mattexts = $el[0].querySelectorAll("mattext:not([fli]");
+            len = mattexts.length;
+            for (i = 0; i < len; i += 1) {
+                if (!mattexts[i].getAttribute("firstlineindent")) {
+                    mattexts[i].innerHTML = str + mattexts[i].innerHTML;
+                    mattexts[i].setAttribute("fli", "");
+                }
+            }
+        }
+    };
+});
+
+angular.module("qti").directive("flow", function() {
+    return {
+        restrict: "E",
+        scope: true,
+        link: function($scope, $el, $attr) {
+            var el = $el[0];
+            var px = "px";
+            var unit;
+            if ($attr.width) {
+                unit = String($attr.width).match(/\D+/);
+                if (unit) {
+                    el.style.width = $attr.width + unit[0];
+                } else {
+                    el.style.width = $attr.width + px;
+                    if ($attr.height === undefined) {
+                        if (parseInt($attr.width, 10) > 40) {
+                            el.style["overflow"] = "auto";
+                        } else {
+                            el.style["overflow"] = "hidden";
+                        }
+                    }
+                }
+            }
+            if ($attr.height) {
+                unit = String($attr.height).match(/\D+/);
+                if (unit) {
+                    el.style.height = $attr.height + unit[0];
+                } else {
+                    el.style.height = $attr.height + px;
+                }
+            }
+        }
+    };
+});
+
+angular.module("qti").directive("inset", function() {
+    return {
+        restrict: "A",
+        link: function($scope, $el, $attr) {
+            var el = $el[0];
+            var px = "px";
+            if ($attr.inset) {
+                if ($attr.inset.indexOf(",") === -1) {
+                    el.style["padding"] = parseInt($attr.inset, 10) + px;
+                } else {
+                    var insets = $attr.inset.split(",");
+                    el.style["padding-top"] = parseInt(insets[0], 10) + px;
+                    el.style["padding-left"] = parseInt(insets[1], 10) + px;
+                    el.style["padding-bottom"] = parseInt(insets[2], 10) + px;
+                    el.style["padding-right"] = parseInt(insets[3], 10) + px;
+                }
+            }
+        }
+    };
+});
 
 angular.module("qti.plugins").directive("matimage", [ "helpers", function(helpers) {
     return {

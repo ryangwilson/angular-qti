@@ -191,9 +191,97 @@ angular.module("qti.plugins").directive("pearsonvueObjectivesref", function() {
     };
 });
 
-angular.module("qti.plugins").directive("pearsonvueScalefactor", function() {
+angular.module("qti").directive("matimageAddon", function() {
     return {
-        restrict: "E",
-        link: function(scope, el, attr) {}
+        scope: true,
+        link: function($scope, $el, $attr) {
+            var measureWidth = 0;
+            var measureHeight = 0;
+            var unitWidth = "px";
+            var unitHeight = "px";
+            var loaded = false;
+            var updateImageSize = function() {
+                if (loaded && $scope.currentScaleFactor) {
+                    $el.css("width", measureWidth * $scope.currentScaleFactor.factor + unitWidth);
+                    $el.css("height", measureHeight * $scope.currentScaleFactor.factor + unitHeight);
+                }
+            };
+            $scope.$on("scalefactor::changed", function(evt) {
+                updateImageSize();
+            });
+            $el.bind("load", function(evt) {
+                loaded = true;
+                var style = window.getComputedStyle($el[0]);
+                measureWidth = style.width.replace(/\D+/i, "");
+                unitWidth = style.width.replace(/\d+/i, "");
+                measureHeight = style.height.replace(/\D+/i, "");
+                unitHeight = style.height.replace(/\d+/i, "");
+                updateImageSize();
+            });
+        }
     };
 });
+
+angular.module("qti").directive("mattext", function() {
+    return {
+        scope: true,
+        link: function($scope, $el, $attr) {
+            var el = $el[0];
+            var style = window.getComputedStyle(el);
+            var defaultFontSize = style.fontSize;
+            var measure = defaultFontSize.replace(/\D+/i, "");
+            var unit = defaultFontSize.replace(/\d+/i, "");
+            var scaleFactor = 1;
+            var updateFontSize = function() {
+                $el.css("fontSize", measure * scaleFactor + unit);
+            };
+            $scope.$on("scalefactor::changed", function(evt, factor) {
+                scaleFactor = factor;
+                updateFontSize();
+            });
+        }
+    };
+});
+
+angular.module("qti.plugins").directive("pearsonvueScalefactors", [ "$compile", function($compile) {
+    return function($scope, $el, $attr) {
+        var scaleFactorsEl = $el[0].querySelectorAll("*");
+        var scaleFactorEl, scaleFactor;
+        var scaleFactors = [];
+        var percent = "%";
+        for (var i = 0; i < scaleFactorsEl.length; i += 1) {
+            scaleFactorEl = scaleFactorsEl[i];
+            scaleFactor = {
+                isDefault: !!scaleFactorEl.getAttribute("default"),
+                factor: Number(scaleFactorEl.getAttribute("factor"))
+            };
+            scaleFactors.push(scaleFactor);
+            if (scaleFactor.isDefault) {
+                $scope.currentScaleFactor = scaleFactor;
+            }
+        }
+        $scope.zoomIn = function() {
+            var index = scaleFactors.indexOf($scope.currentScaleFactor);
+            if (index + 1 < scaleFactors.length) {
+                index += 1;
+            }
+            $scope.currentScaleFactor = scaleFactors[index];
+            $scope.$broadcast("scalefactor::changed", $scope.currentScaleFactor.factor);
+        };
+        $scope.zoomOut = function() {
+            var index = scaleFactors.indexOf($scope.currentScaleFactor);
+            if (index - 1 >= 0) {
+                index -= 1;
+            }
+            $scope.currentScaleFactor = scaleFactors[index];
+            $scope.$broadcast("scalefactor::changed", $scope.currentScaleFactor.factor);
+        };
+        var zoomInEl = '<a class="btn-zoom-in" href="" ng-click="zoomIn()"></a>';
+        var zoomOutEl = '<a class="btn-zoom-out" href="" ng-click="zoomOut()"><a>';
+        var el = angular.element('<div style="font-size: 14px;padding: 10px">' + zoomInEl + zoomOutEl + "</div>");
+        var compiled = $compile(el);
+        $el.append(el);
+        compiled($scope);
+        $el[0].parentNode.style["font-size"] = 100 * $scope.currentScaleFactor.factor + percent;
+    };
+} ]);

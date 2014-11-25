@@ -17,8 +17,8 @@ module.exports = function (grunt, options) {
             "less:pearsonvue": {
                 "files": {
                     "build/pearsonvue/css/styles.css": [
-                        "src_apps/pearsonvue/styles/main.less",
-                        "src_apps/pearsonvue/elements/**/**.less"
+                        "src-plugins/pearsonvue/styles/main.less",
+                        "src-plugins/pearsonvue/elements/**/**.less"
                     ]
                 }
             },
@@ -28,13 +28,13 @@ module.exports = function (grunt, options) {
                 },
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
-                        "src_apps/pearsonvue/*.js",
-                        "src_apps/pearsonvue/elements/**/**.js"
+                        "src-plugins/pearsonvue/*.js",
+                        "src-plugins/pearsonvue/elements/**/**.js"
                     ]
                 }
             },
             "ngtemplates:pearsonvue": {
-                "src": "src_apps/pearsonvue/elements/*/*.html",
+                "src": "src-plugins/pearsonvue/elements/*/*.html",
                 "dest": ".tmp/pearsonvue/templates.js",
                 "options": {
                     "url": function (url) {
@@ -84,13 +84,13 @@ module.exports = function (grunt, options) {
             },
             "copy:pearsonvue_mattable": {
                 "expand": true,
-                "cwd": "src_apps/pearsonvue/elements/mattable/styles/",
+                "cwd": "src-plugins/pearsonvue/elements/mattable/styles/",
                 "src": ["assets/**", "fonts/**"],
                 "dest": "build/pearsonvue/css/mattable"
             },
             "copy:pearsonvue_mathjax": {
                 "expand": true,
-                "cwd": "src_apps/pearsonvue/",
+                "cwd": "src-plugins/pearsonvue/",
                 "src": ["vendor/**"],
                 "dest": "build/pearsonvue"
             }

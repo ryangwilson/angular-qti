@@ -161,20 +161,31 @@ section {
   display: flex;
 }
 
-flow {
-  display: block;
-  padding-bottom: 15px;
-}
-flow:last-child {
-  padding: 0;
-}
-
 flow_mat {
   display: block;
   padding: 5px;
 }
 flow_mat[orientation=horizontal] > flow_mat {
   display: inline-block;
+}
+
+flow {
+  position: relative;
+  display: block;
+  min-width: 10px;
+  min-height: 10px;
+}
+flow[orientation="horizontal"] {
+  white-space: nowrap;
+}
+flow[orientation="horizontal"] > flow {
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+  margin-right: -4px;
+}
+flow[halign="center"] {
+  text-align: center;
 }
 
 /* Material break */

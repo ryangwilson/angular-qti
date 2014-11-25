@@ -4,10 +4,11 @@ angular.module('qti').directive('flowMat', function(ATTR_MAP){
         restrict: 'E',
         scope: true,
         link: function (scope, el, attr) {
+            var px = 'px';
             // convert style attributes to CSS style properties
             for (var e in attr) {
                 if (ATTR_MAP[e]) {
-                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + 'px');
+                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + px);
                 }
             }
 
