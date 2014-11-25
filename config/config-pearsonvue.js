@@ -29,6 +29,7 @@ module.exports = function (grunt, options) {
                 "files": {
                     ".tmp/pearsonvue/pearsonvue.js": [
                         "src-plugins/pearsonvue/*.js",
+                        "src-plugins/pearsonvue/vendor/draggabilly/*.js",
                         "src-plugins/pearsonvue/elements/**/**.js"
                     ]
                 }

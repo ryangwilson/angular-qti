@@ -26,6 +26,16 @@ angular.module("qti").service("helpers", function() {
         }
         return xmlDoc;
     };
+    this.xmlToStr = function(xmlObject) {
+        var str;
+        if (window.ActiveXObject) {
+            str = xmlObject.xml;
+        } else {
+            str = new XMLSerializer().serializeToString(xmlObject);
+        }
+        str = str.replace(/\sxmlns=".*?"/gim, "");
+        return str;
+    };
     this.addClass = function(el, className) {
         if (el.classList) {
             el.classList.add(className);
@@ -1846,16 +1856,15 @@ angular.module("qti").directive("objectives", function() {
 angular.module("qti").directive("presentation", [ "ATTR_MAP", function(ATTR_MAP) {
     return {
         restrict: "E",
-        transclude: true,
-        templateUrl: "templates/presentation.html",
         link: function(scope, el, attr) {
+            var px = "px";
             var questionStem = el[0].querySelector("mattext");
             if (questionStem) {
                 scope.item.question = questionStem.innerHTML;
             }
             for (var e in attr) {
                 if (ATTR_MAP[e]) {
-                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + "px");
+                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + px);
                 }
             }
             scope.$on("item::ready", function() {});

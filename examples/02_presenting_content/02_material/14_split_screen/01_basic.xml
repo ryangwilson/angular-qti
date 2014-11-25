@@ -5,24 +5,7 @@
                  xmlns:pearsonvue="http://www.vue.com/schemas">
     <assessment ident="SampleAssessment" title="Item References Example">
         <section ident="SampleSection">
-            <item ident="CaseStudyPrompt">
-                <presentation>
-                    <flow>
-                        <flow>
-                            <material>
-                                <mattext>This is an item that defines material that is referenced by multiple items.</mattext>
-                            </material>
-                        </flow>
-                    </flow>
-                </presentation>
-            </item>
-            <item ident="CaseStudyQuestion">
-                <!-- config -->
-                <pearsonvue:referencematerial>
-                    <pearsonvue:splitpresentation orientation="vertical" ratio="0.5" allowadjustment="false"/>
-                    <pearsonvue:itemreference ident="CaseStudyPrompt"/>
-                </pearsonvue:referencematerial>
-
+            <!--<item ident="CaseStudyPrompt">-->
                 <!--<presentation>-->
                     <!--<flow>-->
                         <!--<flow>-->
@@ -31,22 +14,56 @@
                             <!--</material>-->
                         <!--</flow>-->
                     <!--</flow>-->
-                    <!--<splitter></splitter>-->
                 <!--</presentation>-->
+            <!--</item>-->
+            <item ident="CaseStudyQuestion">
+                <!-- config -->
+                <!--<pearsonvue:referencematerial>-->
+                    <!--<pearsonvue:splitpresentation orientation="vertical" ratio="0.5" allowadjustment="false"/>-->
+                    <!--<pearsonvue:itemreference ident="CaseStudyPrompt"/>-->
+                <!--</pearsonvue:referencematerial>-->
+
                 <presentation>
-                    <flow>
-                        <flow>
-                            <material>
-                                <mattext>What QTI element defines reference material?</mattext>
-                            </material>
+                    <flow orientation="horizontal">
+                        <flow width="50%" class="orange" style="overflow-x:auto">
+
+                            <!-- content -->
+                            <flow style="padding-right: 15px;min-width: 200px">
+                                <flow>
+                                    <material>
+                                        <mattext>This is an item that defines material that is referenced by multiple items.</mattext>
+                                    </material>
+                                </flow>
+                            </flow>
+
+                            <splitter orientation="horizontal" allowadjustment="true"></splitter>
+
                         </flow>
-                        <flow>
-                            <response_str ident="CaseStudyQuestion2.Response">
-                                <render_fib fibtype="String" prompt="Box"/>
-                            </response_str>
+
+                        <flow width="50%" class="silver" orientation="horizontal">
+
+                            <!-- content -->
+                            <flow style="padding-left: 15px">
+                                <flow>
+                                    <material>
+                                        <mattext>What QTI element defines reference material?</mattext>
+                                    </material>
+                                </flow>
+                                <flow>
+                                    <response_str ident="CaseStudyQuestion2.Response">
+                                        <render_fib fibtype="String" prompt="Box"/>
+                                    </response_str>
+                                </flow>
+                            </flow>
+
+
                         </flow>
                     </flow>
+
+
+
                 </presentation>
+
             </item>
         </section>
     </assessment>

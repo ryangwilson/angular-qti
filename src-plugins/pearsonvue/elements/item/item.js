@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('qti').directive('item', function ($sce) {
+angular.module('qti').directive('item111', function ($sce) {
     return {
         restrict: 'E',
         require: ['?item'],

@@ -195,3 +195,36 @@ thead .fa {
 .table-icon-chevron-down:before {
   content: "\f078";
 }
+
+splitter[orientation="horizontal"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-left: 4px solid rgba(0, 0, 0, 0);
+  border-right: 4px solid rgba(0, 0, 0, 0);
+  width: 1px;
+  margin-left: -8px;
+  z-index: 1;
+}
+splitter[orientation="vertical"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  border-top: 1px solid red;
+  background: lightgrey;
+  z-index: 1;
+}
+splitter[orientation="horizontal"][allowadjustment="true"] {
+  cursor: ew-resize;
+}
+splitter[orientation="vertical"][allowadjustment="true"] {
+  cursor: ns-resize;
+}
+splitter[orientation="horizontal"] .splitter-handle {
+  background: blue;
+  height: 100%;
+  width: 1px;
+}

@@ -3,10 +3,12 @@ angular.module('qti').directive('presentation', function (ATTR_MAP) {
 
     return {
         restrict: 'E',
-        transclude: true,
-        templateUrl: 'templates/presentation.html',
+        //transclude: true,
+        //templateUrl: 'templates/presentation.html',
         link: function (scope, el, attr) {
 //                console.log('presentation');
+
+            var px = 'px';
 
             // find the question stem and mark it
             var questionStem = el[0].querySelector('mattext');
@@ -19,7 +21,7 @@ angular.module('qti').directive('presentation', function (ATTR_MAP) {
             // convert style attributes to CSS style properties
             for (var e in attr) {
                 if (ATTR_MAP[e]) {
-                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + 'px');
+                    el.css(ATTR_MAP[e], isNaN(attr[e]) ? attr[e] : attr[e] + px);
                 }
             }
 

@@ -1,6 +1,5 @@
 /* global angular */
-angular.module('app', ['qti'
-]);
+angular.module('app', ['qti']);
 angular.module('app').controller('SystemCtrl', function () {
     function User(data) {
 
