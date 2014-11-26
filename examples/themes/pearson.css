@@ -1,0 +1,32 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-size: 13px;
+}
+
+.qti-assessment {
+    border: 1px solid #0062AA;
+}
+
+.qti-assessment > .qti-title {
+    background: #0062AA;
+    padding: 10px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.qti-content {
+    padding: 10px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.qti-container {
+    position: relative;
+    width: 640px;
+    height: 480px;
+    margin: 15px auto
+}
