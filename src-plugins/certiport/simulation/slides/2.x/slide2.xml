@@ -1,0 +1,17 @@
+<slide>
+
+    <view width="960" height="300" background-color="#ff0000">
+        <button class="btn btn-default" label="Click me too" x="100" y="100" width="200">
+            <events click="callCommand"></events>
+        </button>
+    </view>
+
+    <properties>
+        <name>Mike</name>
+    </properties>
+
+    <function name="callCommand">
+        <exec command="commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}" }</exec>
+    </function>
+
+</slide>

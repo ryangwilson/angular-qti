@@ -1,0 +1,57 @@
+<sim>
+
+    <!-- :: Virtual :: -->
+    <virtual>
+        <!-- :: Commands :: -->
+        <command name="commands/office::chat">
+            <log>{{displayName}} said: "{{message}}"</log>
+        </command>
+    </virtual>
+
+    <!-- :: Widgets :: -->
+    <slide>
+        <view>
+            <button class="btn btn-default" click="callCommand">Click me</button>
+            <slide>
+
+                <view>
+                    <button class="btn btn-default" click="callCommand">Click me</button>
+                </view>
+
+                <properties>
+                    <name>Mike</name>
+                </properties>
+
+                <function name="callCommand">
+                    <exec command="commands/office::chat">{ displayName: "{{name}}", message: "{{message}}" }</exec>
+                </function>
+
+            </slide>
+        </view>
+
+        <properties>
+            <name>Rob</name>
+            <message>Hello, world!</message>
+        </properties>
+
+        <functions>
+            <function name="callCommand">
+                <exec command="commands/office::chat">{ displayName: "{{name}}", message: "{{message}}" }</exec>
+            </function>
+        </functions>
+
+    </slide>
+
+    <slide>
+
+        <view>
+            <button class="btn btn-default" click="callCommand">Click me</button>
+        </view>
+
+        <function name="callCommand">
+            <exec command="commands/office::chat">{displayName: "John", message: "Hey there!"}</exec>
+            <exec command="commands/office::chat">{displayName: "Jane", message: "Hey there!"}</exec>
+        </function>
+
+    </slide>
+</sim>

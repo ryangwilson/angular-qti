@@ -1,0 +1,12 @@
+<slide>
+
+    <mixins>
+        <mixin>mixins/commands.xml</mixin>
+        <mixin>mixins/commands.xml</mixin>
+    </mixins>
+
+    <slide url="'slides/3.x/slide1.xml'"></slide>
+
+    <slide url="'slides/3.x/slide3.xml'"></slide>
+
+</slide>

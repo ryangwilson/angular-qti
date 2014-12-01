@@ -1,0 +1,20 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+sim-slide, sim-view {
+    display: block;
+    position: relative;
+}
+
+sim-function, sim-properties, sim-command, sim-log, sim-commands, sim-events, sim-mixins {
+    display: none;
+}
+
+sim-slide {
+    border: 1px solid #ccc;
+    display: block;
+    padding: 10px;
+    margin: 10px;
+}
+
