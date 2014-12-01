@@ -7,10 +7,10 @@ angular.module('qti').directive('responseLid', function () {
     return {
         restrict: 'E',
         scope: true,
-        transclude: true,
-        templateUrl: 'templates/question-type.html',
+        //transclude: true,
+        //templateUrl: 'templates/question-type.html',
         link: function (scope, el, attr) {
-            scope.item.type = attr.rcardinality;
+            //scope.item.type = attr.rcardinality;
 //                console.log('### response_lid', scope.item.type);
 //                scope.$on('item::ready', function () {
 //                    switch(attr.rcardinality) {

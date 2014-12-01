@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questestinterop>
+    <assessment ident="SampleAssessment" title="Multiple Choice Example">
+        <section ident="SampleSection">
+            <item ident="SampleItem">
+                <presentation>
+                    <flow>
+                        <flow>
+                            <material>
+                                <mattext>What QTI element defines text material?</mattext>
+                            </material>
+                        </flow>
+                        <flow>
+                            <response_lid ident="SampleItem.Response1">
+                                <!--<render_choice>-->
+                                    <!--<flow_label>-->
+                                        <!--<response_label ident="A">-->
+                                            <!--<flow_mat>-->
+                                                <!--<material>-->
+                                                    <!--<mattext>matimage</mattext>-->
+                                                <!--</material>-->
+                                            <!--</flow_mat>-->
+                                        <!--</response_label>-->
+                                    <!--</flow_label>-->
+                                    <!--<flow_label>-->
+                                        <!--<response_label ident="B">-->
+                                            <!--<flow_mat>-->
+                                                <!--<material>-->
+                                                    <!--<mattext>mattext</mattext>-->
+                                                <!--</material>-->
+                                            <!--</flow_mat>-->
+                                        <!--</response_label>-->
+                                    <!--</flow_label>-->
+                                    <!--<flow_label>-->
+                                        <!--<response_label ident="C">-->
+                                            <!--<flow_mat>-->
+                                                <!--<material>-->
+                                                    <!--<mattext>matbreak</mattext>-->
+                                                <!--</material>-->
+                                            <!--</flow_mat>-->
+                                        <!--</response_label>-->
+                                    <!--</flow_label>-->
+                                <!--</render_choice>-->
+                            </response_lid>
+                        </flow>
+                    </flow>
+                </presentation>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>

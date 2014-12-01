@@ -16,7 +16,6 @@ body {
 }
 
 .qti-assessment {
-    border: 1px solid #0062AA;
     position: absolute;
     top: 0;
     left: 0;
@@ -25,23 +24,35 @@ body {
 }
 
 .qti-assessment > .qti-title {
-    background: #0062AA;
-    padding: 10px;
+    background: #eeeeee;
+    padding: 13px;
     font-size: 14px;
-    color: #ffffff;
+    text-align: center;
+    color: #666;
+    z-index: 10;
+
+    -webkit-box-shadow: 0px 4px 8px 0px rgba(50, 50, 50, 0.35);
+    -moz-box-shadow:    0px 4px 8px 0px rgba(50, 50, 50, 0.35);
+    box-shadow:         0px 4px 8px 0px rgba(50, 50, 50, 0.35);
 }
 
 .qti-content {
     position: absolute;
-    top: 36px;
+    top: 43px;
     left: 0;
     bottom: 0;
     right: 0;
+    padding: 25px;
+    z-index: 1;
 }
 
 .qti-container {
-    position: relative;
-    width: 640px;
-    height: 480px;
-    margin: 15px auto
+    /*position: relative;*/
+    /*width: 640px;*/
+    /*height: 280px;*/
+    /*margin: 15px auto*/
+}
+
+.qti-table {
+    margin-top: 15px;
 }

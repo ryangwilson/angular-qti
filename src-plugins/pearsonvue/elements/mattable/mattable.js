@@ -90,6 +90,10 @@ angular.module('qti.plugins').directive('pearsonvueMatExtension', function ($com
             str = str.replace(/<nth-child(.|\n)*?nth-child>/gim, '');
 
             table = helpers.strToXML(str).firstChild;
+
+            var $table = angular.element(table);
+            $table.addClass('qti-table');
+
             if (table.hasAttribute('border')) {
                 tableBorderWidth = table.getAttribute('border') || '1';
             }

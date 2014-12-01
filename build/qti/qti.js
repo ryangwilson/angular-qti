@@ -851,8 +851,10 @@ angular.module("qti").directive("matimage", [ "$compile", function($compile) {
         link: function($scope, $el, $attr) {
             var px = "px";
             var base64 = "data:image/jpg;base64";
+            var content = $el.text().trim();
             var imgEl = angular.element('<img ng-src="{{src}}" matimage-img />');
             var compiled = $compile(imgEl);
+            $el.empty();
             $el.append(imgEl);
             compiled($scope);
             var valign;
@@ -879,7 +881,7 @@ angular.module("qti").directive("matimage", [ "$compile", function($compile) {
             if ($attr.hasOwnProperty("uri")) {
                 $scope.src = $attr.uri;
             } else if ($attr.hasOwnProperty("embedded")) {
-                $scope.src = base64 + "," + $el.text();
+                $scope.src = base64 + "," + content;
             }
         }
     };
@@ -1874,15 +1876,20 @@ angular.module("qti").directive("presentation", [ "ATTR_MAP", function(ATTR_MAP)
     };
 } ]);
 
+angular.module("qti").directive("renderChoice", function() {
+    return {
+        restrict: "E",
+        scope: true,
+        link: function(scope, el, attr) {},
+        controller: [ "$scope", function($scope) {} ]
+    };
+});
+
 angular.module("qti").directive("responseLid", function() {
     return {
         restrict: "E",
         scope: true,
-        transclude: true,
-        templateUrl: "templates/question-type.html",
-        link: function(scope, el, attr) {
-            scope.item.type = attr.rcardinality;
-        },
+        link: function(scope, el, attr) {},
         controller: [ "$scope", function($scope) {} ]
     };
 });

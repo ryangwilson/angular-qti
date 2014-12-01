@@ -158,7 +158,7 @@ p:empty:after {
   white-space: pre-wrap;
 }
 .qti-content {
-  overflow: hidden;
+  overflow: auto;
 }
 
 flow_mat {

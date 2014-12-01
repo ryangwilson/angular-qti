@@ -9,11 +9,13 @@ angular.module('qti').directive('matimage', function ($compile) {
 
             var px = 'px';
             var base64 = 'data:image/jpg;base64';
+            var content = $el.text().trim();
 
             var imgEl = angular.element('<img ng-src="{{src}}" matimage-img />');
             //compile the view into a function.
             var compiled = $compile(imgEl);
             //append our view to the element of the directive.
+            $el.empty();
             $el.append(imgEl);
             //bind our view to the scope!
             compiled($scope);
@@ -44,7 +46,7 @@ angular.module('qti').directive('matimage', function ($compile) {
             if ($attr.hasOwnProperty('uri')) {
                 $scope.src = $attr.uri;
             } else if ($attr.hasOwnProperty('embedded')) {
-                $scope.src = base64 + ',' + $el.text();
+                $scope.src = base64 + ',' + content;
             }
         }
     };
