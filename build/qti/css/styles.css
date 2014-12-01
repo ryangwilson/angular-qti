@@ -157,6 +157,9 @@ p:empty:after {
 .qti-prewrap {
   white-space: pre-wrap;
 }
+.qti-content {
+  overflow: hidden;
+}
 
 flow_mat {
   display: block;
@@ -169,8 +172,6 @@ flow_mat[orientation=horizontal] > flow_mat {
 flow {
   position: relative;
   display: block;
-  min-width: 10px;
-  min-height: 10px;
 }
 flow[orientation="horizontal"] {
   white-space: nowrap;

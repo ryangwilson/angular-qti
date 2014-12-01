@@ -7,8 +7,21 @@ body {
     font-size: 13px;
 }
 
+.qti-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
 .qti-assessment {
     border: 1px solid #0062AA;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .qti-assessment > .qti-title {
@@ -19,9 +32,11 @@ body {
 }
 
 .qti-content {
-    padding: 10px;
-    max-height: 600px;
-    overflow: auto;
+    position: absolute;
+    top: 36px;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .qti-container {
