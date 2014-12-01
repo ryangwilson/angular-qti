@@ -1,5 +1,7 @@
 <slide>
 
+    <button>Hey you</button>
+
     <view>
         <button class="btn btn-default" label="Hello, world">
             <events click="callCommand"></events>
@@ -10,7 +12,6 @@
     </view>
 
     <!-- These are my notes {{alert(123)}} -->
-
     <listeners>
         <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
