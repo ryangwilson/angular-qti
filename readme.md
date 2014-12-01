@@ -1,7 +1,8 @@
 ##QTI Development Notes
 
-1. This is for QTI 1.2 (not QTI 2.1)
-2. This will not included the full-spec. Only what is needed.
+1. This is for QTI 1.2 (not QTI 2.1) - so yeah it is using a 12 year spec.
+2. This will not included the full-spec. Only what I need.
+3. This isn't going to be useful to anyone except me.
 
 These are notes as I am developing QTI.
 
