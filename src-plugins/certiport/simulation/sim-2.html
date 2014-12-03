@@ -8,7 +8,7 @@
 </head>
 <body ng-cloak>
 
-<simulation url="'slides/2.x/slide-main.xml'"></simulation>
+<simulation url="'slides/2.x.html/slide-main'" extension="html"></simulation>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.js"></script>
@@ -28,15 +28,17 @@
 <script src="src/components/position/width.js"></script>
 <script src="src/components/position/height.js"></script>
 <script src="src/components/styles/backgroundColor.js"></script>
-<script src="src/components/commands.js"></script>
+<script src="src/components/backwards-comp/commands.js"></script>
+<script src="src/components/backwards-comp/event.js"></script>
+<script src="src/components/backwards-comp/mixins.js"></script>
+<script src="src/components/backwards-comp/functions.js"></script>
+<script src="src/components/backwards-comp/listeners.js"></script>
 <script src="src/components/command.js"></script>
 <script src="src/components/function.js"></script>
-<script src="src/components/event.js"></script>
-<script src="src/components/functions.js"></script>
-<script src="src/components/listeners.js"></script>
+<script src="src/components/listener.js"></script>
 <script src="src/components/mixin.js"></script>
-<script src="src/components/mixins.js"></script>
 <script src="src/components/properties.js"></script>
+<script src="src/components/script.js"></script>
 <script src="src/components/virtual.js"></script>
 <script src="src/events/click.js"></script>
 <script src="src/events/double-click.js"></script>
@@ -46,6 +48,7 @@
 <script src="src/events/mousemove.js"></script>
 <script src="src/events/mouseover.js"></script>
 <script src="src/events/mouseup.js"></script>
+<script src="src/polyfills/string.supplant.js"></script>
 <script src="src/utils/helpers.js"></script>
 <script src="src/utils/json.js"></script>
 <script src="src/widgets/button/button.js"></script>

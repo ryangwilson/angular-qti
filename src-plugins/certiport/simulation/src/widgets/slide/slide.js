@@ -15,7 +15,8 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
 
                     //console.log('slide url:', val);
 
-                    $http.get(val).success(function (html) {
+                    var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
+                    $http.get(path).success(function (html) {
 
                         var htmlEl = angular.element(html);
 

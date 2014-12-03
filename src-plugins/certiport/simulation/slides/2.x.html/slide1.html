@@ -1,16 +1,34 @@
 <slide>
 
+    <script src="slides/2.x.html/scripts/callme.js"></script>
+
+    <script>
+        var abc = 123;
+
+        function test() {
+            return 'wonderbread';
+        }
+
+        this.test = function(scope, properties) {
+            var msg = 'you called test()';
+            console.log(msg, abc, test(), properties);
+        }
+    </script>
+
     <view>
         <button class="btn btn-default" label="Hello, world">
+            <events click="test"></events>
+            <events click="callMe"></events>
             <events click="callCommand"></events>
         </button>
 
-        <slide id="slide" url="'slides/2.x/slide2.xml'" style="overflow:auto"></slide>
+        <slide id="slide" url="'slides/2.x.html/slide2'" style="overflow:auto"></slide>
     </view>
 
     <!-- These are my notes {{alert(123)}} -->
     <listeners>
-        <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>
+        <!--<event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>-->
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
 

@@ -1,5 +1,7 @@
 angular.module('simulation').directive('simMixin', function ($http, $compile) {
 
+    var mixins = {};
+
     return {
         restrict: 'AE',
         scope: true,
@@ -10,12 +12,12 @@ angular.module('simulation').directive('simMixin', function ($http, $compile) {
 
             var url = $element.html();
 
-            $scope.mixins = $scope.mixins || {};
-            if (!$scope.mixins[url]) {
+            if (!mixins[url]) {
 
-                $scope.mixins[url] = true;
+                mixins[url] = true;
 
-                $http.get(url).success(function (html) {
+                var path = '{val}.{ext}'.supplant({val: url, ext: $scope.extension || 'xml'});
+                $http.get(path).success(function (html) {
 
                     html = $scope.parseRegisteredTags(html);
 

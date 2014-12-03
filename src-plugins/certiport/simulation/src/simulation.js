@@ -3,7 +3,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
     return {
         restrict: 'AE',
         scope: {
-            url: '='
+            url: '=',
+            extension: '@'
         },
         controller: function ($scope, $element) {
 
@@ -87,9 +88,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             var onUrlChange = function (val) {
                 if (val !== undefined) {
 
-                    //console.log('slide url:', val);
+                    //console.log('slide url: {val}.{ext}'.supplant({val: val, ext: $scope.extension}));
 
-                    $http.get(val).success(function (html) {
+                    var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
+                    $http.get(path).success(function (html) {
 
                         html = '<!-- ' + val + ' -->' + newline + html;
                         html = parseRegisteredTags(html);
@@ -113,7 +115,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             };
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
-                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual'
+                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
+                'script', 'listener'
             ]);
 
             $scope.parseRegisteredTags = parseRegisteredTags;
@@ -121,6 +124,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             $scope.parseHashes = parseHashes;
             $scope.reserveTags = reserveTags;
             $scope.bindable = bindable;
+
+            $scope.alert = function() {
+                alert(123);
+            };
 
             $scope.$watch('url', onUrlChange);
         }

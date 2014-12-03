@@ -5,8 +5,8 @@
         <mixin>mixins/commands.xml</mixin>
     </mixins>
 
-    <slide url="'slides/2.x/slide1.xml'"></slide>
+    <slide url="'slides/2.x/slide1'"></slide>
 
-    <slide url="'slides/2.x/slide3.xml'"></slide>
+    <slide url="'slides/2.x/slide3'"></slide>
 
 </slide>
