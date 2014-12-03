@@ -1,5 +1,21 @@
 <slide>
 
+    <sim-link rel="stylesheet" href="slides/2.x.html/css/green.css"/>
+
+    <!--<style>-->
+        <!--.green {-->
+            <!--background: green;-->
+            <!--color: #ffffff;-->
+        <!--}-->
+    <!--</style>-->
+
+    <style>
+        .blue {
+            background: blue;
+            color: #ffffff;
+        }
+    </style>
+
     <script src="slides/2.x.html/scripts/callme.js"></script>
 
     <script>
@@ -9,14 +25,20 @@
             return 'wonderbread';
         }
 
-        this.test = function(scope, properties) {
+        this.test = function (scope, properties) {
             var msg = 'you called test()';
             console.log(msg, abc, test(), properties);
         }
     </script>
 
     <view>
-        <button class="btn btn-default" label="Hello, world">
+        <button class="btn btn-default blue" label="Blue">
+            <events click="test"></events>
+            <events click="callMe"></events>
+            <events click="callCommand"></events>
+        </button>
+
+        <button class="btn btn-default green" label="Green">
             <events click="test"></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>

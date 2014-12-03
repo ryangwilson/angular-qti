@@ -7,6 +7,9 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
 
             var newline = '\n';
 
+            var slideClass = 'slide_' + $scope.$id;
+            $element.addClass(slideClass);
+
             $scope.properties = {};
             $scope.functions = {};
 
@@ -18,11 +21,15 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                     var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
                     $http.get(path).success(function (html) {
 
-                        var htmlEl = angular.element(html);
+                        html = $scope.openClosedTags(html);
 
-                        html = $scope.parseRegisteredTags(htmlEl.html());
+                        var htmlEl = angular.element(html);
+                        html = htmlEl.html();
+
+                        html = $scope.parseRegisteredTags(html);
                         html = $scope.parseBindables(html);
                         html = '<!-- ' + val + ' -->' + newline + html;
+
 
                         var el = angular.element(html);
 

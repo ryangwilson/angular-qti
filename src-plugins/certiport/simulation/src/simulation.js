@@ -16,6 +16,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
 
             var regExp, patterns = [];
 
+            var openClosedTags = function(html) {
+                return html.replace(/<([\w|-]+)(\s.*)\/>/gim, '<$1$2></$1>');
+            };
+
             /**
              * Adds 'sim-' to a registered tag
              * Ex. <button> to <sim-button>
@@ -94,6 +98,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                     $http.get(path).success(function (html) {
 
                         html = '<!-- ' + val + ' -->' + newline + html;
+                        html = openClosedTags(html);
                         html = parseRegisteredTags(html);
                         html = parseBindables(html);
 
@@ -116,9 +121,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
                 'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
-                'script', 'listener'
+                'script', 'style', 'link', 'listener'
             ]);
 
+            $scope.openClosedTags = openClosedTags;
             $scope.parseRegisteredTags = parseRegisteredTags;
             $scope.parseBindables = parseBindables;
             $scope.parseHashes = parseHashes;
