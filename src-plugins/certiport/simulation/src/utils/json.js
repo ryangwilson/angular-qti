@@ -1,3 +1,6 @@
+/**
+ * This parses string to JSON (relaxed in that is does not require quotes)
+ */
 angular.module('simulation').service('json', function () {
     this.parse = function(source, jsonObjectFormat) {
         if (typeof jsonObjectFormat === "undefined") {

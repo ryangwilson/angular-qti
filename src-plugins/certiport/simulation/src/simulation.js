@@ -37,8 +37,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 var cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
                 var files = cleanHtml.match(/[\w|\/]+::\w+/gim);
                 //console.log('extFiles', files);
-                angular.forEach(files, function(file){
-                    if(typeof externalFiles[file] === 'undefined') {
+                angular.forEach(files, function (file) {
+                    if (typeof externalFiles[file] === 'undefined') {
                         externalFiles[file] = false; // has not been loaded
                         console.log('###file###', file);
                     }
@@ -103,10 +103,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
              * @param html
              * @returns {*}
              */
-            var parseEvent = function(html) {
+            var parseEvent = function (html) {
                 var regExp = /<(listeners)>([\s\S]*?)<\/\1>/gim;
                 var listenersHtml = html.match(regExp);
-                if(listenersHtml) {
+                if (listenersHtml) {
                     var updatedHtml = listenersHtml[0].replace(/<(event)(\s.*?)<\/\1>/gim, '<listener$2</listener>');
                     html = html.replace(regExp, updatedHtml);
                 }
@@ -157,6 +157,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                         //(try commenting out this line to see what happens!)
                         compiled($scope);
 
+                        setTimeout(function(){
+                            console.log(externalFiles);
+                            angular.forEach(externalFiles, function (isLoaded, filepath) {
+                                console.log('##filepath##', filepath);
+                            });
+                        }, 1000)
                     });
 
                 }
