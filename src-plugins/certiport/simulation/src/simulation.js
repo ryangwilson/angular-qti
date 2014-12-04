@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('simulation').directive('simulation', function ($http, $compile, $q, $timeout, XMLService, DataService) {
+angular.module('simulation').directive('simulation', function ($http, $compile, $q, $log, $timeout, XMLService, DataService) {
     return {
         restrict: 'AE',
         scope: {
@@ -16,12 +16,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var counter = 0;
             var regExp, patterns = [];
 
-            var incCounter = function () {
+            var incCounter = function (url) {
                 counter += 1;
+                $log.log('%cinc(' + counter + '): ' + url, 'color: #27ae60');
             };
 
-            var decCounter = function () {
+            var decCounter = function (url) {
                 counter -= 1;
+                $log.log('%cdec(' + counter + '): ' + url, 'color: #c0392b');
             };
 
             // :: Model Functionality :://
@@ -120,9 +122,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var parseHashes = function (html) {
                 var startToken = html.indexOf('##');
                 var endToken = html.indexOf('##', startToken + 2);
-                //console.log('');
+                //$console.log('');
                 while (startToken && endToken) {
-                    console.log('###found one###');
+                    $log.log('###found one###');
                     //
                     //}
                     //if (endToken > startToken) {
@@ -174,9 +176,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             $scope.loadSlide = function (options) {
                 // first thing we do is increment counter
-                incCounter();
+                incCounter(options.templateUrl);
 
-                console.log('counter', counter, options.templateUrl);
+                //$console.log('counter', counter, options.templateUrl);
 
                 var deferred = $q.defer();
                 var path = '{val}.{ext}'.supplant({val: options.templateUrl, ext: $scope.extension || 'xml'});
@@ -209,15 +211,15 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     options.targetEl.append(el);
 
                     $scope.loadVirtuals(html).then(function () {
-                        console.log('### DONE LOADING VIRTUALS ####', options.templateUrl);
+                        //$console.log('### DONE LOADING VIRTUALS ####', options.templateUrl);
                         deferred.resolve();
                     });
 
                     // last thing we do is decrement counter
-                    decCounter();
+                    decCounter(options.templateUrl);
 
                     //var timer = setInterval(function () {
-                    //    console.log('counter', counter);
+                    //    $console.log('counter', counter);
                     //    if(!counter) {
                     //        var unwatch = $scope.$watch(function(){
                     //            clearInterval(timer);
@@ -241,12 +243,13 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 if (files) {
                     angular.forEach(files, function (url) {
 
-                        incCounter();
+                        // first thing we do is increment counter
+                        incCounter(url);
 
-                        console.log('##VIRTUALS##', url);
+                        //$console.log('##VIRTUALS##', url);
                         var ext = '.xml';// TODO: Check if extension exists, default to XML
                         $http.get(url + ext).success(function (response) {
-                            //console.log('xml', response.match(/xmlns="(.*?)"/gim).toString());
+                            //$console.log('xml', response.match(/xmlns="(.*?)"/gim).toString());
 
                             // get the xmlns
                             var xmlns = response.match(/xmlns\="(.*?)(?=")/gim);
@@ -259,31 +262,26 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                             switch (type) {
                                 case 'model':
                                     var json = XMLService.toJson(response);
-                                    console.log('URL', url);
+                                    //$console.log('URL', url);
                                     $scope.set(url, json);
                                     $scope.$broadcast(url);
                                     break;
                             }
 
                             $scope.loadVirtuals(response).then(function () {
-                                console.log('XXXXXXXX VIRTUALS XXXXXXXXX DONE XXXXXXXXXX');
-                                //deferred.resolve();
+                                deferred.resolve();
                             });
 
-                            decCounter();
+                            // last thing we do is decrement counter
+                            decCounter(url);
                         });
                     });
                 } else {
-                    //deferred.resolve();
+                    deferred.resolve();
                 }
 
                 return deferred.promise;
             };
-
-            reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
-                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
-                'script', 'style', 'link', 'listener'
-            ]);
 
             $scope.parseRegisteredTags = parseRegisteredTags;
 
@@ -293,6 +291,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             $scope.$watch('url', function (url) {
                 if (url) {
+                    $log.log('%c SIM START ', 'background: #2980b9; color: #fff');
                     $scope.loadSlide({
                         templateUrl: url,
                         targetScope: $scope,
@@ -300,23 +299,21 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     }).then(function ($el) {
                     });
 
-                    var watching = false;
                     var unwatch = $scope.$watch(function () {
-                        //if (!watching) {
-                            watching = true;
-                            //$timeout(function () {
-                                watching = false;
-                                //console.log('WHERE ARE WE', counter);
-                                if (counter < 1) {
-                                    unwatch();
-                                    console.info('### SIM READY ###');
-                                }
-                            //});
-                        //}
+                        if (counter < 1) {
+                            unwatch();
+                            $log.log('%c SIM READY ', 'background: #27ae60; color: #fff');
+                        }
                     });
 
                 }
             });
+
+            // :: init ::
+            reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
+                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
+                'script', 'style', 'link', 'listener'
+            ]);
         }
     };
 });
