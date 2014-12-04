@@ -21,7 +21,11 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                     var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
                     $http.get(path).success(function (html) {
 
+                        // prep
                         html = $scope.openClosedTags(html);
+                        // backwards compatibility
+                        html = $scope.parseEvent(html);
+                        // parsers
                         html = $scope.parseRegisteredTags(html);
                         html = $scope.parseBindables(html);
                         html = $scope.parseExternalFiles(html);

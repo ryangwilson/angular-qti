@@ -47,8 +47,8 @@
 
     <!-- These are my notes {{alert(123)}} -->
     <listeners>
-        <listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>
-        <!--<event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>-->
+        <!--<listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>-->
+        <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
 

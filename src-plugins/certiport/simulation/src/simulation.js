@@ -98,6 +98,20 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 }
             };
 
+            /**
+             * Converts <event> tags to <listener> tags for backwards compatibility.
+             * @param html
+             * @returns {*}
+             */
+            var parseEvent = function(html) {
+                var listenersHtml = html.match(/<(listeners)>([\s\S]*?)<\/\1>/gim);
+                if(listenersHtml) {
+                    var updatedHtml = listenersHtml[0].replace(/<(event)(\s.*?)<\/\1>/gim, '<listener$2</listener>');
+                    html = html.replace(/<(listeners)>([\s\S]*?)<\/\1>/gim, updatedHtml);
+                }
+                return html;
+            };
+
             var reserveTags = function (tags) {
                 if (typeof tags === 'string') {
                     tags = tags.split(' ');
@@ -125,6 +139,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
 
                         html = '<!-- ' + val + ' -->' + newline + html;
                         html = openClosedTags(html);
+                        html = parseEvent(html);
                         html = parseRegisteredTags(html);
                         html = parseBindables(html);
                         html = parseExternalFiles(html);
@@ -155,9 +170,13 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             $scope.parseExternalFiles = parseExternalFiles;
             $scope.parseRegisteredTags = parseRegisteredTags;
             $scope.parseBindables = parseBindables;
-            $scope.parseHashes = parseHashes;
             $scope.reserveTags = reserveTags;
             $scope.bindable = bindable;
+
+
+            // Backwards compatibility
+            $scope.parseHashes = parseHashes;
+            $scope.parseEvent = parseEvent;
 
             $scope.alert = function () {
                 alert(123);
