@@ -16,6 +16,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var counter = 0;
             var regExp, patterns = [];
 
+            var incCounter = function () {
+                counter += 1;
+            };
+
+            var decCounter = function () {
+                counter -= 1;
+            };
+
             // :: Model Functionality :://
             $scope.model = {};
 
@@ -165,7 +173,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             };
 
             $scope.loadSlide = function (options) {
-                counter++;
+                // first thing we do is increment counter
+                incCounter();
+
                 console.log('counter', counter, options.templateUrl);
 
                 var deferred = $q.defer();
@@ -198,39 +208,41 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     //append our view to the element of the directive.
                     options.targetEl.append(el);
 
-                    //console.log('eq', options.targetEl.scope().$id, options.targetScope.$id, options.templateUrl);
-                    //console.log('### EXT FILES ##', options.templateUrl, files);
-                    //
-                    //if (files.length) {
-                    //    console.log('we gotta load stuff');
-                    //    angular.forEach(files, function (filepath) {
-                    //        $scope.load(filepath).then(function () {
-                    //            searchText.match(/([\w\/]+)(?=::)/im);
-                    //        });
-                    //    });
-                    //} else {
-                    //    console.log('nothing to load we are done!!!');
-                    //    deferred.resolve(el);
-                    //}
-
                     $scope.loadVirtuals(html).then(function () {
                         console.log('### DONE LOADING VIRTUALS ####', options.templateUrl);
                         deferred.resolve();
                     });
 
+                    // last thing we do is decrement counter
+                    decCounter();
+
+                    //var timer = setInterval(function () {
+                    //    console.log('counter', counter);
+                    //    if(!counter) {
+                    //        var unwatch = $scope.$watch(function(){
+                    //            clearInterval(timer);
+                    //            deferred.resolve();
+                    //        })
+                    //    }
+                    //}, 100);
+
+                    //deferred.resolve();
                 });
 
                 return deferred.promise;
             };
 
             $scope.loadVirtuals = function (content) {
+
                 var deferred = $q.defer();
-                var counter = 0;
                 var cleanHtml = content.replace(/<!--[\s\S]*?-->/g, '');
                 var files = cleanHtml.match(/([\w\.\/]+)(?=::)/gim);
 
                 if (files) {
                     angular.forEach(files, function (url) {
+
+                        incCounter();
+
                         console.log('##VIRTUALS##', url);
                         var ext = '.xml';// TODO: Check if extension exists, default to XML
                         $http.get(url + ext).success(function (response) {
@@ -254,15 +266,15 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                             }
 
                             $scope.loadVirtuals(response).then(function () {
-                                counter += 1;
-                                if (counter === files.length) { // all files have been loaded
-                                    deferred.resolve();
-                                }
+                                console.log('XXXXXXXX VIRTUALS XXXXXXXXX DONE XXXXXXXXXX');
+                                //deferred.resolve();
                             });
+
+                            decCounter();
                         });
                     });
                 } else {
-                    deferred.resolve();
+                    //deferred.resolve();
                 }
 
                 return deferred.promise;
@@ -279,10 +291,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             $scope.parseHashes = parseHashes;
             $scope.parseEvent = parseEvent;
 
-            $scope.alert = function () {
-                alert(123);
-            };
-
             $scope.$watch('url', function (url) {
                 if (url) {
                     $scope.loadSlide({
@@ -290,8 +298,23 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         targetScope: $scope,
                         targetEl: $element
                     }).then(function ($el) {
-                        console.info('### SIM READY ###');
                     });
+
+                    var watching = false;
+                    var unwatch = $scope.$watch(function () {
+                        //if (!watching) {
+                            watching = true;
+                            //$timeout(function () {
+                                watching = false;
+                                //console.log('WHERE ARE WE', counter);
+                                if (counter < 1) {
+                                    unwatch();
+                                    console.info('### SIM READY ###');
+                                }
+                            //});
+                        //}
+                    });
+
                 }
             });
         }
