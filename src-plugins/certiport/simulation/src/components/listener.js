@@ -24,7 +24,7 @@ angular.module('simulation').directive('simListener', function ($interpolate) {
                         }
                     }
                     handler = 'functions.' + handler; // add functions. so it can be found
-                    handler = $scope.bindable(handler);
+                    handler = $scope.curlify(handler);
                     var exp = $interpolate(handler); // interpolate any {{}}
                     var interpolatedHandler = exp(data);
                     $scope.$eval(interpolatedHandler); // evaluate expression

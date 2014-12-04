@@ -125,12 +125,16 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 });
             };
 
-            var bindable = function (content) {
+            $scope.curlify = function (content) {
                 return content.split(openBindTag).join(openCurly).split(closeBindTag).join(closeCurly);
             };
 
-            var loadTemplate = function (url, $scope, $el, callback) {
-                var path = '{val}.{ext}'.supplant({val: url, ext: $scope.extension || 'xml'});
+            $scope.load = function (options) {
+
+                counter++;
+                console.log('counter', counter, options.templateUrl);
+
+                var path = '{val}.{ext}'.supplant({val: options.templateUrl, ext: $scope.extension || 'xml'});
                 $http.get(path).success(function (html) {
 
                     // :: prep ::
@@ -145,7 +149,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                     html = parseExternalFiles(html);
 
                     // :: comments - file indicator ::
-                    html = '<!-- ' + url + ' -->' + newline + html;
+                    html = '<!-- ' + options.templateUrl + ' -->' + newline + html;
 
                     var el = angular.element(html);
 
@@ -153,13 +157,15 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                     var compiled = $compile(el);
 
                     //append our view to the element of the directive.
-                    $el.append(el);
+                    options.targetEl.append(el);
 
                     //bind our view to the scope!
                     //(try commenting out this line to see what happens!)
-                    compiled($scope);
+                    compiled(options.targetScope);
 
-                    callback(el);
+                    //console.log('### EXT FILES ##', );
+
+                    options.success(el);
 
                 });
             };
@@ -169,10 +175,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 'script', 'style', 'link', 'listener'
             ]);
 
-            $scope.loadTemplate = loadTemplate;
             $scope.parseRegisteredTags = parseRegisteredTags;
-            $scope.bindable = bindable;
-
 
             // Backwards compatibility
             $scope.parseHashes = parseHashes;
@@ -184,15 +187,18 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
 
             $scope.$watch('url', function (url) {
                 if (url) {
-                    loadTemplate(url, $scope, $element, function (el) {
-                        console.log('ready', url);
-
-                        //setTimeout(function () {
-                        //    console.log(externalFiles);
-                        //    angular.forEach(externalFiles, function (isLoaded, filepath) {
-                        //        console.log('##filepath##', filepath);
-                        //    });
-                        //}, 1000);
+                    $scope.load({
+                        templateUrl: url,
+                        targetScope: $scope,
+                        targetEl: $element,
+                        success: function() {
+                            //setTimeout(function () {
+                            //    console.log(externalFiles);
+                            //    angular.forEach(externalFiles, function (isLoaded, filepath) {
+                            //        console.log('##filepath##', filepath);
+                            //    });
+                            //}, 1000);
+                        }
                     });
                 }
             });

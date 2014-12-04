@@ -7,7 +7,8 @@ angular.module('simulation').directive('simEval', function ($interpolate, $windo
 
             // [sim v2.1] backwards compatible
             content = content.split('event.data.').join('');
-            content = scope.bindable(content);
+
+            content = scope.curlify(content);
 
             scope.registerAction(function (targetScope, data) {
 

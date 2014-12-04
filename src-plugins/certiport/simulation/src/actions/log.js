@@ -7,7 +7,7 @@ angular.module('simulation').directive('simLog', function ($rootScope, $interpol
 
             // [sim v2.1] backwards compatible
             content = content.split('event.data.').join('');
-            content = scope.bindable(content);
+            content = scope.curlify(content);
 
             scope.registerAction(function (targetScope, data) {
                 var exp = $interpolate(content);

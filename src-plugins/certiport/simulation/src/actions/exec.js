@@ -4,7 +4,7 @@ angular.module('simulation').directive('simExec', function ($interpolate, $rootS
         link: function (scope, el, attrs) {
 
             var content = el.text();
-            content = scope.bindable(content);
+            content = scope.curlify(content);
 
             scope.registerAction(function (targetScope, data) {
 

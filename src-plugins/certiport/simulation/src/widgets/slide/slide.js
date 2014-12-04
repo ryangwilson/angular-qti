@@ -60,13 +60,17 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                 if ($attrs.url) {
                     if ($attrs.url[0] === '\'') {
                         url = $attrs.url.replace(/\'/gim, '');
-                        $scope.loadTemplate(url, $scope, $element, function(){
-                            //console.log('ready', url);
-                            $timeout(function () {
-                                var targetScope = $scope;
-                                var data = targetScope.getMerged('properties');
-                                $scope.$broadcast('load', targetScope, data);
-                            }, 100);
+                        $scope.load({
+                            templateUrl: url,
+                            targetEl: $element,
+                            targetScope: $scope,
+                            success: function() {
+                                $timeout(function () {
+                                    var targetScope = $scope;
+                                    var data = targetScope.getMerged('properties');
+                                    $scope.$broadcast('load', targetScope, data);
+                                }, 100);
+                            }
                         });
                     } else {
                         console.log('THIS HAS NOT BEEN DONE');
