@@ -54,13 +54,4 @@ angular.module('simulation').service('DataService', function () {
     this.data = function (data) {
         return new DataService(data);
     };
-
-    this.extend = function (data) {
-        var ds = this.data(data);
-        ds.data.$get = ds.get;
-        ds.data.$set = ds.set;
-        ds.data.$path = ds.path;
-
-        return ds.data;
-    };
 });

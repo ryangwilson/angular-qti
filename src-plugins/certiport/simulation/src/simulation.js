@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('simulation').directive('simulation', function ($http, $compile, $q, XMLService, DataService) {
+angular.module('simulation').directive('simulation', function ($http, $compile, $q, $timeout, XMLService, DataService) {
     return {
         restrict: 'AE',
         scope: {
@@ -16,15 +16,53 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var counter = 0;
             var regExp, patterns = [];
 
+            // :: Model Functionality :://
             $scope.model = {};
 
             var ds = DataService.data($scope.model);
             $scope.set = function (path, value, delimiter) {
+                delimiter = delimiter || '/';
+                if (path.indexOf('::') !== -1) {
+                    path = path.split('::').join('|').split(delimiter).join('|');
+                    delimiter = '|';
+                }
                 return ds.set(path, value, delimiter);
             };
 
-            $scope.get = function (path) {
-                return ds.get(path);
+            $scope.get = function (path, delimiter) {
+                delimiter = delimiter || '/';
+                if (path.indexOf('::') !== -1) {
+                    path = path.split('::').join('|').split(delimiter).join('|');
+                    delimiter = '|';
+                }
+                return ds.get(path, delimiter);
+            };
+
+            $scope.watch = function (path, callback) {
+
+                if (!$scope.isBindable(path)) { // if no curly braces
+
+                    $timeout(function () {
+                        callback(path);
+                    }, 0);
+
+                    return function () { // simulating an unwatch()
+                    };
+                }
+
+                var delimiter = '/';
+                path = path.substring(2, path.length - 2);
+
+                if (path.indexOf('::') !== -1) {
+                    path = 'model["' + path.split('::').join('|').split(delimiter).join('|').split('|').join('"]["') + '"]';
+                }
+
+                return $scope.$watch(path, function (val) {
+                    if (val) {
+                        callback(val);
+                    }
+                });
+
             };
 
             /**
@@ -34,25 +72,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
              */
             var openClosedTags = function (html) {
                 return html.replace(/<([\w|-]+)(\s.*)\/>/gim, '<$1$2></$1>');
-            };
-
-            /**
-             * Finds external files that need to be loaded
-             * @param html
-             * @returns {*}
-             */
-            var parseExternalFiles = function (html) {
-                var cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
-                var files = cleanHtml.match(/[\w|\/]+::\w+/gim);
-                //console.log('extFiles', files);
-                //angular.forEach(files, function (file) {
-                //    if (typeof externalFiles[file] === 'undefined') {
-                //        externalFiles[file] = false; // has not been loaded
-                //        console.log('###file###', file);
-                //    }
-                //});
-                //return html;
-                return files || [];
             };
 
             /**
@@ -135,6 +154,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 });
             };
 
+            $scope.isBindable = function (val) {
+                val += '';
+                return val.indexOf(openBindTag) !== -1;
+                //return val.match(/{%.*?%}/gim);
+            };
+
             $scope.curlify = function (content) {
                 return content.split(openBindTag).join(openCurly).split(closeBindTag).join(closeCurly);
             };
@@ -147,7 +172,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 var path = '{val}.{ext}'.supplant({val: options.templateUrl, ext: $scope.extension || 'xml'});
 
                 $http.get(path).success(function (html) {
-
 
                     // :: prep ::
                     html = openClosedTags(html);
@@ -224,7 +248,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                 case 'model':
                                     var json = XMLService.toJson(response);
                                     console.log('URL', url);
-                                    $scope.set(url, json, '/');
+                                    $scope.set(url, json);
                                     $scope.$broadcast(url);
                                     break;
                             }
@@ -267,12 +291,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         targetEl: $element
                     }).then(function ($el) {
                         console.info('### SIM READY ###');
-                        //setTimeout(function () {
-                        //    console.log(externalFiles);
-                        //    angular.forEach(externalFiles, function (isLoaded, filepath) {
-                        //        console.log('##filepath##', filepath);
-                        //    });
-                        //}, 1000);
                     });
                 }
             });
