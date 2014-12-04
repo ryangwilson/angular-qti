@@ -2,13 +2,14 @@
     display: none !important;
 }
 
-sim-slide, sim-view {
+simulation > *, sim-slide > * {
     display: block;
     position: relative;
 }
 
-sim-function, sim-properties, sim-command, sim-log, sim-commands, sim-events, sim-mixins {
-    display: none;
+sim-slide, sim-view {
+    display: block;
+    position: relative;
 }
 
 sim-slide {
@@ -17,4 +18,3 @@ sim-slide {
     padding: 10px;
     margin: 10px;
 }
-

@@ -18,7 +18,7 @@ angular.module('simulation').directive('simScript', function ($http, $compile) {
                     scripts[url] = true;
 
                     var path = '{val}'.supplant({val: url});
-                    console.log('path', path);
+                    //console.log('path', path);
                     $http.get(path).success(function (content) {
 
                         var fn = Function;

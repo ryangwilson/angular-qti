@@ -157,12 +157,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                         //(try commenting out this line to see what happens!)
                         compiled($scope);
 
-                        setTimeout(function(){
+                        setTimeout(function () {
                             console.log(externalFiles);
                             angular.forEach(externalFiles, function (isLoaded, filepath) {
                                 console.log('##filepath##', filepath);
                             });
-                        }, 1000)
+                        }, 1000);
                     });
 
                 }

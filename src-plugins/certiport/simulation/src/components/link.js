@@ -23,7 +23,7 @@ angular.module('simulation').directive('simLink', function ($http) {
                         content = content.replace(/([\#\.\D]{1}[A-Za-z]{1}[\w\.\s]+)(,|\{)/g, function (match, p1, p2) {
                             return (slideClass + ' ' + p1.trim() + p2).trim();
                         });
-                        console.log('content', content);
+                        //console.log('content', content);
                         //$element.html('<style>\n' + content + '\n</style>');
                         $element[0].outerHTML = ('<style>' + content + '</style>');
 

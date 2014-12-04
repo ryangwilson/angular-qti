@@ -30,8 +30,8 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                         html = $scope.parseBindables(html);
                         html = $scope.parseExternalFiles(html);
 
-                        var htmlEl = angular.element(html);
-                        html = htmlEl.html();
+                        //var htmlEl = angular.element(html);
+                        //html = htmlEl.html();
                         html = '<!-- ' + val + ' -->' + newline + html;
                         var el = angular.element(html);
 
