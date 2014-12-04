@@ -16,7 +16,8 @@ angular.module('simulation').directive('simMixin', function ($http, $compile) {
 
                 mixins[url] = true;
 
-                var path = '{val}.{ext}'.supplant({val: url, ext: $scope.extension || 'xml'});
+                //var path = '{val}.{ext}'.supplant({val: url, ext: $scope.extension || 'xml'});
+                var path = '{val}.{ext}'.supplant({val: url, ext: 'xml'});
                 $http.get(path).success(function (html) {
 
                     html = $scope.parseRegisteredTags(html);

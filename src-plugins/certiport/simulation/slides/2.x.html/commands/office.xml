@@ -1,0 +1,5 @@
+<commands xmlns="http://certiport.com/hammer/sdk/commands">
+    <command name="chat">
+        <log>{{displayName}} said: "{{message}}"</log>
+    </command>
+</commands>

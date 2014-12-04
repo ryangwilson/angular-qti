@@ -57,23 +57,29 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
             // :: init ::
             (function init() {
                 var url;
+
+                // TODO: IN DEVELOPMENT
                 if ($attrs.url) {
-                    if ($attrs.url[0] === '\'') {
+                    if ($attrs.url[0] === '\'') { // if the string is in quotes it is a literal
                         url = $attrs.url.replace(/\'/gim, '');
-                        $scope.load({
+                        $scope.loadSlide({
                             templateUrl: url,
                             targetEl: $element,
-                            targetScope: $scope,
-                            success: function() {
-                                $timeout(function () {
-                                    var targetScope = $scope;
-                                    var data = targetScope.getMerged('properties');
-                                    $scope.$broadcast('load', targetScope, data);
-                                }, 100);
-                            }
+                            targetScope: $scope
+                        }).then(function(){
+                            //$timeout(function () {
+                                var targetScope = $scope;
+                                var data = targetScope.getMerged('properties');
+                                $scope.$broadcast('load', targetScope, data);
+                            //}, 100);
                         });
-                    } else {
-                        console.log('THIS HAS NOT BEEN DONE');
+                    } else { // otherwise it is referencing a model
+                        var filepath = $attrs.url.match(/([\w\.\/]+)(?=::)/gim);
+                        console.warn('SLIDE SUBSCRIBING TO EVENT FOR', filepath.toString());
+                        var off = $scope.$on(filepath.toString(), function () {
+                            off();
+                            console.info('#### SLIDE READY TO LOAD ####', $attrs.url);
+                        });
                     }
                 }
             })();

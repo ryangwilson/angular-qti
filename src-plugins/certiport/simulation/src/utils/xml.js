@@ -7,6 +7,9 @@
 
 (function () {
     var xmlToJson = function (node) {
+        if (typeof node === 'string') {
+            node = strToXML(node).firstElementChild;
+        }
 
         var data = {};
 
@@ -99,7 +102,7 @@
         return str;
     };
 
-    angular.module('simulation').service('xml', function () {
+    angular.module('simulation').service('XMLService', function () {
         this.toJson = xmlToJson;
         this.toString = xmlToStr;
         this.parse = strToXML;

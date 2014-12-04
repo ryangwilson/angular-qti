@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
 <root xmlns="http://certiport.com/hammer/sdk/model">
     <val1>Empty</val1>
     <val2>Empty</val2>
@@ -10,4 +8,6 @@
     <hello><![CDATA[Hello, from models/app: <hello>]]></hello>
     <myVal>App Value</myVal>
     <count>8</count>
+
+    <slide1>slides/2.x.html/slide1</slide1>
 </root>
