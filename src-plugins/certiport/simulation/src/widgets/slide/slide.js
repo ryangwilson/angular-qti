@@ -5,64 +5,27 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
         scope: true,
         controller: function ($scope, $element, $attrs) {
 
-            var newline = '\n';
-
             var slideClass = 'slide_' + $scope.$id;
             $element.addClass(slideClass);
 
             $scope.properties = {};
             $scope.functions = {};
 
-            var load = function (val) {
-                if (val !== undefined) {
-
-                    //console.log('slide url:', val);
-
-                    var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
-                    $http.get(path).success(function (html) {
-
-                        // prep
-                        html = $scope.openClosedTags(html);
-                        // backwards compatibility
-                        html = $scope.parseEvent(html);
-                        // parsers
-                        html = $scope.parseRegisteredTags(html);
-                        html = $scope.parseBindables(html);
-                        html = $scope.parseExternalFiles(html);
-
-                        //var htmlEl = angular.element(html);
-                        //html = htmlEl.html();
-                        html = '<!-- ' + val + ' -->' + newline + html;
-                        var el = angular.element(html);
-
-                        //console.log('success:', el.html());
-
-                        //compile the view into a function.
-                        var compiled = $compile(el);
-
-                        //append our view to the element of the directive.
-                        $element.append(el);
-
-                        //bind our view to the scope!
-                        //(try commenting out this line to see what happens!)
-                        compiled($scope);
-
-                    });
-
-                    $timeout(function () {
-                        var targetScope = $scope;
-                        var data = targetScope.getMerged('properties');
-                        $scope.$broadcast('load', targetScope, data);
-                    }, 100);
-                }
-            };
-
-            var registerFunction = function (name, fn) {
+            /**
+             * Registers functions on the slide's scope
+             * @param name
+             * @param fn
+             */
+            $scope.registerFunction = function (name, fn) {
                 //console.log('register', name, fn);
                 $scope.functions[name] = fn;
             };
 
-            var invoke = function (functionName) {
+            /**
+             * Calls a function on the slide.
+             * @param functionName
+             */
+            $scope.invoke = function (functionName) {
                 if (typeof $scope.functions[functionName] === 'function') {
 
                     var targetScope = $scope;
@@ -72,7 +35,12 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                 }
             };
 
-            var getMerged = function (prop) {
+            /**
+             * Traverses the parent chain to get the current state of all the properties
+             * @param prop
+             * @returns {Object}
+             */
+            $scope.getMerged = function (prop) {
                 var props = [{}];
                 var currentScope = $scope;
                 while (currentScope.$parent) {
@@ -86,17 +54,20 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                 return angular.extend.apply(null, props);
             };
 
-            $scope.registerFunction = registerFunction;
-            $scope.invoke = invoke;
-            $scope.getMerged = getMerged;
-
             // :: init ::
             (function init() {
                 var url;
                 if ($attrs.url) {
                     if ($attrs.url[0] === '\'') {
                         url = $attrs.url.replace(/\'/gim, '');
-                        load(url);
+                        $scope.loadTemplate(url, $scope, $element, function(){
+                            //console.log('ready', url);
+                            $timeout(function () {
+                                var targetScope = $scope;
+                                var data = targetScope.getMerged('properties');
+                                $scope.$broadcast('load', targetScope, data);
+                            }, 100);
+                        });
                     } else {
                         console.log('THIS HAS NOT BEEN DONE');
                     }

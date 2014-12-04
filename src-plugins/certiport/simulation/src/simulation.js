@@ -1,7 +1,5 @@
 /* global angular */
 angular.module('simulation').directive('simulation', function ($http, $compile) {
-
-
     return {
         restrict: 'AE',
         scope: {
@@ -15,6 +13,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             var openBindTag = '{%';
             var closeBindTag = '%}';
             var newline = '\n';
+            var counter = 0;
             var externalFiles = {};
 
             var regExp, patterns = [];
@@ -130,42 +129,39 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 return content.split(openBindTag).join(openCurly).split(closeBindTag).join(closeCurly);
             };
 
-            var onUrlChange = function (val) {
-                if (val !== undefined) {
+            var loadTemplate = function (url, $scope, $el, callback) {
+                var path = '{val}.{ext}'.supplant({val: url, ext: $scope.extension || 'xml'});
+                $http.get(path).success(function (html) {
 
-                    //console.log('slide url: {val}.{ext}'.supplant({val: val, ext: $scope.extension}));
+                    // :: prep ::
+                    html = openClosedTags(html);
 
-                    var path = '{val}.{ext}'.supplant({val: val, ext: $scope.extension || 'xml'});
-                    $http.get(path).success(function (html) {
+                    // :: backwards compatibility ::
+                    html = parseEvent(html);
 
-                        html = '<!-- ' + val + ' -->' + newline + html;
-                        html = openClosedTags(html);
-                        html = parseEvent(html);
-                        html = parseRegisteredTags(html);
-                        html = parseBindables(html);
-                        html = parseExternalFiles(html);
+                    // :: parsers ::
+                    html = parseRegisteredTags(html);
+                    html = parseBindables(html);
+                    html = parseExternalFiles(html);
 
-                        var el = angular.element(html);
+                    // :: comments - file indicator ::
+                    html = '<!-- ' + url + ' -->' + newline + html;
 
-                        //compile the view into a function.
-                        var compiled = $compile(el);
+                    var el = angular.element(html);
 
-                        //append our view to the element of the directive.
-                        $element.append(el);
+                    //compile the view into a function.
+                    var compiled = $compile(el);
 
-                        //bind our view to the scope!
-                        //(try commenting out this line to see what happens!)
-                        compiled($scope);
+                    //append our view to the element of the directive.
+                    $el.append(el);
 
-                        setTimeout(function () {
-                            console.log(externalFiles);
-                            angular.forEach(externalFiles, function (isLoaded, filepath) {
-                                console.log('##filepath##', filepath);
-                            });
-                        }, 1000);
-                    });
+                    //bind our view to the scope!
+                    //(try commenting out this line to see what happens!)
+                    compiled($scope);
 
-                }
+                    callback(el);
+
+                });
             };
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
@@ -173,11 +169,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 'script', 'style', 'link', 'listener'
             ]);
 
-            $scope.openClosedTags = openClosedTags;
-            $scope.parseExternalFiles = parseExternalFiles;
+            $scope.loadTemplate = loadTemplate;
             $scope.parseRegisteredTags = parseRegisteredTags;
-            $scope.parseBindables = parseBindables;
-            $scope.reserveTags = reserveTags;
             $scope.bindable = bindable;
 
 
@@ -189,7 +182,20 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 alert(123);
             };
 
-            $scope.$watch('url', onUrlChange);
+            $scope.$watch('url', function (url) {
+                if (url) {
+                    loadTemplate(url, $scope, $element, function (el) {
+                        console.log('ready', url);
+
+                        //setTimeout(function () {
+                        //    console.log(externalFiles);
+                        //    angular.forEach(externalFiles, function (isLoaded, filepath) {
+                        //        console.log('##filepath##', filepath);
+                        //    });
+                        //}, 1000);
+                    });
+                }
+            });
         }
     };
 });

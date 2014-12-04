@@ -2,12 +2,11 @@
     display: none !important;
 }
 
-simulation > *, sim-slide > * {
-    display: block;
-    position: relative;
+.ng-isolate-scope {
+    border: 1px dashed #3498db;
 }
 
-sim-slide, sim-view {
+simulation, sim-slide, sim-view, simulation > *, sim-slide > * {
     display: block;
     position: relative;
 }
