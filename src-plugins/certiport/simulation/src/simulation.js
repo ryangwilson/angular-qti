@@ -20,7 +20,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             var regExp, patterns = [];
 
             /**
-             * Converts <tag /> to <tag></tag>
+             * Converts <tag/> to <tag></tag>
              * @param html
              * @returns {*}
              */
@@ -104,10 +104,11 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
              * @returns {*}
              */
             var parseEvent = function(html) {
-                var listenersHtml = html.match(/<(listeners)>([\s\S]*?)<\/\1>/gim);
+                var regExp = /<(listeners)>([\s\S]*?)<\/\1>/gim;
+                var listenersHtml = html.match(regExp);
                 if(listenersHtml) {
                     var updatedHtml = listenersHtml[0].replace(/<(event)(\s.*?)<\/\1>/gim, '<listener$2</listener>');
-                    html = html.replace(/<(listeners)>([\s\S]*?)<\/\1>/gim, updatedHtml);
+                    html = html.replace(regExp, updatedHtml);
                 }
                 return html;
             };
