@@ -1,14 +1,9 @@
 <slide>
 
-    <sim-link rel="stylesheet" href="slides/2.x.html/css/green.css"/>
+    <!-- Example of scoped styles (external ref) -->
+    <link rel="stylesheet" href="slides/2.x.html/css/green.css"/>
 
-    <!--<style>-->
-        <!--.green {-->
-            <!--background: green;-->
-            <!--color: #ffffff;-->
-        <!--}-->
-    <!--</style>-->
-
+    <!-- Example of scoped styles (embedded) -->
     <style>
         .blue {
             background: blue;
@@ -16,18 +11,20 @@
         }
     </style>
 
+    <!-- Example of scoped script (external ref) -->
     <script src="slides/2.x.html/scripts/callme.js"></script>
 
+    <!-- Example of scoped styles (embedded) -->
     <script>
         var abc = 123;
 
-        function test() {
+        function privateFn() {
             return 'wonderbread';
         }
 
         this.test = function (scope, properties) {
             var msg = 'you called test()';
-            console.log(msg, abc, test(), properties);
+            console.log(msg, abc, privateFn(), properties);
         }
     </script>
 
@@ -36,6 +33,7 @@
             <events click="test"></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>
+            <growl>Step changed {{models/app::distance}}</growl>
         </button>
 
         <button class="btn btn-default green" label="Green">

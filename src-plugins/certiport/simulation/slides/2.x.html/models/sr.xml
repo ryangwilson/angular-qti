@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root xmlns="http://certiport.com/hammer/sdk/model">
+    <totalWeight>0</totalWeight>
+    <totalPoints>0</totalPoints>
+    <totalPointsAvail>0</totalPointsAvail>
+
+    <!-- Hotspot -->
+    <options img="assets/images/html5_css_javascript.png">
+        <!--<hotspot path="M 27 46 L 38 177 L 89 192 L 142 177 L 153 46 L 27 46 L 27 46 Z"></hotspot>-->
+        <option id="option1" weight="1" type="rect" x="10" y="10" width="100" height="100"></option>
+        <option id="option2" weight="1" type="polygon" path="M 394 62 L 281 61 L 260 161 L 312 182 L 373 162 L 394 62 Z"></option>
+        <option id="option3" weight="1" type="polygon" path="M 504 46 L 504 184 L 615 184 L 615 86 L 577 46 Z"></option>
+    </options>
+    <selectedOptions></selectedOptions>
+    <points>0</points>
+</root>

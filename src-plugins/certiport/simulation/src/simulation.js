@@ -1,5 +1,7 @@
 /* global angular */
 angular.module('simulation').directive('simulation', function ($http, $compile) {
+
+
     return {
         restrict: 'AE',
         scope: {
@@ -13,11 +15,35 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             var openBindTag = '{%';
             var closeBindTag = '%}';
             var newline = '\n';
+            var externalFiles = {};
 
             var regExp, patterns = [];
 
-            var openClosedTags = function(html) {
+            /**
+             * Converts <tag /> to <tag></tag>
+             * @param html
+             * @returns {*}
+             */
+            var openClosedTags = function (html) {
                 return html.replace(/<([\w|-]+)(\s.*)\/>/gim, '<$1$2></$1>');
+            };
+
+            /**
+             * Finds external files that need to be loaded
+             * @param html
+             * @returns {*}
+             */
+            var parseExternalFiles = function (html) {
+                var cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
+                var files = cleanHtml.match(/[\w|\/]+::\w+/gim);
+                //console.log('extFiles', files);
+                angular.forEach(files, function(file){
+                    if(typeof externalFiles[file] === 'undefined') {
+                        externalFiles[file] = false; // has not been loaded
+                        console.log('###file###', file);
+                    }
+                });
+                return html;
             };
 
             /**
@@ -59,16 +85,16 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                 var startToken = html.indexOf('##');
                 var endToken = html.indexOf('##', startToken + 2);
                 //console.log('');
-                while(startToken && endToken) {
+                while (startToken && endToken) {
                     console.log('###found one###');
-                //    
-                //}
-                //if (endToken > startToken) {
-                //    evals = html.match(/\#{2}(.*?)\#{2}/gm);
-                //    angular.forEach(evals, function (val) {
-                //        result = dataUtil.rawEval(val.substring(2, val.length - 2));
-                //        html = html.split(val).join(result);
-                //    });
+                    //
+                    //}
+                    //if (endToken > startToken) {
+                    //    evals = html.match(/\#{2}(.*?)\#{2}/gm);
+                    //    angular.forEach(evals, function (val) {
+                    //        result = dataUtil.rawEval(val.substring(2, val.length - 2));
+                    //        html = html.split(val).join(result);
+                    //    });
                 }
             };
 
@@ -101,6 +127,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
                         html = openClosedTags(html);
                         html = parseRegisteredTags(html);
                         html = parseBindables(html);
+                        html = parseExternalFiles(html);
 
                         var el = angular.element(html);
 
@@ -125,13 +152,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile) 
             ]);
 
             $scope.openClosedTags = openClosedTags;
+            $scope.parseExternalFiles = parseExternalFiles;
             $scope.parseRegisteredTags = parseRegisteredTags;
             $scope.parseBindables = parseBindables;
             $scope.parseHashes = parseHashes;
             $scope.reserveTags = reserveTags;
             $scope.bindable = bindable;
 
-            $scope.alert = function() {
+            $scope.alert = function () {
                 alert(123);
             };
 

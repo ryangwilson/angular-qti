@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root xmlns="http://certiport.com/hammer/sdk/model">
+    <message>Hello, world! $reset</message>
+    <pass>false</pass>
+    <test>This is a test.</test>
+</root>

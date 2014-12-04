@@ -22,15 +22,13 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                     $http.get(path).success(function (html) {
 
                         html = $scope.openClosedTags(html);
+                        html = $scope.parseRegisteredTags(html);
+                        html = $scope.parseBindables(html);
+                        html = $scope.parseExternalFiles(html);
 
                         var htmlEl = angular.element(html);
                         html = htmlEl.html();
-
-                        html = $scope.parseRegisteredTags(html);
-                        html = $scope.parseBindables(html);
                         html = '<!-- ' + val + ' -->' + newline + html;
-
-
                         var el = angular.element(html);
 
                         //console.log('success:', el.html());
