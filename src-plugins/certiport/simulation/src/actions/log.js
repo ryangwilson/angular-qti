@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simLog', function ($rootScope, $interpolate, $log) {
     return {
         restrict: 'AE',

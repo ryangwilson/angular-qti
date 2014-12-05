@@ -384,12 +384,16 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     }).then(function ($el) {
                     });
 
+                    var timer;
                     var unwatch = $scope.$watch(function () {
-                        if (counter < 1) {
-                            unwatch();
-                            $log.log('%c SIM READY ', 'background: #27ae60; color: #fff');
-                            $element.removeClass('sim-cloak');
-                        }
+                        $timeout.cancel(timer);
+                        timer = $timeout(function () {
+                            if (counter < 1) {
+                                unwatch();
+                                $log.log('%c SIM READY ', 'background: #27ae60; color: #fff');
+                                $element.removeClass('sim-cloak');
+                            }
+                        }, 0);
                     });
 
                 }

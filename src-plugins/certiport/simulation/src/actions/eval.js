@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simEval', function ($interpolate, $window) {
     return {
         restrict: 'AE',

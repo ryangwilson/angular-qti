@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simExec', function ($interpolate, $rootScope, json) {
     return {
         restrict: 'AE',
