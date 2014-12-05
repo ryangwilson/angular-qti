@@ -1,4 +1,4 @@
-angular.module('simulation').directive('simCommand', function ($rootScope) {
+angular.module('simulation').directive('simCommand', function ($rootScope, $log) {
 
     var commands = {};
 
@@ -10,7 +10,8 @@ angular.module('simulation').directive('simCommand', function ($rootScope) {
         },
         controller: function ($scope, $attrs) {
             var returnVal;
-            console.log('### SIM COMMAND ###', $attrs.name);
+            $log.log('%ccommand added: ' + $attrs.name, 'color: #8e44ad');
+
             // :: init ::
             $scope.actions = [];
 
