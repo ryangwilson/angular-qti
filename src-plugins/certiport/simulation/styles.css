@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+.sim-cloak {
+    display: none !important;
+}
+
 .ng-isolate-scope {
     border: 1px dashed #3498db;
 }

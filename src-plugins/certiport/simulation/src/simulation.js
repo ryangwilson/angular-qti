@@ -289,6 +289,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             $scope.parseHashes = parseHashes;
             $scope.parseEvent = parseEvent;
 
+            // :: init ::
+            $element.addClass('sim-cloak');
+
+            reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
+                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
+                'script', 'style', 'link', 'listener'
+            ]);
+
             $scope.$watch('url', function (url) {
                 if (url) {
                     $log.log('%c SIM START ', 'background: #2980b9; color: #fff');
@@ -303,17 +311,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         if (counter < 1) {
                             unwatch();
                             $log.log('%c SIM READY ', 'background: #27ae60; color: #fff');
+                            $element.removeClass('sim-cloak');
                         }
                     });
 
                 }
             });
-
-            // :: init ::
-            reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
-                'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
-                'script', 'style', 'link', 'listener'
-            ]);
         }
     };
 });
