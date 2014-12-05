@@ -17,11 +17,19 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var regExp, patterns = [];
             var virtuals = {};
 
+            /**
+             * Increments a counter used to determine when simulation is ready
+             * @param url
+             */
             var incCounter = function (url) {
                 counter += 1;
                 $log.log('%cinc(' + counter + '): ' + url, 'color: #27ae60');
             };
 
+            /**
+             * Decrements a counter used to determine when simulation is ready
+             * @param url
+             */
             var decCounter = function (url) {
                 counter -= 1;
                 $log.log('%cdec(' + counter + '): ' + url, 'color: #c0392b');
@@ -29,8 +37,15 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             // :: Model Functionality :://
             $scope.model = {};
-
             var ds = DataService.data($scope.model);
+
+            /**
+             * Sets a property on the model, can be a complex path using a string
+             * @param path
+             * @param value
+             * @param delimiter
+             * @returns {*}
+             */
             $scope.set = function (path, value, delimiter) {
                 delimiter = delimiter || '/';
                 if (path.indexOf('::') !== -1) {
@@ -40,6 +55,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 return ds.set(path, value, delimiter);
             };
 
+            /**
+             * Gets a property on the model, can be a complex path using a string
+             * @param path
+             * @param delimiter
+             * @returns {*}
+             */
             $scope.get = function (path, delimiter) {
                 delimiter = delimiter || '/';
                 if (path.indexOf('::') !== -1) {
@@ -49,7 +70,13 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 return ds.get(path, delimiter);
             };
 
-            $scope.watch = function (path, callback) {
+            /**
+             * Watches a property on a path, will automatically parse sim paths
+             * @param path
+             * @param callback
+             * @returns {*}
+             */
+            $scope.watch = function (path, callback, deepWatch) {
 
                 if (!$scope.isBindable(path)) { // if no curly braces
 
@@ -72,7 +99,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     if (val) {
                         callback(val);
                     }
-                });
+                }, deepWatch);
 
             };
 
@@ -152,6 +179,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 return html;
             };
 
+            /**
+             * Reserved tags will be prefixed with "sim-"
+             * @param tags
+             */
             var reserveTags = function (tags) {
                 if (typeof tags === 'string') {
                     tags = tags.split(' ');
@@ -165,6 +196,11 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 });
             };
 
+            /**
+             * Appends a commands segment to the DOM as an angular element
+             * @param path
+             * @param html
+             */
             var appendCommand = function (path, html) {
 
                 html = parseRegisteredTags(html);
@@ -186,16 +222,31 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             };
 
+            /**
+             * Checks if the value is using bind tags
+             * @param val
+             * @returns {boolean}
+             */
             $scope.isBindable = function (val) {
                 val += '';
                 return val.indexOf(openBindTag) !== -1;
-                //return val.match(/{%.*?%}/gim);
             };
 
+            /**
+             * Converts sim bindable tags to angular bindable tags
+             * @param content
+             * @returns {string}
+             */
             $scope.curlify = function (content) {
                 return content.split(openBindTag).join(openCurly).split(closeBindTag).join(closeCurly);
             };
 
+
+            /**
+             * Loads a slide and all the virtuals and then appends slide to DOM
+             * @param options
+             * @returns {promise.promise|jQuery.promise|jQuery.ready.promise|promise|qFactory.Deferred.promise|dd.g.promise}
+             */
             $scope.loadSlide = function (options) {
                 // first thing we do is increment counter
                 incCounter(options.templateUrl);
@@ -238,23 +289,16 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
                     // last thing we do is decrement counter
                     decCounter(options.templateUrl);
-
-                    //var timer = setInterval(function () {
-                    //    $console.log('counter', counter);
-                    //    if(!counter) {
-                    //        var unwatch = $scope.$watch(function(){
-                    //            clearInterval(timer);
-                    //            deferred.resolve();
-                    //        })
-                    //    }
-                    //}, 100);
-
-                    //deferred.resolve();
                 });
 
                 return deferred.promise;
             };
 
+            /**
+             * Finds and loads all virtual elements of the content provided.
+             * @param content
+             * @returns {promise.promise|jQuery.promise|jQuery.ready.promise|promise|qFactory.Deferred.promise|dd.g.promise}
+             */
             $scope.loadVirtuals = function (content) {
 
                 var deferred = $q.defer();
@@ -325,6 +369,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 'script', 'style', 'link', 'listener'
             ]);
 
+            /**
+             * Watch when url has changed
+             */
             $scope.$watch('url', function (url) {
                 if (url) {
                     $log.log('%c SIM START ', 'background: #2980b9; color: #fff');
