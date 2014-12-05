@@ -15,6 +15,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var newline = '\n';
             var counter = 0;
             var regExp, patterns = [];
+            var virtuals = {};
 
             var incCounter = function (url) {
                 counter += 1;
@@ -263,40 +264,45 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 if (files) {
                     angular.forEach(files, function (url) {
 
-                        // first thing we do is increment counter
-                        incCounter(url);
+                        if (!virtuals[url]) {
 
-                        //$console.log('##VIRTUALS##', url);
-                        var ext = '.xml';// TODO: Check if extension exists, default to XML
-                        $http.get(url + ext).success(function (html) {
-                            //$console.log('xml', response.match(/xmlns="(.*?)"/gim).toString());
+                            // first thing we do is increment counter
+                            incCounter(url);
 
-                            // get the xmlns
-                            var xmlns = html.match(/xmlns\="(.*?)(?=")/gim);
-                            if (!xmlns) {
-                                throw new Error('missing require "xmlns" attribute');
-                            }
+                            virtuals[url] = true;
 
-                            // ex. xmlns="http://certiport.com/hammer/sdk/model
-                            var type = xmlns[0].split('/').pop(); // ex. model
-                            switch (type) {
-                                case 'model':
-                                    var json = XMLService.toJson(html);
-                                    //$console.log('URL', url);
-                                    $scope.set(url, json);
-                                    break;
-                                case 'commands':
-                                    appendCommand(url, html);
-                                    break;
-                            }
+                            //$console.log('##VIRTUALS##', url);
+                            var ext = '.xml';// TODO: Check if extension exists, default to XML
+                            $http.get(url + ext).success(function (html) {
+                                //$console.log('xml', response.match(/xmlns="(.*?)"/gim).toString());
 
-                            $scope.loadVirtuals(html).then(function () {
-                                deferred.resolve();
+                                // get the xmlns
+                                var xmlns = html.match(/xmlns\="(.*?)(?=")/gim);
+                                if (!xmlns) {
+                                    throw new Error('missing require "xmlns" attribute');
+                                }
+
+                                // ex. xmlns="http://certiport.com/hammer/sdk/model
+                                var type = xmlns[0].split('/').pop(); // ex. model
+                                switch (type) {
+                                    case 'model':
+                                        var json = XMLService.toJson(html);
+                                        //$console.log('URL', url);
+                                        $scope.set(url, json);
+                                        break;
+                                    case 'commands':
+                                        appendCommand(url, html);
+                                        break;
+                                }
+
+                                $scope.loadVirtuals(html).then(function () {
+                                    deferred.resolve();
+                                });
+
+                                // last thing we do is decrement counter
+                                decCounter(url);
                             });
-
-                            // last thing we do is decrement counter
-                            decCounter(url);
-                        });
+                        }
                     });
                 } else {
                     deferred.resolve();
