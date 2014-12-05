@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('height', function () {
     return {
         restrict: 'A',

@@ -4,7 +4,7 @@
  *
  * Author: Rob Taylor <roboncode@gmail.com>
  */
-
+/* global angular, ActiveXObject */
 (function () {
     var xmlToJson = function (node) {
         if (typeof node === 'string') {
@@ -92,7 +92,7 @@
     };
 
     var xmlToStr = function (xmlObject) {
-        var str
+        var str;
         if (window.ActiveXObject) {
             str = xmlObject.xml;
         } else {

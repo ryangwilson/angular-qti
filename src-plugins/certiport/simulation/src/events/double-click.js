@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('dblclick', function () {
     return {
         restrict: 'A',

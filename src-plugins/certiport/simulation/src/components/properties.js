@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simProperties', function (helpers) {
     return {
         restrict: 'AE',

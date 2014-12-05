@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('bottom', function () {
     return {
         restrict: 'A',

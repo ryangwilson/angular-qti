@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simImage', function ($compile) {
     return {
         restrict: 'AE',

@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simListener', function ($interpolate) {
     return {
         restrict: 'AE',

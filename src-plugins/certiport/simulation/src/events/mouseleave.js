@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('mouseleave', function () {
     return {
         restrict: 'A',

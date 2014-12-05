@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simFunctions', function () {
     return {
         restrict: 'AE',

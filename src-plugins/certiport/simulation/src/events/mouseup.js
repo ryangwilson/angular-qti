@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('mouseup', function () {
     return {
         restrict: 'A',

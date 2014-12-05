@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simMixins', function () {
     return {
         restrict: 'AE',

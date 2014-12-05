@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('left', function () {
     return {
         restrict: 'A',

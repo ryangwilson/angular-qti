@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').service('helpers', function () {
 
     var strToXML = function (str) {

@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('backgroundColor', function () {
     return {
         restrict: 'A',

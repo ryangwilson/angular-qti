@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('width', function () {
     return {
         restrict: 'A',

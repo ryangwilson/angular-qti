@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('mouseenter', function () {
     return {
         restrict: 'A',

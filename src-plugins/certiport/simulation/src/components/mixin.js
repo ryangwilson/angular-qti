@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('simulation').directive('simMixin', function ($http, $compile) {
 
     var mixins = {};
