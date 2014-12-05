@@ -356,6 +356,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             };
 
             $scope.parseRegisteredTags = parseRegisteredTags;
+            $scope.incCounter = incCounter;
+            $scope.decCounter = decCounter;
 
             // Backwards compatibility
             $scope.parseHashes = parseHashes;
@@ -366,7 +368,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
                 'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
-                'script', 'style', 'link', 'listener'
+                'script', 'style', 'link', 'listener', 'image'
             ]);
 
             /**
