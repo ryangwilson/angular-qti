@@ -164,6 +164,27 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 });
             };
 
+            var appendCommand = function (path, html) {
+
+                html = parseRegisteredTags(html);
+
+                // add path
+                html = html.replace(/name="(\w+)"/gim, 'name="' + path + '::$1"');
+
+                // create angular element
+                var el = angular.element(html);
+
+                //compile the view into a function.
+                var compiled = $compile(el);
+
+                //bind our view to the scope!
+                compiled($scope);
+
+                //append our view to the element of the directive.
+                $element.append(el);
+
+            };
+
             $scope.isBindable = function (val) {
                 val += '';
                 return val.indexOf(openBindTag) !== -1;
@@ -204,7 +225,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     var compiled = $compile(el);
 
                     //bind our view to the scope!
-                    //(try commenting out this line to see what happens!)
                     compiled(options.targetScope);
 
                     //append our view to the element of the directive.
@@ -248,11 +268,11 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
                         //$console.log('##VIRTUALS##', url);
                         var ext = '.xml';// TODO: Check if extension exists, default to XML
-                        $http.get(url + ext).success(function (response) {
+                        $http.get(url + ext).success(function (html) {
                             //$console.log('xml', response.match(/xmlns="(.*?)"/gim).toString());
 
                             // get the xmlns
-                            var xmlns = response.match(/xmlns\="(.*?)(?=")/gim);
+                            var xmlns = html.match(/xmlns\="(.*?)(?=")/gim);
                             if (!xmlns) {
                                 throw new Error('missing require "xmlns" attribute');
                             }
@@ -261,14 +281,16 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                             var type = xmlns[0].split('/').pop(); // ex. model
                             switch (type) {
                                 case 'model':
-                                    var json = XMLService.toJson(response);
+                                    var json = XMLService.toJson(html);
                                     //$console.log('URL', url);
                                     $scope.set(url, json);
-                                    $scope.$broadcast(url);
+                                    break;
+                                case 'commands':
+                                    appendCommand(url, html);
                                     break;
                             }
 
-                            $scope.loadVirtuals(response).then(function () {
+                            $scope.loadVirtuals(html).then(function () {
                                 deferred.resolve();
                             });
 

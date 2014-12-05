@@ -10,7 +10,7 @@ angular.module('simulation').directive('simCommand', function ($rootScope) {
         },
         controller: function ($scope, $attrs) {
             var returnVal;
-
+            console.log('### SIM COMMAND ###', $attrs.name);
             // :: init ::
             $scope.actions = [];
 
