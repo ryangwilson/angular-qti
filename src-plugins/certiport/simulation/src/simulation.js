@@ -17,6 +17,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var regExp, patterns = [];
             var virtuals = {};
 
+            $scope.$$data = {};
+            var ds = DataService.data($scope.$$data);
+
+            $scope.$$strings = {};
+
+            //$scope.strings = {};
+            //var dsStrings = DataService.data($scope.strings);
+
             /**
              * Increments a counter used to determine when simulation is ready
              * @param url
@@ -36,9 +44,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             };
 
             // :: Model Functionality :://
-            $scope.model = {};
-            var ds = DataService.data($scope.model);
-
             /**
              * Sets a property on the model, can be a complex path using a string
              * @param path
@@ -92,7 +97,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 path = path.substring(2, path.length - 2);
 
                 if (path.indexOf('::') !== -1) {
-                    path = 'model["' + path.split('::').join('|').split(delimiter).join('|').split('|').join('"]["') + '"]';
+                    path = '$$data["' + path.split('::').join('|').split(delimiter).join('|').split('|').join('"]["') + '"]';
                 }
 
                 return $scope.$watch(path, function (val) {
@@ -126,13 +131,33 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             };
 
             /**
-             * Converts curlies to tag that will not automatically be parsed by angular
+             * converts string
+             * @param html
+             */
+            var parseStrings = function (html) {
+                html = html.replace(/\$([\w\.]+)/gim, "{{::@@strings.$1}}");
+                html = html.split('@@').join('$$'); // had to do this because $ in regex string causing issues
+
+                return html;
+            };
+
+            /**
+             * Converts curlies to tag that will not automatically be parsed by angular.
+             * Ignore <view> backwards compatibility. If <virtual> tag, only parse virtual tag.
              * Ex. {{ myVal }} to {% myVal %}
              * @param html (string)
              * @returns html (string)
              */
             var parseBindables = function (html) {
+
                 var $el = angular.element('<div>' + html + '</div>'); // the div is a temporary wrapper
+
+                //var viewEl = $el[0].querySelector('sim-view');
+                //var viewHtml;
+                //if(viewEl) {
+                //    viewHtml = viewEl.innerHTML;
+                //}
+
                 var childNodes = $el[0].childNodes;
                 var len = childNodes.length;
                 for (var e = 0; e < len; e++) {
@@ -140,7 +165,14 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         childNodes[e].outerHTML = childNodes[e].outerHTML.split(openCurly).join(openBindTag).split(closeCurly).join(closeBindTag);
                     }
                 }
+
+                //if(viewEl) {
+                //    var $viewEl = angular.element(viewEl);
+                //    $viewEl.html(viewHtml);
+                //}
+
                 return $el.html();
+
             };
 
             /**
@@ -163,6 +195,26 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     //    });
                 }
             };
+
+            /**
+            * Converts view tag content back to curlies. This is for backwards compatibility.
+            * @param html
+            */
+            //var parseViewBindables = function (html) {
+            //    var $el = angular.element('<div>' + html + '</div>'); // the div is a temporary wrapper
+            //    var viewEl = $el[0].querySelector('sim-view');
+            //    if(viewEl) {
+            //        var delimiter = '/';
+            //        path = path.substring(2, path.length - 2);
+            //
+            //        if (path.indexOf('::') !== -1) {
+            //            path = '$$data["' + path.split('::').join('|').split(delimiter).join('|').split('|').join('"]["') + '"]';
+            //        }
+            //
+            //        viewEl.innerHTML = $scope.curlify(viewEl.innerHTML);
+            //    }
+            //    return $el.html();
+            //};
 
             /**
              * Converts <event> tags to <listener> tags for backwards compatibility.
@@ -267,6 +319,8 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     // :: parsers ::
                     html = parseRegisteredTags(html);
                     html = parseBindables(html);
+                    html = parseStrings(html);
+                    //html = parseViewBindables(html);
 
                     // :: comments - file indicator ::
                     html = '<!-- ' + options.templateUrl + ' -->' + newline + html;
@@ -368,7 +422,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
                 'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
-                'script', 'style', 'link', 'listener', 'image'
+                'script', 'style', 'link', 'listener', 'image', 'strings'
             ]);
 
             /**

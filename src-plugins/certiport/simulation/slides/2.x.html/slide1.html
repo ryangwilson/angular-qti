@@ -32,14 +32,14 @@
     <view>
         <sim-image src="//cdn1.iconfinder.com/data/icons/iconza-circle-social/64/697066-html5-128.png"></sim-image>
         
-        <button class="btn btn-default blue" label="Blue">
-            <events click="test"></events>
+        <button class="btn btn-default blue" label="$colors.blue">
+            <events click="test" mousedown=""></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>
             <growl>Step changed {{slides/2.x.html/models/app::distance}}</growl>
         </button>
 
-        <button class="btn btn-default green" label="Green">
+        <button class="btn btn-default green" label="$green">
             <events click="test"></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>
