@@ -6,9 +6,6 @@ angular.module('simulation').directive('simEval', function ($interpolate) {
 
             var content = el.text();
 
-            // [sim v2.1] backwards compatible
-            content = content.split('event.data.').join('');
-
             content = scope.curlify(content);
 
             scope.registerAction(function (targetScope, data) {

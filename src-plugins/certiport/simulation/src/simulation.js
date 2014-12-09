@@ -2,11 +2,8 @@
 angular.module('simulation').directive('simulation', function ($http, $compile, $q, $timeout, XMLService, DataService) {
     return {
         restrict: 'AE',
-        scope: {
-            url: '=',
-            extension: '@'
-        },
-        controller: function ($scope, $element) {
+        scope: true,
+        controller: function ($scope, $element, $attrs) {
 
             var prefixTag = 'sim-';
             var openCurly = '{{';
@@ -22,6 +19,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 slideCount: 0,
                 virtualCount: 0
             };
+
+            $scope.extension = $attrs.extension;
+            $scope.url = $scope.$eval($attrs.url);
 
             $scope.$$data = {};
             var ds = DataService.data($scope.$$data);
@@ -47,6 +47,13 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var decCounter = function (url) {
                 counter -= 1;
                 console.log('%cdec(' + counter + '): ' + url, 'color: #c0392b');
+            };
+
+
+            var slideInterceptors = [];
+
+            $scope.addSlideInterceptor = function (interceptor) {
+                slideInterceptors.push(interceptor);
             };
 
             // :: Model Functionality :://
@@ -149,20 +156,12 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
             /**
              * Converts curlies to tag that will not automatically be parsed by angular.
-             * Ignore <view> backwards compatibility. If <virtual> tag, only parse virtual tag.
              * Ex. {{ myVal }} to {% myVal %}
              * @param html (string)
              * @returns html (string)
              */
             var parseBindables = function (html) {
-
                 var $el = angular.element('<div>' + html + '</div>'); // the div is a temporary wrapper
-
-                //var viewEl = $el[0].querySelector('sim-view');
-                //var viewHtml;
-                //if(viewEl) {
-                //    viewHtml = viewEl.innerHTML;
-                //}
 
                 var childNodes = $el[0].childNodes;
                 var len = childNodes.length;
@@ -172,49 +171,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     }
                 }
 
-                //if(viewEl) {
-                //    var $viewEl = angular.element(viewEl);
-                //    $viewEl.html(viewHtml);
-                //}
-
                 return $el.html();
-
-            };
-
-            /**
-             * Converts ## tags to <eval> tags. This is for backwards compatibility.
-             * @param html (string)
-             */
-            var parseHashes = function (html) {
-                var startToken = html.indexOf('##');
-                var endToken = html.indexOf('##', startToken + 2);
-                //$console.log('');
-                while (startToken && endToken) {
-                    console.log('###found one###');
-                    //
-                    //}
-                    //if (endToken > startToken) {
-                    //    evals = html.match(/\#{2}(.*?)\#{2}/gm);
-                    //    angular.forEach(evals, function (val) {
-                    //        result = dataUtil.rawEval(val.substring(2, val.length - 2));
-                    //        html = html.split(val).join(result);
-                    //    });
-                }
-            };
-
-            /**
-             * Converts <event> tags to <listener> tags for backwards compatibility.
-             * @param html
-             * @returns {*}
-             */
-            var parseEvent = function (html) {
-                var regExp = /<(listeners)>([\s\S]*?)<\/\1>/gim;
-                var listenersHtml = html.match(regExp);
-                if (listenersHtml) {
-                    var updatedHtml = listenersHtml[0].replace(/<(event)(\s.*?)<\/\1>/gim, '<listener$2</listener>');
-                    html = html.replace(regExp, updatedHtml);
-                }
-                return html;
             };
 
             /**
@@ -302,8 +259,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     // :: prep ::
                     html = openClosedTags(html);
 
-                    // :: backwards compatibility ::
-                    html = parseEvent(html);
+                    // :: interceptors ::
+                    angular.forEach(slideInterceptors, function (interceptor) {
+                        html = interceptor(html);
+                    });
 
                     // :: parsers ::
                     html = parseRegisteredTags(html);
@@ -409,10 +368,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             $scope.incCounter = incCounter;
             $scope.decCounter = decCounter;
 
-            // Backwards compatibility
-            $scope.parseHashes = parseHashes;
-            $scope.parseEvent = parseEvent;
-
             // :: init ::
             $element.addClass(prefixTag + 'cloak');
 
@@ -422,18 +377,17 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             ]);
 
 
-            var padRight = function (str) {
-                var filler = '                                        ';
-                return str + filler.slice(str.length);
-            };
-
             /**
              * Watch when url has changed
              */
             $scope.$watch('url', function (url) {
+
                 if (url) {
                     analytics.startTime = Date.now();
                     console.log('%c SIM START ', 'background: #2980b9; color: #fff');
+
+                    $scope.$broadcast('SIM_SETUP');
+
                     $scope.loadSlide({
                         templateUrl: url,
                         targetScope: $scope,
@@ -448,7 +402,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                             if (counter < 1) {
                                 unwatch();
 
-                                console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block', 'SLIDE READY', url);
+                                console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block; width: 200px', 'SLIDE READY', url);
                                 $scope.$broadcast('sim.ready');
 
                                 $element.removeClass(prefixTag + 'cloak');
@@ -459,11 +413,11 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                 console.log('%c SIM READY ', 'background: #27ae60; color: #fff; display:block;');
 
                                 console.log('');
-                                console.log('%c' + padRight('INITIALIZATION REPORT'), 'border-bottom: 1px solid #34495e; color: #666; display:block');
+                                console.log('%cINITIALIZATION REPORT', 'border-bottom: 1px solid #34495e; color: #666; display:block;');
                                 console.log('%ctime: ' + analytics.totalTime, 'color: #34495e; display:block');
                                 console.log('%cslide count: ' + analytics.slideCount, 'color: #34495e; display:block');
                                 console.log('%cvirtual count: ' + analytics.virtualCount, 'color: #34495e; display:block');
-                                console.log('%c' + padRight(''), 'border-top: 1px solid #34495e; color: #666; display:block');
+                                console.log('');
                             }
                         }, 0);
                     });
