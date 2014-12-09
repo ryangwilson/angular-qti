@@ -13,19 +13,28 @@ angular.module('simulation').directive('simListener', function ($interpolate) {
                     var openParenIndex = handler.indexOf('(');
                     var closeParenIndex = handler.lastIndexOf(')');
                     if (openParenIndex === -1) {
-                        handler += '($scope)'; // if no parens add them
+                        // "this" refers to the scope $eval is applied on and will be passed
+                        // to other functions as targetScope
+                        handler += '(this)'; // if no parens add them
                     } else {
                         var str1 = handler.substr(0, openParenIndex + 1);
                         var str2 = handler.substr(openParenIndex + 1);
 
                         if (handler.substr(openParenIndex, closeParenIndex).match(/\w+/im)) {
-                            handler = str1 + '$scope,' + str2; // if callback has args
+                            // "this" refers to the scope $eval is applied on and will be passed
+                            // to other functions as targetScope
+                            handler = str1 + 'this, ' + str2; // if callback has args
                         } else {
-                            handler = str1 + '$scope' + str2; // if callback has no args
+                            // "this" refers to the scope $eval is applied on and will be passed
+                            // to other functions as targetScope
+                            handler = str1 + 'this' + str2; // if callback has no args
                         }
                     }
+
+                    // "functions" is the namespace we use to store functions onto
                     handler = 'functions.' + handler; // add functions. so it can be found
                     handler = $scope.curlify(handler);
+
                     var exp = $interpolate(handler); // interpolate any {{}}
                     var interpolatedHandler = exp(data);
                     $scope.$eval(interpolatedHandler); // evaluate expression

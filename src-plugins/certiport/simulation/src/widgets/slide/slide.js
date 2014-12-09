@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('simulation').directive('simSlide', function ($http, $compile, $timeout) {
+angular.module('simulation').directive('simSlide', function ($log) {
     return {
         restrict: 'AE',
         scope: true,
@@ -36,6 +36,50 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
             };
 
             /**
+             * Looks for <% %> in content and will try to invoke function in the following order
+             * 1. Check if function exists on scope
+             * 2. Check if function exists on scope.functions
+             * 3. Check if function exists on global scope
+             *
+             * Supports both relative and explicit definitions. If user defines function as
+             * myCallback() then the parser will add "this." to the front => this.myCallback().
+             * If user defines with an explicit dot syntax, like so, window.myCallback(),
+             * not change will occur.
+             * @param content
+             */
+            $scope.parseFunctions = function (content) {
+                content = content || '';
+                var funcs = content.match(/(<%=?)((.|\n)*?)(%>)/gim);
+                var fn = Function;
+
+                var returnVal = '';
+
+                angular.forEach(funcs, function (func) {
+                    func = func.substring(3, func.length - 2).trim();
+
+                    if (!func.match(/\w+\./im)) {
+                        func = 'this.' + func;
+                    }
+
+                    try {
+                        returnVal += (new fn('return (' + func + ');')).apply($scope);
+                    } catch (e) {
+                        try {
+                            returnVal += (new fn('return (' + func + ');')).apply($scope.functions);
+                        } catch (e) {
+                            try {
+                                returnVal += (new fn('return (' + func + ');')).apply(window);
+                            } catch (e) {
+                                $log.warn('Could not invoke: ' + func);
+                            }
+                        }
+                    }
+                });
+
+                return returnVal;
+            };
+
+            /**
              * Traverses the parent chain to get the current state of all the properties
              * @param prop
              * @returns {Object}
@@ -62,12 +106,17 @@ angular.module('simulation').directive('simSlide', function ($http, $compile, $t
                     targetEl: $element,
                     targetScope: $scope
                 }).then(function () {
-                    //$timeout(function () {
-                    var targetScope = $scope;
-                    var data = targetScope.getMerged('properties');
-                    $scope.$broadcast('load', targetScope, data);
-                    //}, 100);
+                    //var targetScope = $scope;
+                    //var data = targetScope.getMerged('properties');
+                    console.log('%cslide ready ' + url, 'color: #8e44ad');
+                    //$scope.$broadcast('load', targetScope, data);
                 });
+            });
+
+            $scope.$on('sim::ready', function () {
+                var targetScope = $scope;
+                var data = targetScope.getMerged('properties');
+                $scope.$broadcast('load', targetScope, data);
             });
 
 

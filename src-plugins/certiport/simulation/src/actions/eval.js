@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('simulation').directive('simEval', function ($interpolate, $window) {
+angular.module('simulation').directive('simEval', function ($interpolate) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
@@ -17,15 +17,17 @@ angular.module('simulation').directive('simEval', function ($interpolate, $windo
                 var parsedData = exp(data);
 
                 //console.log('parsed', parsedData);
+                console.log('whoisscope', scope.functions.uppercase, parsedData);
 
                 var fn = Function;
-                var result = (new fn('var result = (' + parsedData + ');')).apply(scope);
-
-                //console.log('result', result);
-
+                var returnVal = (new fn('return (' + parsedData + ');')).apply(scope);
+                if(returnVal === undefined) {
+                    return returnVal;
+                    //el.remove();
+                    //el.outerHTML()
+                }
             });
 
-            el.remove();
         }
     };
 });

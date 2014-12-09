@@ -13,6 +13,8 @@ angular.module('simulation').directive('simLog', function ($rootScope, $interpol
             scope.registerAction(function (targetScope, data) {
                 var exp = $interpolate(content);
                 var parsedData = exp(data);
+
+                parsedData = scope.parseFunctions(parsedData);
                 $log.log(parsedData);
             });
 

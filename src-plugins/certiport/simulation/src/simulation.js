@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('simulation').directive('simulation', function ($http, $compile, $q, $log, $timeout, XMLService, DataService) {
+angular.module('simulation').directive('simulation', function ($http, $compile, $q, $timeout, XMLService, DataService) {
     return {
         restrict: 'AE',
         scope: {
@@ -8,6 +8,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
         },
         controller: function ($scope, $element) {
 
+            var prefixTag = 'sim-';
             var openCurly = '{{';
             var closeCurly = '}}';
             var openBindTag = '{%';
@@ -16,6 +17,11 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             var counter = 0;
             var regExp, patterns = [];
             var virtuals = {};
+
+            var analytics = {
+                slideCount: 0,
+                virtualCount: 0
+            };
 
             $scope.$$data = {};
             var ds = DataService.data($scope.$$data);
@@ -31,7 +37,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
              */
             var incCounter = function (url) {
                 counter += 1;
-                $log.log('%cinc(' + counter + '): ' + url, 'color: #27ae60');
+                console.log('%cinc(' + counter + '): ' + url, 'color: #27ae60');
             };
 
             /**
@@ -40,7 +46,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
              */
             var decCounter = function (url) {
                 counter -= 1;
-                $log.log('%cdec(' + counter + '): ' + url, 'color: #c0392b');
+                console.log('%cdec(' + counter + '): ' + url, 'color: #c0392b');
             };
 
             // :: Model Functionality :://
@@ -184,7 +190,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                 var endToken = html.indexOf('##', startToken + 2);
                 //$console.log('');
                 while (startToken && endToken) {
-                    $log.log('###found one###');
+                    console.log('###found one###');
                     //
                     //}
                     //if (endToken > startToken) {
@@ -195,26 +201,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     //    });
                 }
             };
-
-            /**
-            * Converts view tag content back to curlies. This is for backwards compatibility.
-            * @param html
-            */
-            //var parseViewBindables = function (html) {
-            //    var $el = angular.element('<div>' + html + '</div>'); // the div is a temporary wrapper
-            //    var viewEl = $el[0].querySelector('sim-view');
-            //    if(viewEl) {
-            //        var delimiter = '/';
-            //        path = path.substring(2, path.length - 2);
-            //
-            //        if (path.indexOf('::') !== -1) {
-            //            path = '$$data["' + path.split('::').join('|').split(delimiter).join('|').split('|').join('"]["') + '"]';
-            //        }
-            //
-            //        viewEl.innerHTML = $scope.curlify(viewEl.innerHTML);
-            //    }
-            //    return $el.html();
-            //};
 
             /**
              * Converts <event> tags to <listener> tags for backwards compatibility.
@@ -300,16 +286,19 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
              * @returns {promise.promise|jQuery.promise|jQuery.ready.promise|promise|qFactory.Deferred.promise|dd.g.promise}
              */
             $scope.loadSlide = function (options) {
+
+                console.log('%cloading slide ' + options.templateUrl + ' ', 'color: #bdc3c7');
+
                 // first thing we do is increment counter
                 incCounter(options.templateUrl);
-
-                //$console.log('counter', counter, options.templateUrl);
+                analytics.slideCount += 1;
 
                 var deferred = $q.defer();
                 var path = '{val}.{ext}'.supplant({val: options.templateUrl, ext: $scope.extension || 'xml'});
 
                 $http.get(path).success(function (html) {
 
+                    // TODO: Possibly break out the parsers (?)
                     // :: prep ::
                     html = openClosedTags(html);
 
@@ -320,7 +309,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     html = parseRegisteredTags(html);
                     html = parseBindables(html);
                     html = parseStrings(html);
-                    //html = parseViewBindables(html);
 
                     // :: comments - file indicator ::
                     html = '<!-- ' + options.templateUrl + ' -->' + newline + html;
@@ -336,8 +324,10 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     //append our view to the element of the directive.
                     options.targetEl.append(el);
 
-                    $scope.loadVirtuals(html).then(function () {
-                        //$console.log('### DONE LOADING VIRTUALS ####', options.templateUrl);
+                    //console.log('ATTEMPT LOAD VIRTUALS', path);
+                    $scope.loadVirtuals(html, path).then(function () {
+                        //console.log('### DONE LOADING VIRTUALS ####', options.templateUrl);
+                        console.log('%cvirtuals loaded for ' + options.templateUrl, 'color: #3498db');
                         deferred.resolve();
                     });
 
@@ -353,19 +343,21 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
              * @param content
              * @returns {promise.promise|jQuery.promise|jQuery.ready.promise|promise|qFactory.Deferred.promise|dd.g.promise}
              */
-            $scope.loadVirtuals = function (content) {
+            $scope.loadVirtuals = function (content, url) {
 
                 var deferred = $q.defer();
                 var cleanHtml = content.replace(/<!--[\s\S]*?-->/g, '');
                 var files = cleanHtml.match(/([\w\.\/]+)(?=::)/gim);
 
                 if (files) {
+                    var virtualCount = 0;
                     angular.forEach(files, function (url) {
 
                         if (!virtuals[url]) {
-
+                            virtualCount += 1;
                             // first thing we do is increment counter
                             incCounter(url);
+                            analytics.virtualCount += 1
 
                             virtuals[url] = true;
 
@@ -385,7 +377,6 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                 switch (type) {
                                     case 'model':
                                         var json = XMLService.toJson(html);
-                                        //$console.log('URL', url);
                                         $scope.set(url, json);
                                         break;
                                     case 'commands':
@@ -393,7 +384,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                         break;
                                 }
 
-                                $scope.loadVirtuals(html).then(function () {
+                                $scope.loadVirtuals(html, url).then(function () {
                                     deferred.resolve();
                                 });
 
@@ -401,8 +392,13 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                 decCounter(url);
                             });
                         }
+
+                        if (virtualCount === 0) {
+                            deferred.resolve();
+                        }
                     });
                 } else {
+                    //console.info('NO VIRTUALS TO LOAD', url);
                     deferred.resolve();
                 }
 
@@ -418,19 +414,26 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             $scope.parseEvent = parseEvent;
 
             // :: init ::
-            $element.addClass('sim-cloak');
+            $element.addClass(prefixTag + 'cloak');
 
             reserveTags(['exec', 'log', 'events', 'event', 'commands', 'command', 'functions', 'function',
                 'properties', 'listeners', 'button', 'slide', 'mixins', 'mixin', 'view', 'eval', 'virtual',
                 'script', 'style', 'link', 'listener', 'image', 'strings'
             ]);
 
+
+            var padRight = function (str) {
+                var filler = '                                        ';
+                return str + filler.slice(str.length);
+            };
+
             /**
              * Watch when url has changed
              */
             $scope.$watch('url', function (url) {
                 if (url) {
-                    $log.log('%c SIM START ', 'background: #2980b9; color: #fff');
+                    analytics.startTime = Date.now();
+                    console.log('%c ' + padRight('SIM START'), 'background: #2980b9; color: #fff');
                     $scope.loadSlide({
                         templateUrl: url,
                         targetScope: $scope,
@@ -444,8 +447,19 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         timer = $timeout(function () {
                             if (counter < 1) {
                                 unwatch();
-                                $log.log('%c SIM READY ', 'background: #27ae60; color: #fff');
-                                $element.removeClass('sim-cloak');
+                                analytics.endTime = Date.now();
+                                analytics.totalTime = analytics.endTime - analytics.startTime;
+                                console.log('%cslide ready ' + url, 'color: #8e44ad');
+                                console.log('%c ' + padRight('SIM READY'), 'background: #27ae60; color: #fff');
+                                console.log('%c ' + padRight('INITIALIZATION REPORT'), 'background: #34495e; color: #fff');
+                                console.log('%ctime: ' + analytics.totalTime, 'color: #34495e');
+                                console.log('%cslide count: ' + analytics.slideCount, 'color: #34495e');
+                                console.log('%cvirtual count: ' + analytics.virtualCount, 'color: #34495e');
+                                console.log('%c ' + padRight('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'), 'background: #34495e; color: #fff');
+
+                                $element.removeClass(prefixTag + 'cloak');
+
+                                $scope.$broadcast('sim::ready');
                             }
                         }, 0);
                     });

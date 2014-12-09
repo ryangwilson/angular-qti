@@ -23,24 +23,28 @@
             return 'wonderbread';
         }
 
-        this.test = function (scope, properties) {
+        this.uppercase = function (text) {
+            return String(text).toUpperCase();
+        };
+
+        this.clickHandler = function (scope, properties) {
             var msg = 'you called test()';
             console.log(msg, abc, privateFn(), properties);
-        }
+        };
     </script>
 
     <view>
         <sim-image src="//cdn1.iconfinder.com/data/icons/iconza-circle-social/64/697066-html5-128.png"></sim-image>
-        
+
         <button class="btn btn-default blue" label="$colors.blue">
-            <events click="test" mousedown=""></events>
+            <events click="clickHandler" mousedown=""></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>
             <growl>Step changed {{slides/2.x.html/models/app::distance}}</growl>
         </button>
 
         <button class="btn btn-default green" label="$green">
-            <events click="test"></events>
+            <events click="clickHandler"></events>
             <events click="callMe"></events>
             <events click="callCommand"></events>
         </button>
@@ -51,6 +55,8 @@
     <!-- These are my notes {{alert(123)}} -->
     <listeners>
         <!--<listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>-->
+
+        <!-- event tag converts to listener -->
         <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
@@ -58,15 +64,18 @@
     <properties>
         <name>Rob</name>
         <message>Hello, world!</message>
+        <!--<message>Hello, world!</message>-->
     </properties>
 
     <functions>
         <function name="onLoad">
-            <log>{{displayName}} said: "{{quote}}"</log>
-            <!--<eval>alert("{{displayName}}")</eval>-->
+            <!--<log>{{displayName}} said: "{{quote}}"</log>-->
+            <!--<eval>fn.myFunc()</eval>-->
+            <!--<eval>alert('{{quote}}')</eval>-->
+            <log><%= uppercase('{{quote}}') %> ||| <%= uppercase('{{quote}}') %></log>
         </function>
         <function name="callCommand">
-            <exec command="slides/2.x.html/commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}" }</exec>
+            <exec command="slides/2.x.html/commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}"}</exec>
         </function>
     </functions>
 
