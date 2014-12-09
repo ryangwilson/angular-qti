@@ -35,7 +35,7 @@
     </script>
 
     <view>
-        <sim-image src="//cdn1.iconfinder.com/data/icons/iconza-circle-social/64/697066-html5-128.png"></sim-image>
+        <image src="//cdn1.iconfinder.com/data/icons/iconza-circle-social/64/697066-html5-128.png"></image>
 
         <button class="btn btn-default blue" label="$colors.blue">
             <events click="clickHandler" mousedown=""></events>
@@ -58,8 +58,8 @@
         <!--<listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>-->
 
         <!-- event tag converts to listener -->
-        <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
-        <event on="ready" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="slide.loaded" handler="onSlideLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="slide.ready" handler="onSlideReady({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
 
@@ -70,13 +70,13 @@
     </properties>
 
     <functions>
-        <function name="onLoad">
+        <function name="onSlideLoad">
             <!--<log>{{displayName}} said: "{{quote}}"</log>-->
             <!--<eval>fn.myFunc()</eval>-->
             <!--<eval>alert('{{quote}}')</eval>-->
             <log debug="true">This is invoked on load</log>
         </function>
-        <function name="onReady">
+        <function name="onSlideReady">
             <!--<log>{{displayName}} said: "{{quote}}"</log>-->
             <!--<eval>fn.myFunc()</eval>-->
             <!--<eval>alert('{{quote}}')</eval>-->

@@ -14,9 +14,9 @@ angular.module('simulation').directive('simLog', function ($rootScope, $interpol
                 var exp = $interpolate(content);
                 var parsedData = exp(data);
 
-                parsedData = scope.parseFunctions(parsedData);
+                parsedData = targetScope.parseFunctions(parsedData);
                 if (attrs.debug) {
-                    console.log('%c%s%c %s', 'background: #e67e22; color: #fff; display:block', '[DEBUG::' + scope.$$url + ']', 'background: #fff; color: #000; display:block', parsedData );
+                    console.log('%c%s%c %s', 'background: #e67e22; color: #fff; display:block', '[DEBUG::' + targetScope.$$url + ']', 'background: #fff; color: #000; display:block', parsedData );
                 } else {
                     console.info(parsedData);
                 }

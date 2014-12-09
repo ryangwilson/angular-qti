@@ -433,7 +433,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
             $scope.$watch('url', function (url) {
                 if (url) {
                     analytics.startTime = Date.now();
-                    console.log('%c ' + padRight('SIM START'), 'background: #2980b9; color: #fff');
+                    console.log('%c SIM START ', 'background: #2980b9; color: #fff');
                     $scope.loadSlide({
                         templateUrl: url,
                         targetScope: $scope,
@@ -447,19 +447,23 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                         timer = $timeout(function () {
                             if (counter < 1) {
                                 unwatch();
-                                analytics.endTime = Date.now();
-                                analytics.totalTime = analytics.endTime - analytics.startTime;
-                                console.log('%cslide ready ' + url, 'color: #8e44ad');
-                                console.log('%c ' + padRight('SIM READY'), 'background: #27ae60; color: #fff');
-                                console.log('%c ' + padRight('INITIALIZATION REPORT'), 'background: #34495e; color: #fff');
-                                console.log('%ctime: ' + analytics.totalTime, 'color: #34495e');
-                                console.log('%cslide count: ' + analytics.slideCount, 'color: #34495e');
-                                console.log('%cvirtual count: ' + analytics.virtualCount, 'color: #34495e');
-                                console.log('%c ' + padRight('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'), 'background: #34495e; color: #fff');
+
+                                console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block', 'SLIDE READY', url);
+                                $scope.$broadcast('sim.ready');
 
                                 $element.removeClass(prefixTag + 'cloak');
 
-                                $scope.$broadcast('sim::ready');
+                                analytics.endTime = Date.now();
+                                analytics.totalTime = analytics.endTime - analytics.startTime;
+
+                                console.log('%c SIM READY ', 'background: #27ae60; color: #fff; display:block;');
+
+                                console.log('');
+                                console.log('%c' + padRight('INITIALIZATION REPORT'), 'border-bottom: 1px solid #34495e; color: #666; display:block');
+                                console.log('%ctime: ' + analytics.totalTime, 'color: #34495e; display:block');
+                                console.log('%cslide count: ' + analytics.slideCount, 'color: #34495e; display:block');
+                                console.log('%cvirtual count: ' + analytics.virtualCount, 'color: #34495e; display:block');
+                                console.log('%c' + padRight(''), 'border-top: 1px solid #34495e; color: #666; display:block');
                             }
                         }, 0);
                     });

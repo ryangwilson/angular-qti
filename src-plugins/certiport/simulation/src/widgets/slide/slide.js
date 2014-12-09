@@ -52,7 +52,6 @@ angular.module('simulation').directive('simSlide', function ($log) {
                 var funcs = content.match(/(<%=?)((.|\n)*?)(%>)/gim);
                 var fn = Function;
 
-
                 var func;
                 var result;
                 var regex;
@@ -121,19 +120,21 @@ angular.module('simulation').directive('simSlide', function ($log) {
                     targetEl: $element,
                     targetScope: $scope
                 }).then(function () {
-                    //var targetScope = $scope;
-                    //var data = targetScope.getMerged('properties');
-                    console.log('%cslide ready ' + url, 'color: #8e44ad');
-                    //$scope.$broadcast('load', targetScope, data);
+                    var targetScope = $scope;
+                    var data = targetScope.getMerged('properties');
+                    console.log('%cslide loaded ' + url, 'color: #8e44ad');
+                    $scope.$broadcast('slide.loaded', targetScope, data);
+
+                    var unwatchReady = $scope.$on('sim.ready', function () {
+                        unwatchReady();
+                        var targetScope = $scope;
+                        var data = targetScope.getMerged('properties');
+                        //console.log('%cslide ready ' + url, 'color: #8e44ad');
+                        console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block', 'SLIDE READY', url);
+                        $scope.$broadcast('slide.ready', targetScope, data);
+                    });
                 });
             });
-
-            $scope.$on('sim::ready', function () {
-                var targetScope = $scope;
-                var data = targetScope.getMerged('properties');
-                $scope.$broadcast('load', targetScope, data);
-            });
-
 
         }
     };
