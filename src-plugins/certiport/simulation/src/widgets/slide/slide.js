@@ -84,7 +84,7 @@ angular.module('simulation').directive('simSlide', function ($log) {
                     // create regex
                     regex = new RegExp(funcName, 'im');
                     // replace first item only
-                    content = content.replace(regex, result);
+                    content = content.replace(regex, result || '');
                 });
 
                 return content;
@@ -112,6 +112,10 @@ angular.module('simulation').directive('simSlide', function ($log) {
 
             // :: init ::
             $scope.watch($attrs.url, function (url) {
+
+                // used as a reference to the slide this represents
+                $scope.$$url = url;
+
                 $scope.loadSlide({
                     templateUrl: url,
                     targetEl: $element,

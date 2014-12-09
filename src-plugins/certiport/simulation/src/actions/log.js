@@ -1,5 +1,5 @@
-/* global angular */
-angular.module('simulation').directive('simLog', function ($rootScope, $interpolate, $log) {
+/* global angular, console */
+angular.module('simulation').directive('simLog', function ($rootScope, $interpolate) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
@@ -15,7 +15,11 @@ angular.module('simulation').directive('simLog', function ($rootScope, $interpol
                 var parsedData = exp(data);
 
                 parsedData = scope.parseFunctions(parsedData);
-                $log.log(parsedData);
+                if (attrs.debug) {
+                    console.log('%c%s%c %s', 'background: #e67e22; color: #fff; display:block', '[DEBUG::' + scope.$$url + ']', 'background: #fff; color: #000; display:block', parsedData );
+                } else {
+                    console.info(parsedData);
+                }
             });
 
             el.remove();

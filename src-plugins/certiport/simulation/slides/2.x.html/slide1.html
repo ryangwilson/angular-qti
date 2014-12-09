@@ -59,6 +59,7 @@
 
         <!-- event tag converts to listener -->
         <event on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="ready" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
 
@@ -73,7 +74,14 @@
             <!--<log>{{displayName}} said: "{{quote}}"</log>-->
             <!--<eval>fn.myFunc()</eval>-->
             <!--<eval>alert('{{quote}}')</eval>-->
-            <log><%= uppercase('{{quote}}') %> ||| <%= uppercase('{{quote}}') %></log>
+            <log debug="true">This is invoked on load</log>
+        </function>
+        <function name="onReady">
+            <!--<log>{{displayName}} said: "{{quote}}"</log>-->
+            <!--<eval>fn.myFunc()</eval>-->
+            <!--<eval>alert('{{quote}}')</eval>-->
+            <log>This is invoked on ready</log>
+            <log><%= uppercase('{{displayName}}') %> => <%= uppercase('{{quote}}') %></log>
         </function>
         <function name="callCommand">
             <exec command="slides/2.x.html/commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}"}</exec>
