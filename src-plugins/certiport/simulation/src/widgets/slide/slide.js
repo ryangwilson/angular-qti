@@ -52,31 +52,42 @@ angular.module('simulation').directive('simSlide', function ($log) {
                 var funcs = content.match(/(<%=?)((.|\n)*?)(%>)/gim);
                 var fn = Function;
 
-                var returnVal = '';
 
-                angular.forEach(funcs, function (func) {
-                    func = func.substring(3, func.length - 2).trim();
+                var func;
+                var result;
+                var regex;
+
+                angular.forEach(funcs, function (funcName) {
+
+                    func = funcName.substring(3, funcName.length - 2).trim();
 
                     if (!func.match(/\w+\./im)) {
                         func = 'this.' + func;
                     }
 
                     try {
-                        returnVal += (new fn('return (' + func + ');')).apply($scope);
+                        result = (new fn('return (' + func + ');')).apply($scope);
                     } catch (e) {
                         try {
-                            returnVal += (new fn('return (' + func + ');')).apply($scope.functions);
+                            result = (new fn('return (' + func + ');')).apply($scope.functions);
                         } catch (e) {
                             try {
-                                returnVal += (new fn('return (' + func + ');')).apply(window);
+                                result = (new fn('return (' + func + ');')).apply(window);
                             } catch (e) {
                                 $log.warn('Could not invoke: ' + func);
                             }
                         }
                     }
+
+                    // escape regex
+                    funcName = funcName.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+                    // create regex
+                    regex = new RegExp(funcName, 'im');
+                    // replace first item only
+                    content = content.replace(regex, result);
                 });
 
-                return returnVal;
+                return content;
             };
 
             /**
