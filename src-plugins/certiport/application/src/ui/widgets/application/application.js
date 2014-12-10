@@ -386,7 +386,7 @@ angular.module('certiport').directive('application', function ($http, $compile, 
 
                 if (url) {
                     analytics.startTime = Date.now();
-                    console.log('%c SIM START ', 'background: #2980b9; color: #fff');
+                    console.log('%c APPLICATION START ', 'background: #2980b9; color: #fff');
 
                     $scope.$broadcast(events.APP_INIT);
 
@@ -412,10 +412,10 @@ angular.module('certiport').directive('application', function ($http, $compile, 
                                 analytics.endTime = Date.now();
                                 analytics.totalTime = analytics.endTime - analytics.startTime;
 
-                                console.log('%c SIM READY ', 'background: #27ae60; color: #fff; display:block;');
+                                console.log('%c APPLICATION READY ', 'background: #27ae60; color: #fff; display:block;');
 
                                 console.log('');
-                                console.log('%cINITIALIZATION REPORT', 'border-bottom: 1px solid #34495e; color: #666; display:block;');
+                                console.log('%cINIT REPORT', 'border-bottom: 1px solid #34495e; color: #666; display:block;');
                                 console.log('%ctime: ' + analytics.totalTime, 'color: #34495e; display:block');
                                 console.log('%cslide count: ' + analytics.slideCount, 'color: #34495e; display:block');
                                 console.log('%cvirtual count: ' + analytics.virtualCount, 'color: #34495e; display:block');
