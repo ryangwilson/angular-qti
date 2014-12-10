@@ -12,12 +12,12 @@ angular.module('simulation').directive('hammer2x', function () {
              * @param html
              * @returns {string}
              */
-            var removeEventData = function(html) {
+            var removeEventData = function (html) {
                 return html.split('event.data.').join('');
             };
 
             /**
-             * Converts <event> tags to <listener> tags for backwards compatibility.
+             * Converts <event> tags to <listener> tags.
              * @param html
              * @returns {*}
              */
@@ -32,26 +32,11 @@ angular.module('simulation').directive('hammer2x', function () {
             };
 
             /**
-             * Converts ## tags to <eval> tags. This is for backwards compatibility.
+             * Converts ## tags to <%= %> tags
              * @param html (string)
              */
             var parseHashes = function (html) {
-                //var startToken = html.indexOf('##');
-                //var endToken = html.indexOf('##', startToken + 2);
-                //$console.log('');
-                //while (startToken && endToken) {
-                //    console.log('###found one###');
-                    //
-                    //}
-                    //if (endToken > startToken) {
-                    //    evals = html.match(/\#{2}(.*?)\#{2}/gm);
-                    //    angular.forEach(evals, function (val) {
-                    //        result = dataUtil.rawEval(val.substring(2, val.length - 2));
-                    //        html = html.split(val).join(result);
-                    //    });
-                //}
-
-                return html;
+                return html.replace(/#{2}((.|\n)*?)#{2}/gim, '<%= $1 %>');
             };
 
             scope.addSlideInterceptor(removeEventData);

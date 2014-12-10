@@ -5,16 +5,16 @@ angular.module('simulation').directive('mouseleave', function () {
         link: function (scope, el, attrs) {
 
             var handler = function (evt) {
-                var action = 'invoke("' + attrs.mouseleave + '")';
-                // set on window (needed for Firefox)
-                window.event = evt;
                 // stop propagation
                 evt.stopPropagation();
-                // exec mouseleave
-                scope.$apply(action);
+                // do this for FF compatibility(?)
+                window.event = evt;
+                // invoke event
+                scope.invoke(attrs.mouseleave);
             };
 
             el.parent().on('mouseleave', handler);
+
             scope.$on('$destroy', function () {
                 el.parent().off('mouseleave', handler);
             });

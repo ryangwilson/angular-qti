@@ -5,16 +5,16 @@ angular.module('simulation').directive('mouseover', function () {
         link: function (scope, el, attrs) {
 
             var handler = function (evt) {
-                var action = 'invoke("' + attrs.mouseover + '")';
-                // set on window (needed for Firefox)
-                window.event = evt;
                 // stop propagation
                 evt.stopPropagation();
-                // exec mouseover
-                scope.$apply(action);
+                // do this for FF compatibility(?)
+                window.event = evt;
+                // invoke event
+                scope.invoke(attrs.mouseover);
             };
 
             el.parent().on('mouseover', handler);
+
             scope.$on('$destroy', function () {
                 el.parent().off('mouseover', handler);
             });

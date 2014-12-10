@@ -58,8 +58,8 @@
         <!--<listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>-->
 
         <!-- event tag converts to listener -->
-        <event on="slide.loaded" handler="onSlideLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
-        <event on="slide.ready" handler="onSlideReady({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="slide.events.init" handler="onSlideInit({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="slide.events.ready" handler="onSlideReady({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
         <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
     </listeners>
 
@@ -70,7 +70,7 @@
     </properties>
 
     <functions>
-        <function name="onSlideLoad">
+        <function name="onSlideInit">
             <!--<log>{{displayName}} said: "{{quote}}"</log>-->
             <!--<eval>fn.myFunc()</eval>-->
             <!--<eval>alert('{{quote}}')</eval>-->
@@ -81,7 +81,7 @@
             <!--<eval>fn.myFunc()</eval>-->
             <!--<eval>alert('{{quote}}')</eval>-->
             <log>This is invoked on ready</log>
-            <log><%= uppercase('{{displayName}}') %> => <%= uppercase('{{quote}}') %></log>
+            <log>## uppercase('{{displayName}}') ## => <%= uppercase('{{quote}}') %></log>
         </function>
         <function name="callCommand">
             <exec command="slides/2.x.html/commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}"}</exec>

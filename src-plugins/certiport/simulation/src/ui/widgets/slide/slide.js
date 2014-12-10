@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, events */
 angular.module('simulation').directive('simSlide', function ($log) {
     return {
         restrict: 'AE',
@@ -122,16 +122,16 @@ angular.module('simulation').directive('simSlide', function ($log) {
                 }).then(function () {
                     var targetScope = $scope;
                     var data = targetScope.getMerged('properties');
-                    console.log('%cslide loaded ' + url, 'color: #8e44ad');
-                    $scope.$broadcast('slide.loaded', targetScope, data);
+                    window.console.log('%cslide loaded ' + url, 'color: #8e44ad');
+                    $scope.$broadcast(events.SLIDE_INIT, targetScope, data);
 
-                    var unwatchReady = $scope.$on('sim.ready', function () {
+                    var unwatchReady = $scope.$on(events.APP_READY, function () {
                         unwatchReady();
                         var targetScope = $scope;
                         var data = targetScope.getMerged('properties');
                         //console.log('%cslide ready ' + url, 'color: #8e44ad');
-                        console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block', 'SLIDE READY', url);
-                        $scope.$broadcast('slide.ready', targetScope, data);
+                        window.console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block', 'SLIDE READY', url);
+                        $scope.$broadcast(events.SLIDE_READY, targetScope, data);
                     });
                 });
             });

@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, events */
 angular.module('simulation').directive('simulation', function ($http, $compile, $q, $timeout, XMLService, DataService) {
     return {
         restrict: 'AE',
@@ -200,7 +200,9 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
 
                 html = parseRegisteredTags(html);
 
-                // add path
+                // add full path to name
+                // ex. <command name="chat" /> to <command name="slides/2.x.html/commands/office::chat" />
+                // that way when we need to call it is just will just have to broadcast an event
                 html = html.replace(/name="(\w+)"/gim, 'name="' + path + '::$1"');
 
                 // create angular element
@@ -386,7 +388,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                     analytics.startTime = Date.now();
                     console.log('%c SIM START ', 'background: #2980b9; color: #fff');
 
-                    $scope.$broadcast('SIM_SETUP');
+                    $scope.$broadcast(events.APP_INIT);
 
                     $scope.loadSlide({
                         templateUrl: url,
@@ -403,7 +405,7 @@ angular.module('simulation').directive('simulation', function ($http, $compile, 
                                 unwatch();
 
                                 console.log('%c %s ', 'background: #1abc9c; color: #fff; display:block; width: 200px', 'SLIDE READY', url);
-                                $scope.$broadcast('sim.ready');
+                                $scope.$broadcast(events.APP_READY);
 
                                 $element.removeClass(prefixTag + 'cloak');
 
