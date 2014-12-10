@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root xmlns="http://certiport.com/hammer/sdk/slide">
+
+    <!-- Example of scoped styles (external ref) -->
+    <link rel="stylesheet" href="examples/v2/css/green.css"/>
+
+    <!-- Example of scoped styles (embedded) -->
+    <style>
+        .blue {
+            background: blue;
+            color: #ffffff;
+        }
+    </style>
+
+    <!-- Example of scoped script (external ref) -->
+    <script src="examples/v2/scripts/callme.js"></script>
+
+    <!-- Example of scoped styles (embedded) -->
+    <script>
+        var abc = 123;
+
+        function privateFn() {
+            return 'wonderbread';
+        }
+
+        var counter = 1;
+        this.uppercase = function (text) {
+            return String(text).toUpperCase();
+        };
+
+        this.clickHandler = function (scope, properties) {
+            var msg = 'you called test()';
+            console.log(msg, abc, privateFn(), properties);
+        };
+    </script>
+
+    <view>
+        <image src="//cdn1.iconfinder.com/data/icons/iconza-circle-social/64/697066-html5-128.png"></image>
+
+        <button class="btn btn-default blue" label="$colors.blue">
+            <events click="clickHandler" mousedown=""></events>
+            <events click="callMe"></events>
+            <events click="callCommand"></events>
+            <growl>Step changed {{examples/v2/models/app::distance}}</growl>
+        </button>
+
+        <button class="btn btn-default green" label="$green">
+            <events click="clickHandler"></events>
+            <events click="callMe"></events>
+            <events click="callCommand"></events>
+        </button>
+
+        <slide id="slide" url="examples/v2/slide2" style="overflow:auto"></slide>
+    </view>
+
+    <!-- These are my notes {{alert(123)}} -->
+    <listeners>
+        <!--<listener on="load" handler="onLoad({displayName: '{{ name }}', quote: '{{ message }}'})"></listener>-->
+
+        <!-- event tag converts to listener -->
+        <event on="slide.events.init" handler="onSlideInit({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <event on="slide.events.ready" handler="onSlideReady({displayName: '{{ name }}', quote: '{{ message }}'})"></event>
+        <!--<event on="change" target="models/app::distance" handler="notify"></event>-->
+    </listeners>
+
+    <properties>
+        <name>Rob</name>
+        <message>Hello, world!</message>
+        <!--<message>Hello, world!</message>-->
+    </properties>
+
+    <functions>
+        <function name="onSlideInit">
+            <!--<log>{{displayName}} said: "{{quote}}"</log>-->
+            <!--<eval>fn.myFunc()</eval>-->
+            <!--<eval>alert('{{quote}}')</eval>-->
+            <log debug="true">This is invoked on load</log>
+        </function>
+        <function name="onSlideReady">
+            <!--<log>{{displayName}} said: "{{quote}}"</log>-->
+            <!--<eval>fn.myFunc()</eval>-->
+            <!--<eval>alert('{{quote}}')</eval>-->
+            <log>This is invoked on ready</log>
+            <log>## uppercase('{{displayName}}') ## => <%= uppercase('{{quote}}') %></log>
+        </function>
+        <function name="callCommand">
+            <exec command="examples/v2/commands/office::chat">{ displayName: "{{ name }}", message: "{{ message }}"}</exec>
+        </function>
+    </functions>
+
+
+</root>

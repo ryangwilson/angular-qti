@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app="hammer">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hammer Lite 2</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body ng-cloak>
+
+<application url="'slides/2.x.html/slide-main'" extension="html">
+    <!-- hammer 2.x fixes -->
+    <hammer-2x></hammer-2x>
+</application>
+
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>-->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.js"></script>
+
+<script>
+    var fn = {
+        myFunc: function () {
+            console.log('myFunc called.');
+        }
+    }
+</script>
+
+<!---->
+
+<!-- application -->
+<script src="src/bootstrap.js"></script>
+<script src="src/events.js"></script>
+
+<script src="src/polyfills/string.supplant.js"></script>
+
+<!-- ui -->
+<script src="src/ui/events/click.js"></script>
+<script src="src/ui/events/double-click.js"></script>
+<script src="src/ui/events/mousedown.js"></script>
+<script src="src/ui/events/mouseenter.js"></script>
+<script src="src/ui/events/mouseleave.js"></script>
+<script src="src/ui/events/mousemove.js"></script>
+<script src="src/ui/events/mouseover.js"></script>
+<script src="src/ui/events/mouseup.js"></script>
+<script src="src/ui/widgets/application/application.js"></script>
+<script src="src/ui/widgets/button/button.js"></script>
+<script src="src/ui/widgets/image/image.js"></script>
+<script src="src/ui/widgets/slide/slide.js"></script>
+
+<!-- utils-->
+<script src="src/utils/helpers.js"></script>
+<script src="src/utils/data.js"></script>
+<script src="src/utils/json.js"></script>
+<script src="src/utils/xml.js"></script>
+
+<!-- virtuals -->
+<script src="src/virtuals/actions/eval.js"></script>
+<script src="src/virtuals/actions/exec.js"></script>
+<script src="src/virtuals/actions/log.js"></script>
+<script src="src/virtuals/position/x.js"></script>
+<script src="src/virtuals/position/y.js"></script>
+<script src="src/virtuals/position/top.js"></script>
+<script src="src/virtuals/position/left.js"></script>
+<script src="src/virtuals/position/bottom.js"></script>
+<script src="src/virtuals/position/right.js"></script>
+<script src="src/virtuals/position/width.js"></script>
+<script src="src/virtuals/position/height.js"></script>
+<script src="src/virtuals/styles/backgroundColor.js"></script>
+<script src="src/virtuals/command.js"></script>
+<script src="src/virtuals/function.js"></script>
+<script src="src/virtuals/link.js"></script>
+<script src="src/virtuals/listener.js"></script>
+<script src="src/virtuals/mixin.js"></script>
+<script src="src/virtuals/properties.js"></script>
+<script src="src/virtuals/script.js"></script>
+<script src="src/virtuals/strings.js"></script>
+<script src="src/virtuals/style.js"></script>
+<script src="src/virtuals/virtual.js"></script>
+
+
+<!-- Hammer 2.x Plugin-->
+<script src="src-plugins/2.x/plugin.js"></script>
+
+<script src="src-plugins/2.x/virtuals/commands.js"></script>
+<script src="src-plugins/2.x/virtuals/mixins.js"></script>
+<script src="src-plugins/2.x/virtuals/functions.js"></script>
+<script src="src-plugins/2.x/virtuals/listeners.js"></script>
+
+</body>
+</html>
