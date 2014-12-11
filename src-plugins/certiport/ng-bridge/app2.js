@@ -1,3 +1,4 @@
+/* global angular */
 (function () {
     var secondApp = angular.module('secondApp', []);
     secondApp.controller('SecondController', function ($scope, $timeout) {

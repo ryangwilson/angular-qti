@@ -20,10 +20,10 @@
     }
 </script>
 
-<!-- Application -->
+<!-- Application View -->
 <script src="application/build/application.js"></script>
 
-<!-- Hammer 2.x Plugin-->
+<!-- Application View - Hammer 2.x Plugin-->
 <script src="application/src-plugins/2.x/plugin.js"></script>
 <script src="application/src-plugins/2.x/virtuals/commands.js"></script>
 <script src="application/src-plugins/2.x/virtuals/mixins.js"></script>
@@ -31,8 +31,8 @@
 <script src="application/src-plugins/2.x/virtuals/listeners.js"></script>
 
 
-<!-- hammer -->
-<script src="hammer/src/hammer.js"></script>
+<!-- Hammer Platform -->
+<script src="hammer/src/bootstrap.js"></script>
 <script src="hammer/src/platform.js"></script>
 <script src="hammer/src/polyfills/string.supplant.js"></script>
 <script src="hammer/src/utils/dispatcher.js"></script>
@@ -41,6 +41,21 @@
 
 <script>
 
+    var reportCardPlugin = {
+        name: 'reportcard',
+        attrs: {}
+    };
+
+    var reportCardPlugin = {
+        name: 'io-compressed',
+        attrs: {}
+    };
+
+    var reportCardPlugin = {
+        name: 'webservice',
+        attrs: {}
+    };
+
     var hammerPlugin = {
         name: 'hammer-2x',
         attrs: {}
@@ -48,6 +63,7 @@
 
     var applicationView = {
         name: 'application',
+        module: 'certiport',
         attrs: {
             extension: 'html',
             virtuals: 'xml'
@@ -60,12 +76,16 @@
     hammer.registerView('simulation', applicationView);
     hammer.registerPlugin('backwardComp', hammerPlugin);
 
-    hammer.on('ready', function (evt) {
+    hammer.on('platform.events.init', function (evt) {
         hammer.render('simulation', {
             attrs: {
                 url: "'examples/v2/slide-main'"
             }
         });
+    });
+
+    hammer.on('platform.events.ready', function (evt, platformScope) {
+        console.log('~~~ READY ~~~', platformScope);
     });
 
 </script>

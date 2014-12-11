@@ -374,6 +374,8 @@
                                     console.log("%cslide count: " + analytics.slideCount, "color: #34495e; display:block");
                                     console.log("%cvirtual count: " + analytics.virtualCount, "color: #34495e; display:block");
                                     console.log("");
+
+                                    $scope.$root.$emit('ready');
                                 }
                             }, 0);
                         });

@@ -29,14 +29,24 @@ angular.module('hammer').directive('platform', function ($http, $compile, $windo
              * @param options
              */
             p.render = function (name, options) {
-
                 var viewEl = p.getViewElement(name, options);
 
-                var linkFn = $compile(viewEl);
-                var $viewEl = linkFn(scope);
+                //var linkFn = $compile(viewEl);
+                //var $viewEl = linkFn(scope);
 
-                el.append($viewEl);
+                // bootstrap
+                angular.bootstrap(viewEl, ['certiport']);
 
+                el.append(viewEl);
+
+                var injector = viewEl.injector();
+                var applicationScope = injector.get('$rootScope');
+
+                applicationScope.$on('ready', function () {
+                    debugger;
+                    //$scope.$on('bridge.events.ready', $scope[$attrs.ready]);
+                    //$scope.$broadcast('bridge.events.ready', applicationScope);
+                });
             };
 
             // load JS
@@ -45,7 +55,7 @@ angular.module('hammer').directive('platform', function ($http, $compile, $windo
             // load Images
             // load HTML
 
-            p.fire('ready', p);
+            p.fire('platform.events.init', p);
         }
     };
 });

@@ -7,6 +7,7 @@ app.directive('ngBridge', function ($http) {
 
                 var html = response.data;
                 var el = angular.element(html);
+                console.log('module', $attrs.module);
                 angular.bootstrap(el, [$attrs.module]);
                 $element.append(el);
 
