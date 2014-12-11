@@ -1,9 +1,43 @@
-/* global angular */
-angular.module('hammer').directive('platform', function ($http, $compile, $templateCache) {
+/* global angular, platform, extend */
+angular.module('hammer').directive('platform', function ($http, $compile, $window, $templateCache) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
-            console.log('platform');
+
+            var p = platform(attrs.name);
+
+            /**
+             * Example:
+             * hammer.init({
+             *      plugins: [ 'reportcard', 'io-compressed', 'webservice' ]
+             * });
+             */
+            p.init = function (options) {
+                var plugin;
+                options = options || {};
+                angular.forEach(options.plugins, function (name) {
+                    plugin = p.getPlugin(name);
+                    if (plugin) {
+                        debugger;
+                    }
+                });
+            };
+
+            /**
+             * Renders a view to viewport
+             * @param name
+             * @param options
+             */
+            p.render = function (name, options) {
+
+                var viewEl = p.getViewElement(name, options);
+
+                var linkFn = $compile(viewEl);
+                var $viewEl = linkFn(scope);
+
+                el.append($viewEl);
+
+            };
 
             // load JS
             // load CSS
@@ -11,29 +45,7 @@ angular.module('hammer').directive('platform', function ($http, $compile, $templ
             // load Images
             // load HTML
 
-            var html = $templateCache.get('application-tpl');
-            var linkFn = $compile(html);
-            var $el = linkFn(scope);
-            el.append($el);
-
-            //$http.get($attrs.src).then(function (response) {
-            //
-            //    var html = response.data;
-            //    var el = angular.element(html);
-            //    angular.bootstrap(el, [$attrs.module]);
-            //    $element.append(el);
-            //
-            //    var injector = el.injector();
-            //
-            //    var applicationScope = injector.get('$rootScope');
-            //    if ($attrs.ready && $scope[$attrs.ready]) {
-            //        applicationScope.$on('app.events.ready', function () {
-            //            $scope.$on('bridge.events.ready', $scope[$attrs.ready]);
-            //            $scope.$broadcast('bridge.events.ready', applicationScope);
-            //        });
-            //    }
-            //
-            //});
+            p.fire('ready', p);
         }
     };
 });

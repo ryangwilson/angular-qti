@@ -28,9 +28,6 @@ angular.module('certiport').directive('application', function ($http, $compile, 
 
             $scope.$$strings = {};
 
-            //$scope.strings = {};
-            //var dsStrings = DataService.data($scope.strings);
-
             /**
              * Increments a counter used to determine when simulation is ready
              * @param url

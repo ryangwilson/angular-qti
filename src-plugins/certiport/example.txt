@@ -1,0 +1,39 @@
+
+var hammerPlugin = {
+    name: 'hammer-2x',
+    attrs: {}
+};
+
+var application = {
+    name: 'application',
+    attrs: {
+        url: 'examples/v2/slide-main',
+        extension:'html',
+        virtuals: 'xml'
+    },
+    plugins: [ 'hammer' ]
+};
+
+hammer.registerView('simulation', application);
+hammer.registerView('qti', qti);
+hammer.registerView('typing', typing);
+hammer.registerPlugin('hammer', hammerPlugin);
+hammer.registerPlugin('reportcard', reportCardPlugin);
+hammer.registerPlugin('webservice', lmsPlugin);
+
+hammer.init({
+    plugins: [ 'reportcard', 'io-compressed', 'webservice' ]
+});
+
+platform('hammer').render('simulation', {
+    /// ... config ...
+    attrs: {
+        url: 'examples/v2/slide-main'
+    }
+});
+
+<platform>
+    <reportcard />
+    <io-compressed />
+    <lms-service />
+</platform>
