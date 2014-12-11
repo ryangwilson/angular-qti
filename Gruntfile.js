@@ -48,4 +48,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('pearsonvue', tasksPearsonvue);
 
+    // application tasks
+    var tasksApplication = [
+        'clean:application',
+        'ngAnnotate:application',
+        //'ngtemplates:application',
+        'uglify:application',
+        'uglify:application_min',
+        //'less:application',
+        'clean:common'
+    ];
+
+    grunt.registerTask('application', tasksApplication);
+
 };

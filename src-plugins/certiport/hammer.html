@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="hammer">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hammer Platform</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="examples/styles.css"/>
+</head>
+<body ng-cloak>
+
+<platform name="hammer"></platform>
+<!--<bridge options="options"></bridge>-->
+
+<script id="application-tpl" type="text/ng-template">
+    <application url="'examples/v2/slide-main'" extension="html" virtuals="xml">
+        <!-- hammer 2.x fixes -->
+        <hammer-2x></hammer-2x>
+    </application>
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.js"></script>
+
+<script>
+    var fn = {
+        myFunc: function () {
+            console.log('myFunc called.');
+        }
+    }
+</script>
+
+<!-- Application -->
+<script src="application/build/application.js"></script>
+
+<!-- Hammer 2.x Plugin-->
+<script src="application/src-plugins/2.x/plugin.js"></script>
+<script src="application/src-plugins/2.x/virtuals/commands.js"></script>
+<script src="application/src-plugins/2.x/virtuals/mixins.js"></script>
+<script src="application/src-plugins/2.x/virtuals/functions.js"></script>
+<script src="application/src-plugins/2.x/virtuals/listeners.js"></script>
+
+
+<!-- hammer -->
+<script src="hammer/src/hammer.js"></script>
+<script src="hammer/src/widgets/platform/platform.js"></script>
+
+</body>
+</html>
