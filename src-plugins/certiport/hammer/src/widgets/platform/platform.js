@@ -1,26 +1,37 @@
 /* global angular, platform, extend */
-angular.module('hammer').directive('platform', function ($http, $compile, $window, $templateCache) {
+angular.module('hammer').directive('platform', function ($http, $compile, $controller) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
 
+            //console.log('whois', $compile, $controller);
             var p = platform(attrs.name);
 
             /**
+             * Responsible for loading plugins and other resources into platform
              * Example:
-             * hammer.init({
-             *      plugins: [ 'reportcard', 'io-compressed', 'webservice' ]
+             * platform('hammer').init({
+             *      plugins: [ 'reportcard', 'io-compressed', 'webservice', 'logger', 'debugger' ]
              * });
              */
-            p.init = function (options) {
+            var init = function () {
+
                 var plugin;
-                options = options || {};
-                angular.forEach(options.plugins, function (name) {
+                angular.forEach(p.config.plugins, function (name) {
                     plugin = p.getPlugin(name);
                     if (plugin) {
                         debugger;
+                        platformConsts.$compileProvider.directive(plugin.name, plugin.directive);
                     }
                 });
+
+                var html = '<dummy></dummy>';
+                var linkFn = $compile(html);
+                var $el = linkFn(scope);
+                el.append($el);
+
+
+                p.fire('platform.events.init', p);
             };
 
             /**
@@ -53,7 +64,7 @@ angular.module('hammer').directive('platform', function ($http, $compile, $windo
             // load Images
             // load HTML
 
-            p.fire('platform.events.init', p);
+            init();
         }
     };
 });

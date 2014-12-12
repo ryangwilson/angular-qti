@@ -39,9 +39,11 @@
 <script src="hammer/src/utils/extend.js"></script>
 <script src="hammer/src/widgets/platform/platform.js"></script>
 
+<script src="hammer/src-plugins/console/console.js"></script>
+
 <script>
 
-    var debug = true;
+    //    var debug = true;
 
     var reportCardPlugin = {
         name: 'reportcard',
@@ -63,6 +65,17 @@
         attrs: {}
     };
 
+    var dummyPlugin = {
+        name: 'dummy',
+        directive: function () {
+            return {
+                link: function(){
+                    console.log('dummy directive');
+                }
+            };
+        }
+    };
+
     var applicationView = {
         name: 'application',
         module: 'certiport',
@@ -73,41 +86,25 @@
         plugins: ['backwardComp']
     };
 
-    if (!debug) {
-        var logger = window.console;
-        window.console = {
-            log: function () {
-                var args = Array.prototype.slice.call(arguments, 0) || [];
-                if (!args.toString().match(/%c/im)) {
-                    logger.log.apply(logger, args);
-                }
-            },
-            info: function () {
-                var args = Array.prototype.slice.call(arguments, 0) || [];
-                logger.info.apply(logger, args);
-            },
-            warn: function () {
-                var args = Array.prototype.slice.call(arguments, 0) || [];
-                logger.warn.apply(logger, args);
-            },
-            error: function () {
-                var args = Array.prototype.slice.call(arguments, 0) || [];
-                logger.error.apply(logger, args);
-            }
-        };
-    }
 
+    console.log('%c PLATFORM STARTED ', 'background: #f00; color:#fff');
 
     var hammer = platform('hammer');
+
     hammer.registerView('simulation', applicationView); // object or url
     hammer.registerPlugin('backwardComp', hammerPlugin); // object or url
+    hammer.registerPlugin('dummy', dummyPlugin); // object or url
+
+    hammer.init({
+        plugins: ['dummy']
+    });
 
     hammer.on('platform.events.init', function (evt) {
-        console.log('%c PLATFORM STARTED ', 'background: #f00; color:#fff');
         hammer.render('simulation', {
             attrs: {
                 url: "'examples/v2/slide-main'"
-            }
+            },
+            plugins: []
         });
     });
 

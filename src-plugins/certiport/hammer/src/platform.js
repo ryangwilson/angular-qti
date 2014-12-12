@@ -1,7 +1,6 @@
 (function () {
 
     /* global angular, dispatcher, extend */
-
     var _platforms = {};
 
     /**
@@ -11,6 +10,7 @@
      */
     function Platform(name) {
         this.name = name;
+        this.config = {};
         this.views = {};
         this.plugins = {};
 
@@ -18,21 +18,35 @@
     }
 
     /**
+     * Applies the configuration file for the initialization.
+     * @param config
+     * @returns {Platform}
+     */
+    Platform.prototype.init = function(config) {
+        extend(this.config, config);
+        return this;
+    };
+
+    /**
      * Registers a configuration to be used to render the view.
      * @param name - name of the view
      * @param options - configuration for view
+     * @returns {Platform}
      */
     Platform.prototype.registerView = function (name, options) {
         this.views[name] = options;
+        return this;
     };
 
     /**
      * Registers a configuration to be used to add plugins either to a view or to the platform.
      * @param name - name of the plugin
      * @param options - configuration for plugin
+     * @returns {Platform}
      */
     Platform.prototype.registerPlugin = function (name, options) {
         this.plugins[name] = options;
+        return this;
     };
 
 
@@ -100,10 +114,12 @@
      */
     Platform.prototype.renderElement = function(tag_name, options) {
 
+        // create a DOM element
         var template = '<{tag_name}></{tag_name}>';
         var html = template.supplant({tag_name: tag_name});
         var el = angular.element(html);
 
+        // add attributes to the newly created DOM element
         angular.forEach(options.attrs, function (value, name) {
             el.attr(name, value);
         });
