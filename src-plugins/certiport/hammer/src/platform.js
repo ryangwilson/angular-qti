@@ -28,12 +28,22 @@
     };
 
     /**
-     * Registers a configuration to be used to render the view.
+     * Getter / setter - Registers a configuration to be used to render the view.
      * @param name - name of the view
      * @param options - configuration for view
-     * @returns {Platform}
+     * @returns {Platform} if setter or view configuration if getter
      */
-    Platform.prototype.registerView = function (name, options) {
+    Platform.prototype.view = function (name, options) {
+
+        if(typeof options === 'undefined') {
+            var view = this.views[name];
+
+            if (!view) {
+                throw new Error('View not registered with name: {name}.').supplant({name: name});
+            }
+            return view;
+        }
+
         this.views[name] = options;
         return this;
     };
@@ -47,22 +57,6 @@
     Platform.prototype.registerPlugin = function (name, options) {
         this.plugins[name] = options;
         return this;
-    };
-
-
-    /**
-     * Gets a registered view configuration.
-     * @param name - name of the view
-     * @returns configuration for view
-     */
-    Platform.prototype.getView = function (name) {
-        var view = this.views[name];
-
-        if (!view) {
-            throw new Error('View not registered with name: {name}.').supplant({name: name});
-        }
-
-        return view;
     };
 
     /**
@@ -90,7 +84,7 @@
 
         var scope = this;
 
-        var view = scope.getView(name);
+        var view = scope.view(name);
 
         options = extend({}, view, options);
 
