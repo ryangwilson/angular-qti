@@ -43,9 +43,7 @@ angular.module('hammer').directive('platform', function ($http, $compile, $windo
                 var applicationScope = injector.get('$rootScope');
 
                 applicationScope.$on('ready', function () {
-                    debugger;
-                    //$scope.$on('bridge.events.ready', $scope[$attrs.ready]);
-                    //$scope.$broadcast('bridge.events.ready', applicationScope);
+                    p.fire('platform.events.ready');
                 });
             };
 

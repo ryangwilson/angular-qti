@@ -41,6 +41,8 @@
 
 <script>
 
+    var debug = true;
+
     var reportCardPlugin = {
         name: 'reportcard',
         attrs: {}
@@ -71,12 +73,37 @@
         plugins: ['backwardComp']
     };
 
+    if (!debug) {
+        var logger = window.console;
+        window.console = {
+            log: function () {
+                var args = Array.prototype.slice.call(arguments, 0) || [];
+                if (!args.toString().match(/%c/im)) {
+                    logger.log.apply(logger, args);
+                }
+            },
+            info: function () {
+                var args = Array.prototype.slice.call(arguments, 0) || [];
+                logger.info.apply(logger, args);
+            },
+            warn: function () {
+                var args = Array.prototype.slice.call(arguments, 0) || [];
+                logger.warn.apply(logger, args);
+            },
+            error: function () {
+                var args = Array.prototype.slice.call(arguments, 0) || [];
+                logger.error.apply(logger, args);
+            }
+        };
+    }
+
 
     var hammer = platform('hammer');
-    hammer.registerView('simulation', applicationView);
-    hammer.registerPlugin('backwardComp', hammerPlugin);
+    hammer.registerView('simulation', applicationView); // object or url
+    hammer.registerPlugin('backwardComp', hammerPlugin); // object or url
 
     hammer.on('platform.events.init', function (evt) {
+        console.log('%c PLATFORM STARTED ', 'background: #f00; color:#fff');
         hammer.render('simulation', {
             attrs: {
                 url: "'examples/v2/slide-main'"
@@ -85,7 +112,7 @@
     });
 
     hammer.on('platform.events.ready', function (evt, platformScope) {
-        console.log('~~~ READY ~~~', platformScope);
+        console.log('%c PLATFORM READY ', 'background: #f00; color:#fff');
     });
 
 </script>

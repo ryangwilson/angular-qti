@@ -10,13 +10,11 @@
      * @constructor
      */
     function Platform(name) {
-
         this.name = name;
         this.views = {};
         this.plugins = {};
 
         dispatcher(this);
-
     }
 
     /**

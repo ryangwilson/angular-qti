@@ -369,13 +369,12 @@
                                     analytics.totalTime = analytics.endTime - analytics.startTime;
                                     console.log("%c APPLICATION READY ", "background: #27ae60; color: #fff; display:block;");
                                     console.log("");
-                                    console.log("%cINIT REPORT", "border-bottom: 1px solid #34495e; color: #666; display:block;");
+                                    console.log("%cAPPLICATION REPORT", "border-bottom: 1px solid #34495e; color: #666; display:block;");
                                     console.log("%ctime: " + analytics.totalTime, "color: #34495e; display:block");
                                     console.log("%cslide count: " + analytics.slideCount, "color: #34495e; display:block");
                                     console.log("%cvirtual count: " + analytics.virtualCount, "color: #34495e; display:block");
                                     console.log("");
-
-                                    $scope.$root.$emit('ready');
+                                    $scope.$root.$emit("ready");
                                 }
                             }, 0);
                         });
