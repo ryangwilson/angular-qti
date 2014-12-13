@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="hammer">
+<html ng-app="platform">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Hammer Platform</title>
@@ -21,14 +21,16 @@
 </script>
 
 <!-- Application View -->
+<!-- Note: this will be referenced in the config-->
 <script src="application/build/application.js"></script>
 
 <!-- Application View - Hammer 2.x Plugin-->
+<!-- Note: this will be referenced in the config -->
 <script src="application/src-plugins/2.x/plugin.js"></script>
-<script src="application/src-plugins/2.x/virtuals/commands.js"></script>
-<script src="application/src-plugins/2.x/virtuals/mixins.js"></script>
-<script src="application/src-plugins/2.x/virtuals/functions.js"></script>
-<script src="application/src-plugins/2.x/virtuals/listeners.js"></script>
+<!--<script src="application/src-plugins/2.x/virtuals/commands.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/mixins.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/functions.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/listeners.js"></script>-->
 
 
 <!-- Hammer Platform -->
@@ -37,6 +39,7 @@
 <script src="hammer/src/polyfills/string.supplant.js"></script>
 <script src="hammer/src/utils/dispatcher.js"></script>
 <script src="hammer/src/utils/extend.js"></script>
+<script src="hammer/src/utils/injector.js"></script>
 <script src="hammer/src/widgets/platform/platform.js"></script>
 
 <script src="hammer/src-plugins/console/console.js"></script>
@@ -45,36 +48,36 @@
 
     //    var debug = true;
 
-    var reportCardPlugin = {
-        name: 'reportcard',
-        attrs: {}
-    };
+    //    var reportCardPlugin = {
+    //        name: 'reportcard',
+    //        attrs: {}
+    //    };
+    //
+    //    var reportCardPlugin = {
+    //        name: 'io-compressed',
+    //        attrs: {}
+    //    };
+    //
+    //    var reportCardPlugin = {
+    //        name: 'webservice',
+    //        attrs: {}
+    //    };
 
-    var reportCardPlugin = {
-        name: 'io-compressed',
-        attrs: {}
-    };
-
-    var reportCardPlugin = {
-        name: 'webservice',
-        attrs: {}
-    };
-
-    var hammerPlugin = {
-        name: 'hammer-2x',
-        attrs: {}
-    };
-
-    var dummyPlugin = {
-        name: 'dummy',
-        directive: function () {
-            return {
-                link: function(){
-                    console.log('dummy directive');
-                }
-            };
-        }
-    };
+    //    var hammerPlugin = {
+    //        name: 'hammer-2x',
+    //        attrs: {}
+    //    };
+    //
+    //    var dummyPlugin = {
+    //        name: 'dummy',
+    //        directive: function () {
+    //            return {
+    //                link: function () {
+    //                    console.log('dummy directive');
+    //                }
+    //            };
+    //        }
+    //    };
 
     var applicationView = {
         name: 'application',
@@ -83,7 +86,9 @@
             extension: 'html',
             virtuals: 'xml'
         },
-        plugins: ['backwardComp']
+        plugins: [
+            {name: 'backwardComp'}
+        ]
     };
 
 
@@ -91,12 +96,41 @@
 
     var hammer = platform('hammer');
 
-    hammer.view('simulation', applicationView); // object or url
-    hammer.registerPlugin('backwardComp', hammerPlugin); // object or url
-    hammer.registerPlugin('dummy', dummyPlugin); // object or url
+    hammer.view('simulation', applicationView); // function or url
+
+    hammer.registerPlugin('backwardComp', function () {
+        debugger;
+        return function (options, next) {
+            console.log('backwardComp called');
+            next();
+        }
+    });
+
+    // NOTE
+    /*
+     function(exports) {
+     // this is the start of what they provide
+     exports = function(options, all, injectable) {
+
+     }
+     // this is the end of what they provide
+     return exports; /
+     }
+     */
+
+    hammer.registerPlugin('dummy', function () {
+        return function (name, options, platform, next) {
+            console.log('dummy called', name, options, platform);
+            next();
+        }
+    }); // function or url
+
+    //    hammer.registerPlugin('dummy', 'dummy.js'); // function or url
 
     hammer.init({
-        plugins: ['dummy']
+        plugins: [
+            {name: 'dummy', options: {message: 'I am no dummy!'}}
+        ]
     });
 
     hammer.on('platform.events.init', function (evt) {

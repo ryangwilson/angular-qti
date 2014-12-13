@@ -1,4 +1,4 @@
-app.directive('ngBridge', function ($http) {
+application.directive('ngBridge', function ($http) {
     return {
         restrict: 'AE',
         link: function ($scope, $element, $attrs) {

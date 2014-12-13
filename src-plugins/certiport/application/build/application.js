@@ -3,8 +3,97 @@
 */
 (function(exports, global) {
     global["application"] = exports;
+    (function() {
+        var _applications = {};
+        function Application(name) {
+            this.name = name;
+            this.config = {};
+            this.views = {};
+            this.plugins = {
+                $$cache: {}
+            };
+            dispatcher(this);
+        }
+        Application.prototype.init = function(config) {
+            extend(this.config, config);
+            return this;
+        };
+        Application.prototype.view = function(name, options) {
+            if (typeof options === "undefined") {
+                var view = this.views[name];
+                if (!view) {
+                    throw new Error("View not registered with name: {name}.").supplant({
+                        name: name
+                    });
+                }
+                return view;
+            }
+            this.views[name] = options;
+            return this;
+        };
+        Application.prototype.registerPlugin = function(name, functionOrUrl) {
+            this.plugins[name] = functionOrUrl;
+            return this;
+        };
+        Application.prototype.getPlugin = function(name, options) {
+            if (!this.plugins.$$cache[name]) {
+                var pluginFn = this.plugins[name];
+                if (!pluginFn) {
+                    throw new Error("Plugin not registered with name: {name}.").supplant({
+                        name: name
+                    });
+                }
+                this.plugins.$$cache[name] = pluginFn();
+            }
+            return this.plugins.$$cache[name];
+        };
+        Application.prototype.getViewElement = function(name, options) {
+            var scope = this;
+            var view = scope.view(name);
+            options = extend({}, view, options);
+            var viewEl = scope.renderElement(view.name, options);
+            var plugin, pluginEl;
+            angular.forEach(options.plugins, function(pluginData) {
+                plugin = scope.getPlugin(pluginData.name, pluginData.options);
+                console.warn("THIS IS BEING REFACTORED");
+            });
+            return viewEl;
+        };
+        Application.prototype.renderElement = function(tag_name, options) {
+            var template = "<{tag_name}></{tag_name}>";
+            var html = template.supplant({
+                tag_name: tag_name
+            });
+            var el = angular.element(html);
+            angular.forEach(options.attrs, function(value, name) {
+                el.attr(name, value);
+            });
+            return el;
+        };
+        window.platform = function(name) {
+            if (!_applications[name]) {
+                _applications[name] = new Application(name);
+            }
+            return _applications[name];
+        };
+    })();
     angular.module("certiport.plugin", []);
     angular.module("certiport", [ "certiport.plugin" ]);
+    var application = angular.module("certiport", [], [ "$compileProvider", "$controllerProvider", function($compileProvider, $controllerProvider) {
+        application.api.consts.$compileProvider = $compileProvider;
+        application.api.consts.$controllerProvider = $controllerProvider;
+    } ]);
+    application.api = {};
+    application.api.consts = {};
+    application.api.directives = {};
+    application.api.directive = function(name, fn) {
+        application.api.directives[name] = fn;
+    };
+    application.api.applyDirectives = function() {
+        angular.forEach(application.api.directives, function(fn, name) {
+            application.directive(name, fn);
+        });
+    };
     var events = {};
     events.APP_INIT = "app.events.init";
     events.APP_READY = "app.events.ready";
@@ -166,6 +255,8 @@
                 };
                 $scope.extension = $attrs.extension;
                 $scope.url = $scope.$eval($attrs.url);
+                $scope.plugins = $scope.$eval($attrs.plugins);
+                debugger;
                 $scope.$$data = {};
                 var ds = DataService.data($scope.$$data);
                 $scope.$$strings = {};
@@ -542,6 +633,64 @@
             return new DataService(data);
         };
     });
+    var dispatcher = function(target, scope, map) {
+        var listeners = {};
+        function off(event, callback) {
+            var index, list;
+            list = listeners[event];
+            if (list) {
+                if (callback) {
+                    index = list.indexOf(callback);
+                    if (index !== -1) {
+                        list.splice(index, 1);
+                    }
+                } else {
+                    list.length = 0;
+                }
+            }
+        }
+        function on(event, callback) {
+            listeners[event] = listeners[event] || [];
+            listeners[event].push(callback);
+            return function() {
+                off(event, callback);
+            };
+        }
+        function once(event, callback) {
+            function fn() {
+                off(event, fn);
+                callback.apply(scope || target, arguments);
+            }
+            return on(event, fn);
+        }
+        function getListeners(event) {
+            return listeners[event];
+        }
+        function fire(callback, args) {
+            return callback && callback.apply(target, args);
+        }
+        function dispatch(event) {
+            if (listeners[event]) {
+                var i = 0, list = listeners[event], len = list.length;
+                while (i < len) {
+                    fire(list[i], arguments);
+                    i += 1;
+                }
+            }
+        }
+        if (scope && map) {
+            target.on = scope[map.on] && scope[map.on].bind(scope);
+            target.off = scope[map.off] && scope[map.off].bind(scope);
+            target.once = scope[map.once] && scope[map.once].bind(scope);
+            target.dispatch = target.fire = scope[map.dispatch].bind(scope);
+        } else {
+            target.on = on;
+            target.off = off;
+            target.once = once;
+            target.dispatch = target.fire = dispatch;
+        }
+        target.getListeners = getListeners;
+    };
     angular.module("certiport").service("helpers", function() {
         var strToXML = function(str) {
             var parser, xmlDoc;
@@ -1232,7 +1381,9 @@
             }
         };
     });
+    exports["application"] = application;
     exports["events"] = events;
+    exports["dispatcher"] = dispatcher;
 })({}, function() {
     return this;
 }());

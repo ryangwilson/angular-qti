@@ -1,4 +1,49 @@
 /* global angular */
+
+angular.module('certiport.plugin').directive('simCommands', function () {
+    return {
+        restrict: 'AE',
+        link: function (scope, el) {
+            setTimeout(function () {
+                el.remove();
+            });
+        }
+    };
+});
+
+angular.module('certiport.plugin').directive('simFunctions', function () {
+    return {
+        restrict: 'AE',
+        link: function(scope, el) {
+            setTimeout(function () {
+                el.remove();
+            });
+        }
+    };
+});
+
+angular.module('certiport.plugin').directive('simListeners', function () {
+    return {
+        restrict: 'AE',
+        link: function(scope, el) {
+            setTimeout(function () {
+                el.remove();
+            });
+        }
+    };
+});
+
+angular.module('certiport.plugin').directive('simMixins', function () {
+    return {
+        restrict: 'AE',
+        link: function (scope, el) {
+            setTimeout(function () {
+                el.remove();
+            });
+        }
+    };
+});
+
 angular.module('certiport.plugin').directive('hammer2x', function () {
     return {
         restrict: 'AE',

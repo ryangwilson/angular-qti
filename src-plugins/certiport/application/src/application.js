@@ -1,14 +1,14 @@
 /* global angular, dispatcher, extend, injector */
 (function () {
 
-    var _platforms = {};
+    var _applications = {};
 
     /**
-     * Platform manages views, plugins and other resources.
+     * Application manages views, plugins and other resources.
      * @param name - name of the platform
      * @constructor
      */
-    function Platform(name) {
+    function Application(name) {
         this.name = name;
         this.config = {};
         this.views = {};
@@ -22,9 +22,9 @@
     /**
      * Applies the configuration file for the initialization.
      * @param config
-     * @returns {Platform}
+     * @returns {Application}
      */
-    Platform.prototype.init = function (config) {
+    Application.prototype.init = function (config) {
         extend(this.config, config);
         return this;
     };
@@ -33,9 +33,9 @@
      * Getter / setter - Registers a configuration to be used to render the view.
      * @param name - name of the view
      * @param options - configuration for view
-     * @returns {Platform} if setter or view configuration if getter
+     * @returns {Application} if setter or view configuration if getter
      */
-    Platform.prototype.view = function (name, options) {
+    Application.prototype.view = function (name, options) {
 
         if (typeof options === 'undefined') {
             var view = this.views[name];
@@ -54,14 +54,14 @@
      * Registers a configuration to be used to add plugins either to a view or to the platform.
      * @param name - name of the plugin
      * @param functionOrUrl - configuration for plugin
-     * @returns {Platform} or Plugin Instance
+     * @returns {Application} or Plugin Instance
      */
-    Platform.prototype.registerPlugin = function (name, functionOrUrl) {
+    Application.prototype.registerPlugin = function (name, functionOrUrl) {
         this.plugins[name] = functionOrUrl;
         return this;
     };
 
-    Platform.prototype.getPlugin = function (name, options) {
+    Application.prototype.getPlugin = function (name, options) {
 
         if (!this.plugins.$$cache[name]) {
             var pluginFn = this.plugins[name];
@@ -82,7 +82,7 @@
      * @param options - adds or overrides default options
      * @returns DOM element
      */
-    Platform.prototype.getViewElement = function (name, options) {
+    Application.prototype.getViewElement = function (name, options) {
 
         var scope = this;
 
@@ -109,7 +109,7 @@
      * @param options - configuration for DOM
      * @returns DOM element
      */
-    Platform.prototype.renderElement = function (tag_name, options) {
+    Application.prototype.renderElement = function (tag_name, options) {
 
         // create a DOM element
         var template = '<{tag_name}></{tag_name}>';
@@ -128,13 +128,13 @@
     /**
      * Global reference to platform
      * @param name
-     * @returns Platform instance
+     * @returns Application instance
      */
     window.platform = function (name) {
-        if (!_platforms[name]) {
-            _platforms[name] = new Platform(name);
+        if (!_applications[name]) {
+            _applications[name] = new Application(name);
         }
-        return _platforms[name];
+        return _applications[name];
     };
 
 })();

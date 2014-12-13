@@ -1,5 +1,5 @@
 /* global angular, platform, extend */
-angular.module('hammer').directive('platform', function ($http, $compile, $controller) {
+angular.module('platform').directive('platform', function ($http, $compile, $controller) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
@@ -17,18 +17,30 @@ angular.module('hammer').directive('platform', function ($http, $compile, $contr
             var init = function () {
 
                 var plugin;
-                angular.forEach(p.config.plugins, function (name) {
-                    plugin = p.getPlugin(name);
-                    if (plugin) {
-                        debugger;
-                        platformConsts.$compileProvider.directive(plugin.name, plugin.directive);
+                angular.forEach(p.config.plugins, function (pluginInfo) {
+                    plugin = p.getPlugin(pluginInfo.name, pluginInfo.options);
+                    if (typeof plugin !== 'function') {
+                        throw new Error('Plugin must return a function to be valid.');
+                        //platformConsts.$compileProvider.directive(name, plugin.directive);
                     }
+
+                    injector('platform').invoke(plugin, {}, {
+                        name: pluginInfo.name,
+                        options: pluginInfo.options,
+                        platform: p,
+                        next: function() {
+                            // TODO: This is for the purpose of being asynchronouse, which means we
+                            // cant be in a for loop
+                            console.log('next called!!!');
+                        }
+                    });
+
                 });
 
-                var html = '<dummy></dummy>';
-                var linkFn = $compile(html);
-                var $el = linkFn(scope);
-                el.append($el);
+                //var html = '<dummy></dummy>';
+                //var linkFn = $compile(html);
+                //var $el = linkFn(scope);
+                //el.append($el);
 
 
                 p.fire('platform.events.init', p);

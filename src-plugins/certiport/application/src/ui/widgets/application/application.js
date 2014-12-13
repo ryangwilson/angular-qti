@@ -22,6 +22,8 @@ angular.module('certiport').directive('application', function ($http, $compile, 
 
             $scope.extension = $attrs.extension;
             $scope.url = $scope.$eval($attrs.url);
+            $scope.plugins = $scope.$eval($attrs.plugins);
+            debugger;
 
             $scope.$$data = {};
             var ds = DataService.data($scope.$$data);

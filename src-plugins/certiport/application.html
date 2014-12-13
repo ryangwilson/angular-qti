@@ -8,7 +8,8 @@
 </head>
 <body ng-cloak>
 
-<application url="'examples/v2/slide-main'" extension="html" virtuals="xml">
+<application url="'examples/v2/slide-main'" extension="html" virtuals="xml" plugins="['hammer-2x']">
+    <!-- This is the old way - use plugins attr instead -->
     <!-- hammer 2.x fixes -->
     <hammer-2x></hammer-2x>
 </application>
@@ -25,14 +26,14 @@
 </script>
 
 <!-- Hammer 2.x Plugin-->
-<script src="application/src-plugins/2.x/plugin.js"></script>
-<script src="application/src-plugins/2.x/virtuals/commands.js"></script>
-<script src="application/src-plugins/2.x/virtuals/mixins.js"></script>
-<script src="application/src-plugins/2.x/virtuals/functions.js"></script>
-<script src="application/src-plugins/2.x/virtuals/listeners.js"></script>
+<!--<script src="application/src-plugins/2.x/virtuals/commands.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/mixins.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/functions.js"></script>-->
+<!--<script src="application/src-plugins/2.x/virtuals/listeners.js"></script>-->
 
 <!-- hammer -->
 <script src="application/build/application.js"></script>
+<script src="application/src-plugins/2.x/plugin.js"></script>
 
 </body>
 </html>
