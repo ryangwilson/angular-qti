@@ -1,5 +1,4 @@
 /* global angular */
-
 angular.module('certiport.plugin').directive('simCommands', function () {
     return {
         restrict: 'AE',

@@ -26,7 +26,7 @@
      * @returns {Application}
      */
     Application.prototype.init = function (config) {
-        hb.extend(this.config, config);
+        angular.extend(this.config, config);
         return this;
     };
 

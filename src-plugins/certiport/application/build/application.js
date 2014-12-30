@@ -16,7 +16,7 @@
             hb.dispatcher(this);
         }
         Application.prototype.init = function(config) {
-            hb.extend(this.config, config);
+            angular.extend(this.config, config);
             return this;
         };
         Application.prototype.view = function(name, options) {
