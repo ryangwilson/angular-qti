@@ -1,4 +1,4 @@
-/* global angular, platform, extend */
+/* global angular, platform, platty */
 angular.module('platform').directive('platform', function ($http, $compile, $controller) {
     return {
         restrict: 'AE',
@@ -24,7 +24,7 @@ angular.module('platform').directive('platform', function ($http, $compile, $con
                         //platformConsts.$compileProvider.directive(name, plugin.directive);
                     }
 
-                    injector('platform').invoke(plugin, {}, {
+                    platty.injector('platform').invoke(plugin, {}, {
                         name: pluginInfo.name,
                         options: pluginInfo.options,
                         platform: p,

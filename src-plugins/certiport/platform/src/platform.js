@@ -1,4 +1,4 @@
-/* global angular, dispatcher, extend, injector */
+/* global angular, dispatcher, extend */
 (function () {
 
     var _platforms = {};
@@ -16,7 +16,7 @@
             $$cache: {}
         };
 
-        dispatcher(this);
+        platty.dispatcher(this);
     }
 
     /**
@@ -25,7 +25,7 @@
      * @returns {Platform}
      */
     Platform.prototype.init = function (config) {
-        extend(this.config, config);
+        angular.extend(this.config, config);
         return this;
     };
 
@@ -87,8 +87,7 @@
         var scope = this;
 
         var view = scope.view(name);
-
-        options = extend({}, view, options);
+        options = platty.extend({}, view, options);
 
         var viewEl = scope.renderElement(view.name, options);
 

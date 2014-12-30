@@ -1,5 +1,5 @@
 /* global angular */
-
+//! import string.supplant
 var platformConsts = {};
 angular.module('platform', [], function ($compileProvider, $controllerProvider) {
     platformConsts.$compileProvider = $compileProvider;

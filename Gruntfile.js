@@ -61,4 +61,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('application', tasksApplication);
 
+    // application tasks
+    var tasksPlatform = [
+        'clean:platform',
+        'ngAnnotate:platform',
+        //'ngtemplates:platform',
+        'uglify:platform',
+        'uglify:platform_min',
+        //'less:platform',
+        'clean:common'
+    ];
+
+    grunt.registerTask('platform', tasksPlatform);
+
 };
