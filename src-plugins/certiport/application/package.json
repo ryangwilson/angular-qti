@@ -1,0 +1,13 @@
+{
+  "name": "certiport-application",
+  "description": "Renders an appliation view for hammer",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.2",
+    "grunt-treeshake": "latest"
+  }
+}

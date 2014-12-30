@@ -1,5 +1,5 @@
-/* global angular */
-angular.module('certiport').directive('simExec', function ($interpolate, $rootScope, json) {
+/* global angular, hb */
+angular.module('certiport').directive('simExec', function ($interpolate, $rootScope) {
     return {
         restrict: 'AE',
         link: function (scope, el, attrs) {
@@ -11,7 +11,7 @@ angular.module('certiport').directive('simExec', function ($interpolate, $rootSc
 
                 var exp = $interpolate(content);
                 var result = exp(data);
-                var parsedData =  json.parse(result);
+                var parsedData = hb.fromJson(result);
 
                 $rootScope.$broadcast(attrs.command, targetScope, parsedData);
 

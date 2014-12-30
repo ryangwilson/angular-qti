@@ -1,4 +1,5 @@
-/* global angular, dispatcher, extend, injector */
+/* global angular, hb */
+//! import string.supplant
 (function () {
 
     var _applications = {};
@@ -16,7 +17,7 @@
             $$cache: {}
         };
 
-        dispatcher(this);
+        hb.dispatcher(this);
     }
 
     /**
@@ -25,7 +26,7 @@
      * @returns {Application}
      */
     Application.prototype.init = function (config) {
-        extend(this.config, config);
+        hb.extend(this.config, config);
         return this;
     };
 
@@ -130,7 +131,7 @@
      * @param name
      * @returns Application instance
      */
-    window.platform = function (name) {
+    window.application = function (name) {
         if (!_applications[name]) {
             _applications[name] = new Application(name);
         }

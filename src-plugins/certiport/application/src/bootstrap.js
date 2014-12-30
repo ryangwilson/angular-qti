@@ -1,8 +1,6 @@
 /* global angular */
 angular.module('certiport.plugin', []);
-angular.module('certiport', ['certiport.plugin']);
-
-var application = angular.module('certiport', [], function ($compileProvider, $controllerProvider) {
+var application = angular.module('certiport', ['certiport.plugin'], function ($compileProvider, $controllerProvider) {
     application.api.consts.$compileProvider = $compileProvider;
     application.api.consts.$controllerProvider = $controllerProvider;
 });

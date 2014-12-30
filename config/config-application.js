@@ -65,7 +65,7 @@ module.exports = function (grunt, options) {
                 "options": {
                     "mangle": false,
                     "compress": false,
-                    "preserveComments": "none",
+                    "preserveComments": "some",
                     "beautify": true,
                     "exportAll": true,
                     "wrap": 'application',

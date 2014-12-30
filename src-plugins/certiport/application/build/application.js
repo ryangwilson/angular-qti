@@ -3,6 +3,7 @@
 */
 (function(exports, global) {
     global["application"] = exports;
+    //! import string.supplant
     (function() {
         var _applications = {};
         function Application(name) {
@@ -12,10 +13,10 @@
             this.plugins = {
                 $$cache: {}
             };
-            dispatcher(this);
+            hb.dispatcher(this);
         }
         Application.prototype.init = function(config) {
-            extend(this.config, config);
+            hb.extend(this.config, config);
             return this;
         };
         Application.prototype.view = function(name, options) {
@@ -70,7 +71,7 @@
             });
             return el;
         };
-        window.platform = function(name) {
+        window.application = function(name) {
             if (!_applications[name]) {
                 _applications[name] = new Application(name);
             }
@@ -78,8 +79,7 @@
         };
     })();
     angular.module("certiport.plugin", []);
-    angular.module("certiport", [ "certiport.plugin" ]);
-    var application = angular.module("certiport", [], [ "$compileProvider", "$controllerProvider", function($compileProvider, $controllerProvider) {
+    var application = angular.module("certiport", [ "certiport.plugin" ], [ "$compileProvider", "$controllerProvider", function($compileProvider, $controllerProvider) {
         application.api.consts.$compileProvider = $compileProvider;
         application.api.consts.$controllerProvider = $controllerProvider;
     } ]);
@@ -99,14 +99,6 @@
     events.APP_READY = "app.events.ready";
     events.SLIDE_INIT = "slide.events.init";
     events.SLIDE_READY = "slide.events.ready";
-    if (!String.supplant) {
-        String.prototype.supplant = function(o) {
-            return this.replace(/{([^{}]*)}/g, function(a, b) {
-                var r = o[b];
-                return typeof r === "string" || typeof r === "number" ? r : a;
-            });
-        };
-    }
     angular.module("certiport").directive("click", function() {
         return {
             restrict: "A",
@@ -235,7 +227,7 @@
             }
         };
     });
-    angular.module("certiport").directive("application", [ "$http", "$compile", "$q", "$timeout", "XMLService", "DataService", function($http, $compile, $q, $timeout, XMLService, DataService) {
+    angular.module("certiport").directive("application", [ "$http", "$compile", "$q", "$timeout", function($http, $compile, $q, $timeout) {
         return {
             restrict: "AE",
             scope: true,
@@ -256,9 +248,8 @@
                 $scope.extension = $attrs.extension;
                 $scope.url = $scope.$eval($attrs.url);
                 $scope.plugins = $scope.$eval($attrs.plugins);
-                debugger;
                 $scope.$$data = {};
-                var ds = DataService.data($scope.$$data);
+                var ds = hb.resolve($scope.$$data);
                 $scope.$$strings = {};
                 var incCounter = function(url) {
                     counter += 1;
@@ -409,7 +400,7 @@
                                     var type = xmlns[0].split("/").pop();
                                     switch (type) {
                                       case "model":
-                                        var json = XMLService.toJson(html);
+                                        var json = hb.fromXML(html);
                                         $scope.set(url, json);
                                         break;
 
@@ -591,426 +582,6 @@
             } ]
         };
     } ]);
-    angular.module("certiport").service("DataService", function() {
-        function DataService(data) {
-            this.data = data || {};
-        }
-        var proto = DataService.prototype;
-        proto.get = function(path, delimiter) {
-            var arr = path.split(delimiter || "."), space = "", i = 0, len = arr.length;
-            var data = this.data;
-            while (i < len) {
-                space = arr[i];
-                data = data[space];
-                if (data === undefined) {
-                    break;
-                }
-                i += 1;
-            }
-            return data;
-        };
-        proto.set = function(path, value, delimiter) {
-            var arr = path.split(delimiter || "."), space = "", i = 0, len = arr.length - 1;
-            var data = this.data;
-            while (i < len) {
-                space = arr[i];
-                if (data[space] === undefined) {
-                    data = data[space] = {};
-                } else {
-                    data = data[space];
-                }
-                i += 1;
-            }
-            if (arr.length > 1) {
-                data[arr.pop()] = value;
-            }
-            return this.data;
-        };
-        proto.path = function(path) {
-            return this.set(path, {});
-        };
-        this.data = function(data) {
-            return new DataService(data);
-        };
-    });
-    var dispatcher = function(target, scope, map) {
-        var listeners = {};
-        function off(event, callback) {
-            var index, list;
-            list = listeners[event];
-            if (list) {
-                if (callback) {
-                    index = list.indexOf(callback);
-                    if (index !== -1) {
-                        list.splice(index, 1);
-                    }
-                } else {
-                    list.length = 0;
-                }
-            }
-        }
-        function on(event, callback) {
-            listeners[event] = listeners[event] || [];
-            listeners[event].push(callback);
-            return function() {
-                off(event, callback);
-            };
-        }
-        function once(event, callback) {
-            function fn() {
-                off(event, fn);
-                callback.apply(scope || target, arguments);
-            }
-            return on(event, fn);
-        }
-        function getListeners(event) {
-            return listeners[event];
-        }
-        function fire(callback, args) {
-            return callback && callback.apply(target, args);
-        }
-        function dispatch(event) {
-            if (listeners[event]) {
-                var i = 0, list = listeners[event], len = list.length;
-                while (i < len) {
-                    fire(list[i], arguments);
-                    i += 1;
-                }
-            }
-        }
-        if (scope && map) {
-            target.on = scope[map.on] && scope[map.on].bind(scope);
-            target.off = scope[map.off] && scope[map.off].bind(scope);
-            target.once = scope[map.once] && scope[map.once].bind(scope);
-            target.dispatch = target.fire = scope[map.dispatch].bind(scope);
-        } else {
-            target.on = on;
-            target.off = off;
-            target.once = once;
-            target.dispatch = target.fire = dispatch;
-        }
-        target.getListeners = getListeners;
-    };
-    angular.module("certiport").service("helpers", function() {
-        var strToXML = function(str) {
-            var parser, xmlDoc;
-            if (window.DOMParser) {
-                parser = new DOMParser();
-                xmlDoc = parser.parseFromString(str, "text/xml");
-            } else {
-                xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async = false;
-                xmlDoc.loadXML(str);
-            }
-            return xmlDoc;
-        };
-        var xmlToJson = function(xml) {
-            var obj = {};
-            if (xml.nodeType === 1) {
-                if (xml.attributes.length > 0) {
-                    obj["@attributes"] = {};
-                    for (var j = 0; j < xml.attributes.length; j++) {
-                        var attribute = xml.attributes.item(j);
-                        obj["@attributes"][attribute.nodeName] = attribute.value;
-                    }
-                }
-            } else if (xml.nodeType === 3) {
-                obj = xml.nodeValue.trim();
-            }
-            if (xml.hasChildNodes()) {
-                for (var i = 0; i < xml.childNodes.length; i++) {
-                    var item = xml.childNodes.item(i);
-                    var nodeName = item.nodeName;
-                    if (typeof obj[nodeName] === "undefined") {
-                        if (nodeName !== "#text") {
-                            obj[nodeName] = xmlToJson(item);
-                        } else if (item.nodeValue.trim()) {
-                            obj = item.nodeValue.trim();
-                        }
-                    } else {
-                        if (typeof obj[nodeName].push === "undefined") {
-                            var old = obj[nodeName];
-                            obj[nodeName] = [];
-                            obj[nodeName].push(old);
-                        }
-                        obj[nodeName].push(xmlToJson(item));
-                    }
-                }
-            }
-            return obj;
-        };
-        this.strToXML = strToXML;
-        this.xmlToJson = xmlToJson;
-    });
-    angular.module("certiport").service("json", function() {
-        this.parse = function(source, jsonObjectFormat) {
-            if (typeof jsonObjectFormat === "undefined") {
-                jsonObjectFormat = true;
-            }
-            var object_start = jsonObjectFormat ? "{" : "(";
-            var object_end = jsonObjectFormat ? "}" : ")";
-            var pair_seperator = jsonObjectFormat ? ":" : "=";
-            var at = 0;
-            var ch = " ";
-            var escapee = {
-                '"': '"',
-                "\\": "\\",
-                "/": "/",
-                b: "\b",
-                f: "\f",
-                n: "\n",
-                r: "\r",
-                t: "	"
-            };
-            var text = source;
-            var result = readValue();
-            skipWhitespace();
-            if (ch) {
-                raiseError("Syntax error");
-            }
-            return result;
-            function raiseError(m) {
-                throw {
-                    name: "SyntaxError",
-                    message: m,
-                    at: at,
-                    text: text
-                };
-            }
-            function next(c) {
-                if (c && c !== ch) {
-                    raiseError("Expected '" + c + "' instead of '" + ch + "'");
-                }
-                ch = text.charAt(at);
-                at += 1;
-                return ch;
-            }
-            function readString() {
-                var s = "";
-                if (ch === '"') {
-                    while (next()) {
-                        if (ch === '"') {
-                            next();
-                            return s;
-                        }
-                        if (ch === "\\") {
-                            next();
-                            if (ch === "u") {
-                                var uffff = 0;
-                                for (var i = 0; i < 4; i += 1) {
-                                    var hex = parseInt(next(), 16);
-                                    if (!isFinite(hex)) {
-                                        break;
-                                    }
-                                    uffff = uffff * 16 + hex;
-                                }
-                                s += String.fromCharCode(uffff);
-                            } else if (typeof escapee[ch] === "string") {
-                                s += escapee[ch];
-                            } else {
-                                break;
-                            }
-                        } else {
-                            s += ch;
-                        }
-                    }
-                }
-                raiseError("Bad string");
-            }
-            function skipWhitespace() {
-                while (ch && ch <= " ") {
-                    next();
-                }
-            }
-            function readWord() {
-                var s = "";
-                while (allowedInWord()) {
-                    s += ch;
-                    next();
-                }
-                if (s === "true") {
-                    return true;
-                }
-                if (s === "false") {
-                    return false;
-                }
-                if (s === "null") {
-                    return null;
-                }
-                if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(s)) {
-                    return parseFloat(s);
-                }
-                return s;
-            }
-            function readArray() {
-                var array = [];
-                if (ch === "[") {
-                    next("[");
-                    skipWhitespace();
-                    if (ch === "]") {
-                        next("]");
-                        return array;
-                    }
-                    while (ch) {
-                        array.push(readValue());
-                        skipWhitespace();
-                        if (ch === "]") {
-                            next("]");
-                            return array;
-                        }
-                        next(",");
-                        skipWhitespace();
-                    }
-                }
-                raiseError("Bad array");
-            }
-            function readObject() {
-                var o = {};
-                if (ch === object_start) {
-                    next(object_start);
-                    skipWhitespace();
-                    if (ch === object_end) {
-                        next(object_end);
-                        return o;
-                    }
-                    while (ch) {
-                        var key = ch === '"' ? readString() : readWord();
-                        if (typeof key !== "string") {
-                            raiseError("Bad object key: " + key);
-                        }
-                        skipWhitespace();
-                        next(pair_seperator);
-                        if (Object.hasOwnProperty.call(o, key)) {
-                            raiseError('Duplicate key: "' + key + '"');
-                        }
-                        o[key] = readValue();
-                        skipWhitespace();
-                        if (ch === object_end) {
-                            next(object_end);
-                            return o;
-                        }
-                        next(",");
-                        skipWhitespace();
-                    }
-                }
-                raiseError("Bad object");
-            }
-            function readValue() {
-                skipWhitespace();
-                switch (ch) {
-                  case object_start:
-                    return readObject();
-
-                  case "[":
-                    return readArray();
-
-                  case '"':
-                    return readString();
-
-                  default:
-                    return readWord();
-                }
-            }
-            function allowedInWord() {
-                switch (ch) {
-                  case '"':
-                  case "\\":
-                  case "	":
-                  case "\n":
-                  case "\r":
-                  case ",":
-                  case "[":
-                  case "]":
-                  case object_start:
-                  case object_end:
-                  case pair_seperator:
-                    return false;
-                }
-                return ch > " ";
-            }
-        };
-    });
-    (function() {
-        var xmlToJson = function(node) {
-            if (typeof node === "string") {
-                node = strToXML(node).firstElementChild;
-            }
-            var data = {};
-            function convertValue(value) {
-                if (isNaN(value)) {
-                    if (value === "true") {
-                        return true;
-                    }
-                    if (value === "false") {
-                        return false;
-                    }
-                    return value;
-                }
-                return Number(value);
-            }
-            function setValue(key, value) {
-                if (data[key]) {
-                    if (data[key].constructor !== Array) {
-                        data[key] = [ data[key] ];
-                    }
-                    data[key][data[key].length] = convertValue(value);
-                } else {
-                    data[key] = convertValue(value);
-                }
-            }
-            function setText(key, value) {
-                data[key].text = value;
-            }
-            var c, cn;
-            for (c = 0; node.attributes[c]; c++) {
-                cn = node.attributes[c];
-                setValue(cn.name, cn.value);
-            }
-            for (c = 0; node.childNodes[c]; c++) {
-                cn = node.childNodes[c];
-                if (cn.nodeType === 1) {
-                    if (cn.childNodes.length === 1 && cn.firstChild.nodeType === 3) {
-                        if (cn.attributes.length) {
-                            setValue(cn.nodeName, xmlToJson(cn));
-                            setText(cn.nodeName, cn.firstChild.nodeValue);
-                        } else {
-                            setValue(cn.nodeName, cn.firstChild.nodeValue);
-                        }
-                    } else {
-                        setValue(cn.nodeName, xmlToJson(cn));
-                    }
-                }
-            }
-            return data;
-        };
-        var strToXML = function(str) {
-            var parser, xmlDoc;
-            if (window.DOMParser) {
-                parser = new DOMParser();
-                xmlDoc = parser.parseFromString(str, "text/xml");
-            } else {
-                xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async = false;
-                xmlDoc.loadXML(str);
-            }
-            return xmlDoc;
-        };
-        var xmlToStr = function(xmlObject) {
-            var str;
-            if (window.ActiveXObject) {
-                str = xmlObject.xml;
-            } else {
-                str = new XMLSerializer().serializeToString(xmlObject);
-            }
-            str = str.replace(/\sxmlns=".*?"/gim, "");
-            return str;
-        };
-        angular.module("certiport").service("XMLService", function() {
-            this.toJson = xmlToJson;
-            this.toString = xmlToStr;
-            this.parse = strToXML;
-        });
-    })();
     angular.module("certiport").directive("simEval", [ "$interpolate", function($interpolate) {
         return {
             restrict: "AE",
@@ -1030,7 +601,7 @@
             }
         };
     } ]);
-    angular.module("certiport").directive("simExec", [ "$interpolate", "$rootScope", "json", function($interpolate, $rootScope, json) {
+    angular.module("certiport").directive("simExec", [ "$interpolate", "$rootScope", function($interpolate, $rootScope) {
         return {
             restrict: "AE",
             link: function(scope, el, attrs) {
@@ -1039,7 +610,7 @@
                 scope.registerAction(function(targetScope, data) {
                     var exp = $interpolate(content);
                     var result = exp(data);
-                    var parsedData = json.parse(result);
+                    var parsedData = hb.fromJson(result);
                     $rootScope.$broadcast(attrs.command, targetScope, parsedData);
                     return parsedData;
                 });
@@ -1295,18 +866,18 @@
             }
         };
     });
-    angular.module("certiport").directive("simProperties", [ "helpers", function(helpers) {
+    angular.module("certiport").directive("simProperties", function() {
         return {
             restrict: "AE",
             link: function(scope, el, attrs) {
                 var content = "<props>" + el.html() + "</props>";
-                var xml = helpers.strToXML(content);
-                var json = helpers.xmlToJson(xml);
+                var xml = hb.toXML(content);
+                var json = hb.fromXML(xml);
                 angular.extend(scope.properties, json.props);
                 el.remove();
             }
         };
-    } ]);
+    });
     angular.module("certiport").directive("simScript", [ "$http", "$compile", function($http, $compile) {
         var scripts = {};
         return {
@@ -1335,14 +906,14 @@
             } ]
         };
     } ]);
-    angular.module("certiport").directive("simStrings", [ "$http", "XMLService", function($http, XMLService) {
+    angular.module("certiport").directive("simStrings", [ "$http", function($http) {
         return {
             restrict: "AE",
             link: function(scope, el, attrs) {
                 scope.incCounter(attrs.url);
                 var ext = ".xml";
                 $http.get(attrs.url + ext).success(function(html) {
-                    var json = XMLService.toJson(html);
+                    var json = hb.fromXML(html);
                     angular.extend(scope.$$strings, json);
                     scope.loadVirtuals(html).then(function() {
                         scope.decCounter(attrs.url);
@@ -1383,7 +954,6 @@
     });
     exports["application"] = application;
     exports["events"] = events;
-    exports["dispatcher"] = dispatcher;
 })({}, function() {
     return this;
 }());

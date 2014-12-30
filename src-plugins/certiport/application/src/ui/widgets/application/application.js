@@ -1,5 +1,5 @@
-/* global angular, events */
-angular.module('certiport').directive('application', function ($http, $compile, $q, $timeout, XMLService, DataService) {
+/* global angular, hb, events */
+angular.module('certiport').directive('application', function ($http, $compile, $q, $timeout) {
     return {
         restrict: 'AE',
         scope: true,
@@ -23,10 +23,9 @@ angular.module('certiport').directive('application', function ($http, $compile, 
             $scope.extension = $attrs.extension;
             $scope.url = $scope.$eval($attrs.url);
             $scope.plugins = $scope.$eval($attrs.plugins);
-            debugger;
 
             $scope.$$data = {};
-            var ds = DataService.data($scope.$$data);
+            var ds = hb.resolve($scope.$$data);
 
             $scope.$$strings = {};
 
@@ -336,7 +335,7 @@ angular.module('certiport').directive('application', function ($http, $compile, 
                                 var type = xmlns[0].split('/').pop(); // ex. model
                                 switch (type) {
                                     case 'model':
-                                        var json = XMLService.toJson(html);
+                                        var json = hb.fromXML(html);
                                         $scope.set(url, json);
                                         break;
                                     case 'commands':
