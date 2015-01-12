@@ -4,7 +4,6 @@
 //! import framework.config
 define('framework', ['dispatcher', 'toArray'], function (dispatcher, toArray) {
 
-    console.log('### framework ###');
     var framework = {};
     dispatcher(framework);
 

@@ -87,7 +87,6 @@
     //! import framework.registry
     //! import framework.config
     define("framework", [ "dispatcher", "toArray" ], function(dispatcher, toArray) {
-        console.log("### framework ###");
         var framework = {};
         dispatcher(framework);
         framework.fire = function(eventName, data) {
@@ -194,37 +193,40 @@
                             count--;
                             interpolate(window, response.data);
                             if (count === 0) {
-                                console.log("###EXPORTS####", exports);
                                 framework.fire("plugin::ready", plugins);
                             }
                         }
                     });
                 }
-                console.log("plugin", name, plugins[name].url);
+                console.log("%c[plugin]", "color: orange", name, plugins[name].url);
             }
         };
         framework.on("registry::ready", function(evt, data) {
             registry = data;
-            var view;
-            for (var e in data.views) {
-                view = data.views[e];
-                views[view.name] = view;
+            var view, e;
+            for (e in data.views) {
+                if (data.plugins.hasOwnProperty(e)) {
+                    view = data.views[e];
+                    views[view.name] = view;
+                }
             }
             var plugin;
-            for (var e in data.plugins) {
-                plugin = data.plugins[e];
-                plugins[plugin.name] = plugin;
+            for (e in data.plugins) {
+                if (data.plugins.hasOwnProperty(e)) {
+                    plugin = data.plugins[e];
+                    plugins[plugin.name] = plugin;
+                }
             }
-            console.log("HERE WE ARE", views, plugins);
         });
         framework.on("config::ready", function(evt, data) {
             config = data;
             var plugin;
             for (var e in data.plugins) {
-                plugin = data.plugins[e];
-                plugins[plugin.name] = extend({}, plugins[plugin.name], plugin);
+                if (data.plugins.hasOwnProperty(e)) {
+                    plugin = data.plugins[e];
+                    plugins[plugin.name] = extend({}, plugins[plugin.name], plugin);
+                }
             }
-            console.log("HERE WE ARE AGAIN", plugins);
             init();
         });
     });

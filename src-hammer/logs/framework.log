@@ -1,8 +1,8 @@
-------Mon Jan 12 2015 07:17:14 GMT-0700 (MST)------
+------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
 
 Output:
-	framework/build/framework.js 18.67k
-	framework/build/framework.min.js 6.65k
+	framework/build/framework.js 18.70k
+	framework/build/framework.min.js 6.63k
 
 Definitions: 
 	addFileToHead 

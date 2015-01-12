@@ -1,18 +1,18 @@
-------Mon Jan 12 2015 07:17:14 GMT-0700 (MST)------
+------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
 
 Output:
-	plugins/reportCard/build/reportCard.js 2.75k
-	plugins/reportCard/build/reportCard.min.js 1.06k
-------Mon Jan 12 2015 07:17:14 GMT-0700 (MST)------
+	plugins/reportCard/build/reportCard.js 2.80k
+	plugins/reportCard/build/reportCard.min.js 1.09k
+------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
 
 Output:
 	application/build/application.js 2.32k
 	application/build/application.min.js 0.62k
-------Mon Jan 12 2015 07:17:14 GMT-0700 (MST)------
+------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
 
 Output:
-	framework/build/framework.js 18.67k
-	framework/build/framework.min.js 6.65k
+	framework/build/framework.js 18.70k
+	framework/build/framework.min.js 6.63k
 
 Definitions: 
 	addFileToHead 
@@ -864,7 +864,7 @@ Definitions:
 
 Included: 
 	plugins/reportCard/src/reportCard.js - Gruntfile.js:import reportCard 
-	plugins/reportCard/src/dummy.js - plugins/reportCard/src/reportCard.js:2 
+	plugins/reportCard/src/dummy.js - plugins/reportCard/src/reportCard.js:3 
 
 Ignored: 
 	node_modules/hbjs/src/hb/debug/debugger.js 

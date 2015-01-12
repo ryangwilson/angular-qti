@@ -21,13 +21,12 @@ internal('framework.plugin', ['framework', 'interpolate', 'extend', 'http'], fun
                         //console.log(response.data);
                         interpolate(window, response.data);
                         if (count === 0) {
-                            console.log('###EXPORTS####', exports);
                             framework.fire('plugin::ready', plugins);
                         }
                     }
                 });
             }
-            console.log('plugin', name, plugins[name].url);
+            console.log('%c[plugin]', 'color: orange',  name, plugins[name].url);
         }
     };
 

@@ -73,11 +73,11 @@
     //! plugins/reportCard/src/reportCard.js
     internal("reportCard", [ "framework", "reportCard.dummy" ], function(framework, dummy) {
         framework.fire("reportCard::init");
-        console.log("### reportCard ###", dummy());
+        console.log("%c[reportCard] calling dummy()", "color: #999", dummy());
     });
     //! plugins/reportCard/src/dummy.js
-    internal("reportCard.dummy", function() {
-        console.log("reportCard.dummy");
+    internal("reportCard.dummy", [ "framework" ], function(framework) {
+        framework.fire("dummy::init");
         return function() {
             return "dummy";
         };
