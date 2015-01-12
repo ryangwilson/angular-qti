@@ -1,7 +1,9 @@
 /* global define */
+
+//! import framework.config
 //! import framework.plugin
 //! import framework.registry
-//! import framework.config
+//! import framework.view
 define('framework', ['dispatcher', 'toArray'], function (dispatcher, toArray) {
 
     var framework = {};

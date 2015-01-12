@@ -70,92 +70,6 @@
         });
         delete pending[name];
     };
-    //! node_modules/hbjs/src/utils/validators/isArguments.js
-    internal("isArguments", function(toString) {
-        var isArguments = function(value) {
-            var str = String(value);
-            var isArguments = str === "[object Arguments]";
-            if (!isArguments) {
-                isArguments = str !== "[object Array]" && value !== null && typeof value === "object" && typeof value.length === "number" && value.length >= 0 && toString.call(value.callee) === "[object Function]";
-            }
-            return isArguments;
-        };
-        return isArguments;
-    });
-    //! framework/src/framework.js
-    //! import framework.plugin
-    //! import framework.registry
-    //! import framework.config
-    define("framework", [ "dispatcher", "toArray" ], function(dispatcher, toArray) {
-        var framework = {};
-        dispatcher(framework);
-        framework.fire = function(eventName, data) {
-            var css = "color: blue";
-            console.log("%c[event]", css, eventName, data || "");
-            framework.dispatch.apply(framework, toArray(arguments));
-        };
-        return framework;
-    });
-    //! node_modules/hbjs/src/utils/polyfills/string.supplant.js
-    internal("string.supplant", function() {
-        if (!String.prototype.supplant) {
-            String.prototype.supplant = function(o) {
-                return this.replace(/{([^{}]*)}/g, function(a, b) {
-                    var r = o[b];
-                    return typeof r === "string" || typeof r === "number" ? r : a;
-                });
-            };
-        }
-        return true;
-    });
-    //! node_modules/hbjs/src/utils/parsers/interpolate.js
-    internal("interpolate", function() {
-        var interpolate = function(scope, src) {
-            var fn = Function;
-            var result = new fn("return " + src).apply(scope);
-            if (result + "" === "NaN") {
-                result = "";
-            }
-            return result;
-        };
-        return interpolate;
-    });
-    //! node_modules/hbjs/src/utils/data/extend.js
-    internal("extend", [ "toArray" ], function(toArray) {
-        var extend = function(target, source) {
-            var args = toArray(arguments), i = 1, len = args.length, item, j;
-            var options = this || {};
-            while (i < len) {
-                item = args[i];
-                for (j in item) {
-                    if (item.hasOwnProperty(j)) {
-                        if (target[j] && typeof target[j] === "object" && !item[j] instanceof Array) {
-                            target[j] = extend.apply(options, [ target[j], item[j] ]);
-                        } else if (item[j] instanceof Array) {
-                            target[j] = target[j] || (options && options.arrayAsObject ? {
-                                length: item[j].length
-                            } : []);
-                            if (item[j].length) {
-                                target[j] = extend.apply(options, [ target[j], item[j] ]);
-                            }
-                        } else if (item[j] && typeof item[j] === "object") {
-                            if (options.objectsAsArray && typeof item[j].length === "number") {
-                                if (!(target[j] instanceof Array)) {
-                                    target[j] = [];
-                                }
-                            }
-                            target[j] = extend.apply(options, [ target[j] || {}, item[j] ]);
-                        } else {
-                            target[j] = item[j];
-                        }
-                    }
-                }
-                i += 1;
-            }
-            return target;
-        };
-        return extend;
-    });
     //! node_modules/hbjs/src/utils/formatters/toArray.js
     internal("toArray", [ "isArguments", "isArray", "isUndefined" ], function(isArguments, isArray, isUndefined) {
         var toArray = function(value) {
@@ -174,80 +88,20 @@
         };
         return toArray;
     });
-    //! framework/src/utils/plugin.js
-    //! import string.supplant
-    internal("framework.plugin", [ "framework", "interpolate", "extend", "http" ], function(framework, interpolate, extend, http) {
-        var registry, config;
-        var views = {};
-        var plugins = {};
-        var init = function() {
-            framework.fire("plugin::init");
-            var plugin, count = 0;
-            for (var name in plugins) {
-                plugin = plugins[name];
-                if (plugin.url) {
-                    count++;
-                    http.get({
-                        url: plugin.url,
-                        success: function(response) {
-                            count--;
-                            interpolate(window, response.data);
-                            if (count === 0) {
-                                framework.fire("plugin::ready", plugins);
-                            }
-                        }
-                    });
-                }
-                console.log("%c[plugin]", "color: orange", name, plugins[name].url);
-            }
+    //! framework/src/framework.js
+    //! import framework.config
+    //! import framework.plugin
+    //! import framework.registry
+    //! import framework.view
+    define("framework", [ "dispatcher", "toArray" ], function(dispatcher, toArray) {
+        var framework = {};
+        dispatcher(framework);
+        framework.fire = function(eventName, data) {
+            var css = "color: blue";
+            console.log("%c[event]", css, eventName, data || "");
+            framework.dispatch.apply(framework, toArray(arguments));
         };
-        framework.on("registry::ready", function(evt, data) {
-            registry = data;
-            var view, e;
-            for (e in data.views) {
-                if (data.plugins.hasOwnProperty(e)) {
-                    view = data.views[e];
-                    views[view.name] = view;
-                }
-            }
-            var plugin;
-            for (e in data.plugins) {
-                if (data.plugins.hasOwnProperty(e)) {
-                    plugin = data.plugins[e];
-                    plugins[plugin.name] = plugin;
-                }
-            }
-        });
-        framework.on("config::ready", function(evt, data) {
-            config = data;
-            var plugin;
-            for (var e in data.plugins) {
-                if (data.plugins.hasOwnProperty(e)) {
-                    plugin = data.plugins[e];
-                    plugins[plugin.name] = extend({}, plugins[plugin.name], plugin);
-                }
-            }
-            init();
-        });
-    });
-    //! node_modules/hbjs/src/utils/validators/isArray.js
-    internal("isArray", function() {
-        Array.prototype.__isArray = true;
-        Object.defineProperty(Array.prototype, "__isArray", {
-            enumerable: false,
-            writable: true
-        });
-        var isArray = function(val) {
-            return val ? !!val.__isArray : false;
-        };
-        return isArray;
-    });
-    //! node_modules/hbjs/src/utils/validators/isUndefined.js
-    internal("isUndefined", function() {
-        var isUndefined = function(val) {
-            return typeof val === "undefined";
-        };
-        return isUndefined;
+        return framework;
     });
     //! node_modules/hbjs/src/utils/ajax/http.js
     internal("http", function() {
@@ -410,18 +264,113 @@
         };
         return result;
     });
-    //! framework/src/utils/registry.js
-    internal("framework.registry", [ "framework", "http" ], function(framework, http) {
-        var url = "registry.json";
-        var registry;
-        framework.fire("registry::init");
-        http.get({
-            url: url,
-            success: function(response) {
-                registry = response.data;
-                framework.fire("registry::ready", registry);
+    //! framework/src/utils/plugin.js
+    //! import string.supplant
+    internal("framework.plugin", [ "framework", "interpolate", "extend", "http" ], function(framework, interpolate, extend, http) {
+        var registry, config;
+        var plugins = {};
+        var init = function() {
+            framework.fire("plugin::init");
+            var plugin, count = 0;
+            for (var name in plugins) {
+                plugin = plugins[name];
+                if (plugin.url) {
+                    count++;
+                    http.get({
+                        url: plugin.url,
+                        success: function(response) {
+                            count--;
+                            interpolate(window, response.data);
+                            if (count === 0) {
+                                framework.fire("plugin::ready", plugins);
+                            }
+                        }
+                    });
+                }
+                console.log("%c[plugin]", "color: orange", name, plugins[name].url);
+            }
+        };
+        framework.on("registry::ready", function(evt, data) {
+            registry = data;
+            var plugin;
+            for (e in data.plugins) {
+                if (data.plugins.hasOwnProperty(e)) {
+                    plugin = data.plugins[e];
+                    plugins[plugin.name] = plugin;
+                }
             }
         });
+        framework.on("config::ready", function(evt, data) {
+            config = data;
+            var plugin;
+            for (var e in data.plugins) {
+                if (data.plugins.hasOwnProperty(e)) {
+                    plugin = data.plugins[e];
+                    plugins[plugin.name] = extend({}, plugins[plugin.name], plugin);
+                }
+            }
+            init();
+        });
+    });
+    //! node_modules/hbjs/src/utils/polyfills/string.supplant.js
+    internal("string.supplant", function() {
+        if (!String.prototype.supplant) {
+            String.prototype.supplant = function(o) {
+                return this.replace(/{([^{}]*)}/g, function(a, b) {
+                    var r = o[b];
+                    return typeof r === "string" || typeof r === "number" ? r : a;
+                });
+            };
+        }
+        return true;
+    });
+    //! node_modules/hbjs/src/utils/parsers/interpolate.js
+    internal("interpolate", function() {
+        var interpolate = function(scope, src) {
+            var fn = Function;
+            var result = new fn("return " + src).apply(scope);
+            if (result + "" === "NaN") {
+                result = "";
+            }
+            return result;
+        };
+        return interpolate;
+    });
+    //! node_modules/hbjs/src/utils/data/extend.js
+    internal("extend", [ "toArray" ], function(toArray) {
+        var extend = function(target, source) {
+            var args = toArray(arguments), i = 1, len = args.length, item, j;
+            var options = this || {};
+            while (i < len) {
+                item = args[i];
+                for (j in item) {
+                    if (item.hasOwnProperty(j)) {
+                        if (target[j] && typeof target[j] === "object" && !item[j] instanceof Array) {
+                            target[j] = extend.apply(options, [ target[j], item[j] ]);
+                        } else if (item[j] instanceof Array) {
+                            target[j] = target[j] || (options && options.arrayAsObject ? {
+                                length: item[j].length
+                            } : []);
+                            if (item[j].length) {
+                                target[j] = extend.apply(options, [ target[j], item[j] ]);
+                            }
+                        } else if (item[j] && typeof item[j] === "object") {
+                            if (options.objectsAsArray && typeof item[j].length === "number") {
+                                if (!(target[j] instanceof Array)) {
+                                    target[j] = [];
+                                }
+                            }
+                            target[j] = extend.apply(options, [ target[j] || {}, item[j] ]);
+                        } else {
+                            target[j] = item[j];
+                        }
+                    }
+                }
+                i += 1;
+            }
+            return target;
+        };
+        return extend;
     });
     //! framework/src/utils/config.js
     internal("framework.config", [ "framework", "http" ], function(framework, http) {
@@ -436,6 +385,98 @@
                     framework.fire("config::ready", config);
                 }
             });
+        });
+    });
+    //! node_modules/hbjs/src/utils/validators/isArguments.js
+    internal("isArguments", function(toString) {
+        var isArguments = function(value) {
+            var str = String(value);
+            var isArguments = str === "[object Arguments]";
+            if (!isArguments) {
+                isArguments = str !== "[object Array]" && value !== null && typeof value === "object" && typeof value.length === "number" && value.length >= 0 && toString.call(value.callee) === "[object Function]";
+            }
+            return isArguments;
+        };
+        return isArguments;
+    });
+    //! node_modules/hbjs/src/utils/validators/isArray.js
+    internal("isArray", function() {
+        Array.prototype.__isArray = true;
+        Object.defineProperty(Array.prototype, "__isArray", {
+            enumerable: false,
+            writable: true
+        });
+        var isArray = function(val) {
+            return val ? !!val.__isArray : false;
+        };
+        return isArray;
+    });
+    //! node_modules/hbjs/src/utils/validators/isUndefined.js
+    internal("isUndefined", function() {
+        var isUndefined = function(val) {
+            return typeof val === "undefined";
+        };
+        return isUndefined;
+    });
+    //! framework/src/utils/registry.js
+    internal("framework.registry", [ "framework", "http" ], function(framework, http) {
+        var url = "registry.json";
+        var registry;
+        framework.fire("registry::init");
+        http.get({
+            url: url,
+            success: function(response) {
+                registry = response.data;
+                framework.fire("registry::ready", registry);
+            }
+        });
+    });
+    //! framework/src/utils/view.js
+    //! import string.supplant
+    internal("framework.view", [ "framework", "interpolate", "extend", "http" ], function(framework, interpolate, extend, http) {
+        var registry, config;
+        var views = {};
+        var init = function() {
+            framework.fire("view::init");
+            var view, count = 0;
+            for (var name in views) {
+                view = views[name];
+                if (view.url) {
+                    count++;
+                    http.get({
+                        url: view.url,
+                        success: function(response) {
+                            count--;
+                            interpolate(window, response.data);
+                            if (count === 0) {
+                                framework.fire("view::ready", views);
+                            }
+                        }
+                    });
+                }
+                console.log("%c[view]", "color: purple", name, views[name].url);
+            }
+        };
+        framework.on("registry::ready", function(evt, data) {
+            registry = data;
+            var view;
+            for (e in data.views) {
+                if (data.views.hasOwnProperty(e)) {
+                    view = data.views[e];
+                    views[view.name] = view;
+                }
+            }
+        });
+        framework.on("config::ready", function(evt, data) {
+            config = data;
+            var view;
+            for (var e in data.views) {
+                if (data.views.hasOwnProperty(e)) {
+                    view = data.views[e];
+                    views[view.name] = extend({}, views[view.name], view);
+                }
+            }
+            init();
         });
     });
     //! node_modules/hbjs/src/utils/async/dispatcher.js

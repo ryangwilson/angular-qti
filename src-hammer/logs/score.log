@@ -1,23 +1,23 @@
-------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
+------Mon Jan 12 2015 08:05:39 GMT-0700 (MST)------
 
 Output:
 	plugins/score/build/score.js 2.65k
 	plugins/score/build/score.min.js 0.98k
-------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
+------Mon Jan 12 2015 08:05:39 GMT-0700 (MST)------
 
 Output:
 	plugins/reportCard/build/reportCard.js 2.80k
 	plugins/reportCard/build/reportCard.min.js 1.09k
-------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
+------Mon Jan 12 2015 08:05:39 GMT-0700 (MST)------
 
 Output:
 	application/build/application.js 2.32k
 	application/build/application.min.js 0.62k
-------Mon Jan 12 2015 07:45:15 GMT-0700 (MST)------
+------Mon Jan 12 2015 08:05:39 GMT-0700 (MST)------
 
 Output:
-	framework/build/framework.js 18.70k
-	framework/build/framework.min.js 6.63k
+	framework/build/framework.js 20.20k
+	framework/build/framework.min.js 7.11k
 
 Definitions: 
 	addFileToHead 
@@ -41,6 +41,7 @@ Definitions:
 	framework.config 
 	framework.plugin 
 	framework.registry 
+	framework.view 
 	fromDashToCamel 
 	fromJson 
 	fromXML 
@@ -191,19 +192,20 @@ Definitions:
 	window.console 
 
 Included: 
-	node_modules/hbjs/src/utils/validators/isArguments.js - node_modules/hbjs/src/utils/formatters/toArray.js:6 
+	node_modules/hbjs/src/utils/formatters/toArray.js - node_modules/hbjs/src/utils/data/extend.js:11 
 	framework/src/framework.js - Gruntfile.js:import framework 
+	node_modules/hbjs/src/utils/ajax/http.js - framework/src/utils/config.js:2 
+	framework/src/utils/plugin.js - framework/src/framework.js:4 
 	node_modules/hbjs/src/utils/polyfills/string.supplant.js - framework/src/utils/plugin.js:2 
 	node_modules/hbjs/src/utils/parsers/interpolate.js - framework/src/utils/plugin.js:3 
 	node_modules/hbjs/src/utils/data/extend.js - framework/src/utils/plugin.js:3 
-	node_modules/hbjs/src/utils/formatters/toArray.js - node_modules/hbjs/src/utils/data/extend.js:11 
-	framework/src/utils/plugin.js - framework/src/framework.js:2 
+	framework/src/utils/config.js - framework/src/framework.js:3 
+	node_modules/hbjs/src/utils/validators/isArguments.js - node_modules/hbjs/src/utils/formatters/toArray.js:6 
 	node_modules/hbjs/src/utils/validators/isArray.js - node_modules/hbjs/src/utils/formatters/toArray.js:2 
 	node_modules/hbjs/src/utils/validators/isUndefined.js - node_modules/hbjs/src/utils/formatters/toArray.js:2 
-	node_modules/hbjs/src/utils/ajax/http.js - framework/src/utils/plugin.js:3 
-	framework/src/utils/registry.js - framework/src/framework.js:3 
-	framework/src/utils/config.js - framework/src/framework.js:4 
-	node_modules/hbjs/src/utils/async/dispatcher.js - framework/src/framework.js:5 
+	framework/src/utils/registry.js - framework/src/framework.js:5 
+	framework/src/utils/view.js - framework/src/framework.js:6 
+	node_modules/hbjs/src/utils/async/dispatcher.js - framework/src/framework.js:7 
 
 Ignored: 
 	node_modules/hbjs/src/hb/debug/debugger.js 

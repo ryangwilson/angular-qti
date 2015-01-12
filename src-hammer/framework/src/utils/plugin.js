@@ -3,7 +3,6 @@
 internal('framework.plugin', ['framework', 'interpolate', 'extend', 'http'], function (framework, interpolate, extend, http) {
 
     var registry, config;
-    var views = {};
     var plugins = {};
 
     var init = function () {
@@ -32,15 +31,6 @@ internal('framework.plugin', ['framework', 'interpolate', 'extend', 'http'], fun
 
     framework.on('registry::ready', function (evt, data) {
         registry = data;
-
-        var view, e;
-        for (e in data.views) {
-            if (data.plugins.hasOwnProperty(e)) {
-                view = data.views[e];
-                views[view.name] = view;
-            }
-        }
-
         var plugin;
         for (e in data.plugins) {
             if (data.plugins.hasOwnProperty(e)) {
