@@ -1,0 +1,24 @@
+{
+  "name": "hbtest",
+  "version": "0.0.0",
+  "description": "Hummingbird Test",
+  "author": {
+    "name": "Rob Taylor",
+    "url": "http://roboncode.com"
+  },
+  "repository": "https://github.com/obogo/hummingbird.git",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "hbjs": "latest"
+  },
+  "license": "MIT",
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "files": [
+    "tasks",
+    "src"
+  ]
+}

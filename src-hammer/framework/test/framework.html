@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="../build/framework.js"></script>
+<script>
+    hammer.framework.on('hello', function (evt) {
+        console.log('hello');
+    });
+    hammer.framework.dispatch('hello');
+</script>
+</body>
+</html>

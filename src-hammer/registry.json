@@ -1,0 +1,27 @@
+{
+  "views": [
+    {
+      "name": "simulation",
+      "type": "application",
+      "url": "application/build/application.js",
+      "options": {}
+    }
+  ],
+  "plugins": [
+    {
+      "name": "reportCard",
+      "type": "framework",
+      "url": "plugins/reportCard/build/reportCard.js",
+      "options": {
+        "minWeight": 0,
+        "maxWeight": 0
+      }
+    },
+    {
+      "name": "score",
+      "type": "framework",
+      "url": "plugins/score/build/score.js",
+      "options": {}
+    }
+  ]
+}
